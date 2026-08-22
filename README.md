@@ -45,3 +45,25 @@ Si une nouvelle version du site est générée localement :
 Le site est statique. Il n'a pas encore de tableau de bord interne.
 
 Pour publier des actualités régulièrement ou permettre à plusieurs personnes de modifier le contenu sans toucher au code, envisager plus tard un CMS comme WordPress, Webflow, Framer ou Decap CMS.
+
+## Formulaire de contact
+
+Le site contient un formulaire de contact.
+
+GitHub Pages étant un hébergement statique, il ne peut pas envoyer les messages directement. Pour activer l'envoi depuis le site, utiliser un service externe comme Formspree.
+
+Étapes recommandées :
+
+1. Créer un compte sur https://formspree.io/
+2. Créer un nouveau formulaire.
+3. Copier l'endpoint officiel fourni, au format :
+   `https://formspree.io/f/xxxxxxxx`
+4. Ouvrir `index.html`.
+5. Chercher :
+   `id="contact-form" data-endpoint=""`
+6. Remplacer uniquement la valeur vide par l'endpoint officiel.
+7. Enregistrer avec `Commit changes`.
+
+Ne jamais inventer d'endpoint Formspree. Tant que l'endpoint officiel n'a pas été créé, conserver `data-endpoint=""`.
+
+Tant que `data-endpoint` est vide, le formulaire ouvre un email prérempli vers `contact@lanatureetlhumain.org`.
