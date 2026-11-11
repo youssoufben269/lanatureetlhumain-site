@@ -1,0 +1,25 @@
+# Modèle systemd : adapter les chemins et créer le compte système lnh.
+[Unit]
+Description=La Nature et l'Humain - adhesions
+After=network.target
+
+[Service]
+Type=simple
+User=lnh
+Group=lnh
+WorkingDirectory=/opt/lnh/site-web
+EnvironmentFile=/etc/lnh/membership.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/lnh/site-web/.venv/bin/python -m membership serve --host 127.0.0.1 --port 8787
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/lnh-private
+
+[Install]
+WantedBy=multi-user.target

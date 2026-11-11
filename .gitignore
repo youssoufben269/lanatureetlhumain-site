@@ -1,0 +1,10 @@
+var/
+.env
+.venv/
+__pycache__/
+*.pyc
+.qa/
+.pages-build/
+*.sqlite3
+*.sqlite3-*
+membership/assets/signature.*
