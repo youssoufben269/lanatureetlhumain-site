@@ -70,7 +70,7 @@ def block(c, text, x, y, width, size=9, max_lines=3, font='LNH'):
         c.drawString(x, y - index * (size + 2), line)
 
 
-def make_card(member, settings, output):
+def make_card(member, settings, output, *, photo_bytes=None):
     validate_card_text(member)
     logo = settings.root / 'adhesion' / 'assets' / 'logo.png'
     if not logo.is_file():
@@ -96,7 +96,7 @@ def make_card(member, settings, output):
         c.drawString(12, HEIGHT - 52, 'CARTE DE MEMBRE')
         c.setFont('LNH', 5.5)
         c.drawRightString(WIDTH - 12, HEIGHT - 52, member['category'].upper())
-        with Image.open(settings.data / member['photo_path']) as image:
+        with Image.open(io.BytesIO(photo_bytes) if photo_bytes is not None else settings.data / member['photo_path']) as image:
             crop = ImageOps.fit(image, (450, 600), method=Image.Resampling.LANCZOS)
             buffer = io.BytesIO()
             crop.save(buffer, 'PNG')

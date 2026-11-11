@@ -51,7 +51,7 @@ def main():
             for row in rows:
                 for key in ('photo_path', 'card_path'):
                     if row[key]:
-                        (settings.data / row[key]).unlink(missing_ok=True)
+                        service.storage.delete(row[key])
     elif args.command == 'serve-dev':
         if args.host not in ('127.0.0.1', 'localhost'):
             parser.error('Le serveur de développement reste sur le poste local.')
@@ -63,6 +63,12 @@ def main():
             server.serve_forever()
     else:
         from waitress import serve
+        bootstrap_email = os.environ.get('LNH_BOOTSTRAP_ADMIN_EMAIL', '')
+        bootstrap_password = os.environ.get('LNH_BOOTSTRAP_ADMIN_PASSWORD', '')
+        if bootstrap_email or bootstrap_password:
+            if not bootstrap_email or not bootstrap_password:
+                parser.error('Configurer les deux paramètres privés du premier administrateur.')
+            service.bootstrap_admin(bootstrap_email, bootstrap_password)
         proxy = os.environ.get('LNH_TRUSTED_PROXY')
         proxy_options = ({'trusted_proxy': proxy, 'trusted_proxy_count': 1,
                           'trusted_proxy_headers': {'x-forwarded-for', 'x-forwarded-proto'}}

@@ -1,5 +1,15 @@
 # Vérification finale du 11 novembre 2026
 
+## Complément : hébergement gratuit
+
+Budget demandé : 0 €. Même module Python, stockage PostgreSQL et Supabase privé en option, conservation du mode SQLite local. Les secrets sont exclus des pages publiques ; schéma PostgreSQL privé avec RLS, bucket privé, verrou transactionnel des écritures, contrôle des deux conditions de délivrance et numéros conservés. Le profil éphémère refuse de démarrer sans les deux stockages distants.
+
+Suite après ces ajouts : **66 tests exécutés, 64 réussis et 2 ignorés sous Windows** (permissions POSIX et création de liens symboliques). Les 22 tests précédents restent réussis. Les nouveaux contrôles couvrent les adaptateurs PostgreSQL et stockage, la reprise des cartes distantes, les fichiers temporaires, les secrets, le refus d’un repli local et l’initialisation unique de l’administrateur. Les appels Supabase sont simulés.
+
+Contrôle PostgreSQL supplémentaire : un moteur PostgreSQL WASM local avec protocole TCP et psycopg a exécuté les migrations, la création d’un compte de test, la demande avec photo, la validation puis le paiement, la réservation du numéro et le PDF recto-verso. Le redémarrage avec un dossier local neuf a retrouvé le dossier et le numéro. Les fichiers distants étaient simulés en mémoire ; aucun appel vers un projet Supabase réel n’a été effectué. Ce test ne vaut pas validation de la concurrence d’un serveur PostgreSQL cloud.
+
+Les offres gratuites, les limites et les accès manquants sont décrits dans [RENDER.md](RENDER.md). Aucun déploiement cloud n’a été effectué.
+
 Mise à jour de préparation à la publication : **22 tests réussis** après correction du démarrage CLI Waitress sans proxy. Le formulaire local est accessible avec la commande documentée. Les paramètres GitHub Pages ont désormais été consultés : publication depuis `main` et `/ (root)`, domaine `www.lanatureetlhumain.org`, DNS validés et HTTPS forcé. Le passage à GitHub Actions reste nécessaire avant intégration sur `main`. Les sources sont préparées sur `codex/adhesion-en-ligne` pour leur transfert au dépôt ; aucune mise en ligne du module n’est effectuée. Les mentions de travail non committé ci-dessous décrivent l’étape de vérification antérieure au transfert.
 
 ## Base et publication

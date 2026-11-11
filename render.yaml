@@ -1,0 +1,48 @@
+# Offre gratuite uniquement : données durables dans Supabase, pas de disque Render.
+# Nécessite les comptes Free Render et Supabase et leurs secrets serveur.
+services:
+  - type: web
+    name: lnh-adhesions
+    runtime: python
+    repo: https://github.com/youssoufben269/lanatureetlhumain-site
+    branch: codex/adhesion-en-ligne
+    plan: free
+    region: frankfurt
+    numInstances: 1
+    autoDeployTrigger: "off"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m membership serve --host 0.0.0.0 --port "$PORT"
+    healthCheckPath: /api/health
+    domains:
+      - adhesions.lanatureetlhumain.org
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: LNH_DATA_DIR
+        value: /tmp/lnh-render
+      - key: LNH_REQUIRE_REMOTE_STORAGE
+        value: "1"
+      - key: LNH_STORAGE_BACKEND
+        value: supabase
+      - key: LNH_DATABASE_URL
+        sync: false
+      - key: LNH_SUPABASE_URL
+        sync: false
+      - key: LNH_SUPABASE_SERVICE_KEY
+        sync: false
+      - key: LNH_STORAGE_BUCKET
+        value: lnh-private
+      - key: LNH_BOOTSTRAP_ADMIN_EMAIL
+        sync: false
+      - key: LNH_BOOTSTRAP_ADMIN_PASSWORD
+        sync: false
+      - key: LNH_MODULE_ORIGIN
+        value: https://adhesions.lanatureetlhumain.org
+      - key: LNH_WEBSITE_URL
+        value: https://www.lanatureetlhumain.org
+      - key: LNH_ALLOWED_ORIGINS
+        value: https://www.lanatureetlhumain.org
+      - key: LNH_QR_MODE
+        value: website
+      - key: LNH_PUBLIC_VERIFICATION
+        value: "0"

@@ -6,6 +6,7 @@ import json
 import os
 import secrets
 import sqlite3
+import shutil
 import time
 import uuid
 import warnings
@@ -35,11 +36,17 @@ class Service:
             if os.name != 'nt':
                 directory.chmod(0o700)
         self.database = settings.data / 'members.sqlite3'
+        from .storage import LocalStorage, SupabaseStorage
+        self.storage = (SupabaseStorage(settings.supabase_url, settings.supabase_service_key, settings.storage_bucket)
+                        if settings.storage_backend == 'supabase' else LocalStorage(settings.data))
         self.migrate()
-        if os.name != 'nt':
+        if not settings.database_url and os.name != 'nt':
             self.database.chmod(0o600)
 
     def connection(self):
+        if self.cfg.database_url:
+            from .database import connection
+            return connection(self.cfg.database_url)
         db = sqlite3.connect(self.database, timeout=30, isolation_level=None)
         db.row_factory = sqlite3.Row
         db.execute('PRAGMA foreign_keys=ON')
@@ -58,6 +65,29 @@ class Service:
                 raise
 
     def migrate(self):
+        if not self.cfg.database_url:
+            self.enable_wal()
+        migrations = Path(__file__).parent / 'migrations'
+        if self.cfg.database_url:
+            migrations = migrations / 'postgres'
+        with self.transaction() as db:
+            if self.cfg.database_url:
+                db.execute('CREATE SCHEMA IF NOT EXISTS lnh_private')
+                db.execute('REVOKE ALL ON SCHEMA lnh_private FROM PUBLIC')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations(version INTEGER PRIMARY KEY)')
+            applied = {row[0] for row in db.execute('SELECT version FROM schema_migrations')}
+            for path in sorted(migrations.glob('*.sql')):
+                if int(path.name.split('_')[0]) not in applied:
+                    statement = ''
+                    for line in path.read_text(encoding='utf-8').splitlines(keepends=True):
+                        statement += line
+                        if sqlite3.complete_statement(statement):
+                            db.execute(statement)
+                            statement = ''
+                    if statement.strip():
+                        raise ValueError('Migration SQL incomplète : ' + path.name)
+
+    def enable_wal(self):
         with contextlib.closing(self.connection()) as db:
             deadline = time.monotonic() + 30
             while True:
@@ -70,21 +100,6 @@ class Service:
                     if getattr(exc, 'sqlite_errorcode', None) not in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED) or time.monotonic() >= deadline:
                         raise
                     time.sleep(.05)
-        # Recheck versions only after taking the same lock as other writers.
-        # executescript would implicitly release an existing transaction.
-        with self.transaction() as db:
-            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations(version INTEGER PRIMARY KEY)')
-            applied = {row[0] for row in db.execute('SELECT version FROM schema_migrations')}
-            for path in sorted((Path(__file__).parent / 'migrations').glob('*.sql')):
-                if int(path.name.split('_')[0]) not in applied:
-                    statement = ''
-                    for line in path.read_text(encoding='utf-8').splitlines(keepends=True):
-                        statement += line
-                        if sqlite3.complete_statement(statement):
-                            db.execute(statement)
-                            statement = ''
-                    if statement.strip():
-                        raise ValueError('Migration SQL incomplète : ' + path.name)
 
     def rate_limit(self, key, limit, seconds):
         stamp = int(time.time())
@@ -93,11 +108,19 @@ class Service:
             row = db.execute('SELECT * FROM rate_limits WHERE key=?', (key,)).fetchone()
             if row and row['count'] >= limit:
                 raise Problem('Trop de tentatives. Réessaie plus tard.', 429)
-            db.execute('INSERT INTO rate_limits VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1', (key, stamp + seconds))
+            db.execute('INSERT INTO rate_limits VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET count=rate_limits.count+1', (key, stamp + seconds))
 
     def add_admin(self, address, password):
         with self.transaction() as db:
             db.execute('INSERT INTO admins VALUES(?,?,?,1)', (uuid.uuid4().hex, email(address), hash_password(password)))
+
+    def bootstrap_admin(self, address, password):
+        # Free hosts may have no interactive shell. Never reset an existing account.
+        with self.transaction() as db:
+            if db.execute('SELECT 1 FROM admins LIMIT 1').fetchone():
+                return False
+            db.execute('INSERT INTO admins VALUES(?,?,?,1)', (uuid.uuid4().hex, email(address), hash_password(password)))
+        return True
 
     def login(self, data, remote):
         self.rate_limit('login-ip:' + digest(remote), 15, 900)
@@ -181,12 +204,11 @@ class Service:
         address, image = email(data.get('email')), self.photo(data.get('photo'))
         identifier, stamp = uuid.uuid4().hex, now()
         photo_path = 'photos/' + identifier + '.jpg'
-        path = self.cfg.data / photo_path
         with self.transaction() as db:
             # Same response for duplicate submissions; no public email enumeration.
             if db.execute('SELECT 1 FROM applications WHERE email=?', (address,)).fetchone():
                 return
-            path.write_bytes(image)
+            self.storage.put(photo_path, image)
             try:
                 keys = [*values, 'id', 'email', 'photo_path', 'consent_at', 'consent_version', 'status', 'created_at', 'updated_at']
                 db.execute(f'INSERT INTO applications({",".join(keys)}) VALUES({",".join("?" for _ in keys)})',
@@ -194,7 +216,7 @@ class Service:
                 self.audit(db, identifier, 'public', 'submit', None, 'soumise')
                 self.enqueue(db, identifier, 'reception', address, {})
             except Exception:
-                path.unlink(missing_ok=True)
+                self.storage.delete(photo_path)
                 raise
 
     def audit(self, db, identifier, actor, action, old, new):
@@ -209,7 +231,7 @@ class Service:
             raise Problem('Le nom, la catégorie ou la fonction dépasse la place disponible sur la carte. Contacte l’association ou utilise une fonction plus courte.')
 
     def enqueue(self, db, identifier, kind, recipient, payload):
-        db.execute('INSERT OR IGNORE INTO outbox(application_id,kind,recipient,payload) VALUES(?,?,?,?)',
+        db.execute('INSERT INTO outbox(application_id,kind,recipient,payload) VALUES(?,?,?,?) ON CONFLICT DO NOTHING',
                    (identifier, kind, recipient, json.dumps(payload)))
 
     def list(self, offset=0):
@@ -290,7 +312,7 @@ class Service:
                     year, month = divmod(joined.year * 12 + joined.month - 1 + self.cfg.validity_months, 12)
                     month += 1
                     expires = date(year, month, min(joined.day, calendar.monthrange(year, month)[1]))
-                    seq = db.execute('INSERT INTO sequences VALUES(?,1) ON CONFLICT(year) DO UPDATE SET value=value+1 RETURNING value', (joined.year,)).fetchone()[0]
+                    seq = db.execute('INSERT INTO sequences VALUES(?,1) ON CONFLICT(year) DO UPDATE SET value=sequences.value+1 RETURNING value', (joined.year,)).fetchone()[0]
                     number = f'ANH-{joined.year}-{seq:03d}'
                     db.execute('UPDATE applications SET member_number=?,joined_on=?,expires_on=? WHERE id=?',
                                (number, joined.isoformat(), expires.isoformat(), identifier))
@@ -312,7 +334,19 @@ class Service:
                 if row['status'] != 'validee' or row['card_path']:
                     return
                 path = 'cards/' + identifier + '.pdf'
-                make_card(dict(row), self.cfg, self.cfg.data / path)
+                if self.cfg.storage_backend == 'local':
+                    make_card(dict(row), self.cfg, self.cfg.data / path)
+                else:
+                    # Only this transient rendering workspace is local on a free host.
+                    # Durable photo/PDF objects stay in the private remote bucket.
+                    workspace = self.cfg.data / ('render-' + uuid.uuid4().hex)
+                    workspace.mkdir(mode=0o700)
+                    try:
+                        output = workspace / 'card.pdf'
+                        make_card(dict(row), self.cfg, output, photo_bytes=self.storage.get(row['photo_path']))
+                        self.storage.put(path, output.read_bytes())
+                    finally:
+                        shutil.rmtree(workspace)
                 url = '/api/admin/applications/' + identifier + '/card'
                 db.execute("UPDATE applications SET status='carte_generee',card_path=?,card_url=?,card_error=NULL,version=version+1,updated_at=? WHERE id=?", (path, url, now(), identifier))
                 token = secrets.token_urlsafe(32)

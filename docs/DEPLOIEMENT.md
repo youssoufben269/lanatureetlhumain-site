@@ -1,5 +1,7 @@
 # Mise à jour et hébergement
 
+Le demandeur a confirmé disposer uniquement de GitHub et du nom de domaine, avec un budget d’hébergement de **0 €**. Le profil gratuit Render + Supabase est préparé dans [RENDER.md](RENDER.md) et `render.yaml`. Aucun service n’a été créé. Les sources sont envoyées sur la branche dédiée ; `main` et le site public restent inchangés. Les options de serveur avec disque décrites plus bas restent des alternatives, pas une souscription à effectuer.
+
 ## État vérifié le 11 novembre 2026
 
 - Branche locale : `codex/adhesion-en-ligne`, actualisée sur `origin/main` `82f0ad0`. Le distant comporte deux commits après `ecb0626` : section don/nettoyage institutionnel, puis coordonnées de Marseille. Ils sont conservés.

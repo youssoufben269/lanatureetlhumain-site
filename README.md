@@ -4,6 +4,8 @@ Le module d’adhésion, son administration et le générateur de cartes sont in
 
 La branche `codex/adhesion-en-ligne` a été actualisée sur `origin/main` `82f0ad0` le 11 novembre 2026 et prépare le module pour publication. Son hébergement Python reste à configurer avant activation sur le site. Voir [les vérifications](docs/VALIDATION.md) et [la procédure de déploiement](docs/DEPLOIEMENT.md).
 
+Pour le budget d’hébergement de 0 €, le même service peut utiliser PostgreSQL et le stockage privé Supabase, avec Render Free : [configuration et limites de l’option gratuite](docs/RENDER.md). Ce profil nécessite les comptes correspondants ; il n’est pas encore activé sur le site public.
+
 Ce dépôt contient le site public de l'association.
 
 Adresse en ligne :

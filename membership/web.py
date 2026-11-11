@@ -94,10 +94,11 @@ class Application:
     def card(self, member):
         if not member.get('card_path') or member['status'] != 'carte_generee':
             raise Problem('La carte n’est pas disponible.', 404)
-        path = self.cfg.data / member['card_path']
-        if not path.is_file():
+        try:
+            content = self.service.storage.get(member['card_path'])
+        except FileNotFoundError:
             raise Problem('Fichier indisponible. Contacte l’association.', 404)
-        return 200, 'application/pdf', path.read_bytes(), [('Content-Disposition', 'attachment; filename="' + member['member_number'] + '.pdf"')]
+        return 200, 'application/pdf', content, [('Content-Disposition', 'attachment; filename="' + member['member_number'] + '.pdf"')]
 
     def dispatch(self, env, method, path, data):
         remote = env.get('REMOTE_ADDR', 'unknown')  # Do not trust client-supplied X-Forwarded-For.
@@ -147,7 +148,7 @@ class Application:
             if not item:
                 return self.json(member)
             if item == 'photo':
-                return 200, 'image/jpeg', (self.cfg.data / member['photo_path']).read_bytes(), []
+                return 200, 'image/jpeg', self.service.storage.get(member['photo_path']), []
             if item == 'card':
                 return self.card(member)
         if re.fullmatch(r'/membre/ANH-\d{4}-\d{3,}', path) and method == 'GET':

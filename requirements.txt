@@ -2,3 +2,4 @@ Pillow==13.0.0
 reportlab==4.4.9
 waitress>=3.0.2,<4
 tzdata>=2026.1
+psycopg[binary]>=3.2,<4
