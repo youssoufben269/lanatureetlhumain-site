@@ -20,8 +20,8 @@
     emailRecipient:'Recipient:', emailFallback:'If your email app does not open, write to this address, attach your application and copy the message below.', emailMessage:'Message to copy if needed'
   });
   if (emailMode) {
-    Object.assign(french, {intro:'Prépare ta demande et ta photo, puis envoie le dossier par email. L’association examine les pièces reçues et traite ton adhésion.', submit:'Préparer mon email', step1:'Tu prépares le dossier et l’envoies par email avec ta photo.'});
-    Object.assign(english, {intro:'Prepare your application and photo, then send the file by email. The association reviews the documents received and processes your membership.', submit:'Prepare my email', step1:'Prepare your application and send it by email with your photo.'});
+    Object.assign(french, {intro:'Prépare ta demande et ta photo, puis envoie le dossier par email. L’association examine les pièces reçues et traite ton adhésion.', submit:'Envoyer', step1:'Tu prépares le dossier et l’envoies par email avec ta photo.'});
+    Object.assign(english, {intro:'Prepare your application and photo, then send the file by email. The association reviews the documents received and processes your membership.', submit:'Send', step1:'Prepare your application and send it by email with your photo.'});
   }
   function renderEmail() {
     const draft = LNH_EMAIL.prepare(preparedApplication, recipient, lang);
