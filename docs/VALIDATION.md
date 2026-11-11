@@ -2,6 +2,8 @@
 
 ## Envoi direct Google préparé
 
+Activation Google commencée dans le compte de l’association : projet créé, code et manifeste enregistrés ; lancement de `installer` arrêté sur la demande d’autorisation Google. Le propriétaire doit valider personnellement les autorisations. Aucun `/exec` ni envoi réel vérifié ; la publication du mode direct reste en attente. [État et reprise](ENVOI_DIRECT_GOOGLE.md).
+
 Le service de réception Google Apps Script et le POST direct du formulaire sont préparés, avec notice FR/EN adaptée et import local de la nouvelle version de consentement. La photo est jointe au même envoi. `googleEndpoint` reste vide jusqu’à l’activation dans le compte de l’association ; la production conserve donc le parcours manuel. Aucun dossier ni email réel n’a été transmis à Google pendant les tests locaux. Suite Python complète : **70 tests, 68 réussis, 2 ignorés sous Windows**. Le harnais Node hors ligne couvre validation, idempotence, limites, stockage en échec, reprise des notifications, contrôle du propriétaire et POST direct. Les services Google y sont simulés. Affichage du mode direct vérifié dans le navigateur, FR/EN, largeur réelle de 390 px (document 375 px, sans débordement), champs requis et panneau de téléchargement masqué. Voir [l’activation et les limites](ENVOI_DIRECT_GOOGLE.md).
 
 

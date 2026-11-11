@@ -2,6 +2,12 @@
 
 Compte propriétaire prévu : **lanaturetlhumain@gmail.com**. Aucun compte supplémentaire ni serveur Python distant. Le site reste publié par GitHub Pages. Le code préparé n’active pas le service tant que son URL de déploiement n’est pas renseignée.
 
+## État au 11 novembre 2026
+
+Le projet **LNH - Réception des adhésions** a été créé dans le profil Chrome de l’association : [ouvrir le projet](https://script.google.com/home/projects/1Cn6q4KvG-42_6MhU0ofMvbwMwgSHedocvrGD-4eSmstc6MrUYR246z4X/edit). `Code.gs` (234 lignes, source du commit `afdbe2f`) et le manifeste livré ont été chargés et enregistrés. La fonction `installer` a été lancée ; Google affiche **Autorisation nécessaire**, avec le bouton **Examiner les autorisations**. Aucune autorisation n’a été accordée par l’agent.
+
+Reprendre à l’étape 4 ci-dessous, sans créer de deuxième projet. L’installation du dossier privé et du déclencheur n’est pas encore confirmée. Aucun déploiement Web `/exec`, dossier de test ou email réel n’a été créé. `googleEndpoint` reste vide ; le formulaire public utilise encore le parcours manuel. La mise à jour préparée est dans la branche distante `codex/adhesion-en-ligne` ; `main` reste à `f40a341` lors de cette vérification.
+
 ## Parcours
 
 Le demandeur remplit le formulaire et clique sur **Envoyer**. Le navigateur transmet un POST HTTPS comprenant les champs et la photo, sans téléchargement ni passage par sa messagerie. Il est dirigé vers une page de réception Google portant l’identité de l’association. Cette navigation est volontaire : une requête `fetch` en mode `no-cors` ne permettrait pas de vérifier le résultat et ne doit jamais être présentée comme un envoi réussi.
