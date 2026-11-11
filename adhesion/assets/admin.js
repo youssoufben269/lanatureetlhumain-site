@@ -116,7 +116,7 @@
     }
     detail.append(node('h3', 'Historique'));
     const history = node('ol', undefined, 'history');
-    current.history.forEach(x => history.append(node('li', x.created_at + ' · ' + x.action + ' · ' + (labels[x.old_status] || 'Création') + ' → ' + labels[x.new_status] + ' · ' + x.actor)));
+    current.history.forEach(x => history.append(node('li', x.created_at + ' · ' + (x.action === 'import_email' ? 'Dossier reçu par email' : x.action) + ' · ' + (labels[x.old_status] || 'Création') + ' → ' + labels[x.new_status] + ' · ' + x.actor)));
     detail.append(history);
   }
   document.querySelector('#login').addEventListener('submit', async event => {
@@ -125,6 +125,22 @@
     try {
       const result = await api('/api/login', { data: { email: document.querySelector('#login-email').value, password: document.querySelector('#login-password').value } });
       csrf = result.csrf; document.querySelector('#login-password').value = ''; display('Connexion établie.'); await enter();
+    } catch (error) { display(error.message, true); } finally { button.disabled = false; }
+  });
+  document.querySelector('#import-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.target, button = form.querySelector('button');
+    if (!form.reportValidity()) return;
+    button.disabled = true;
+    try {
+      const file = document.querySelector('#import-file').files[0];
+      if (file.size > 4_400_000) throw new Error('Le dossier dépasse la taille maximale autorisée.');
+      let request;
+      try { request = JSON.parse(await file.text()); } catch { throw new Error('Le fichier ne contient pas un dossier lisible.'); }
+      const member = await api('/api/admin/applications/import', {data:{request},csrf});
+      form.reset(); offset = 0;
+      await loadList(); await select(member.id);
+      display('Dossier importé. Vérifie les informations et la photo avant toute validation.');
     } catch (error) { display(error.message, true); } finally { button.disabled = false; }
   });
   document.querySelector('#logout').addEventListener('click', async () => {

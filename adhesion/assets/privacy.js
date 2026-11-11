@@ -19,7 +19,19 @@ if (englishNotice) {
 }
 document.querySelector('#back').href = './?lang=' + (englishNotice ? 'en' : 'fr');
 document.querySelector('.brand').href = '../?lang=' + (englishNotice ? 'en' : 'fr');
-LNH.api('/api/membership/config').then(config => {
+if (window.LNH_MEMBERSHIP_MODE === 'email') {
+  document.querySelector('[data-t="intro"]').textContent = englishNotice
+    ? 'La Nature et l’Humain uses the application sent by email to review your request, manage membership and produce your card. Completing the form alone sends nothing: you download the application file and send it through your own email app.'
+    : 'La Nature et l’Humain utilise le dossier transmis par email pour examiner ta demande, gérer ton adhésion et produire ta carte. Remplir le formulaire ne transmet rien : tu télécharges ton dossier et l’envoies depuis ta propre messagerie.';
+  document.querySelector('[data-t="access"]').textContent = englishNotice
+    ? 'Your details and photo are contained in the application file prepared on your device. Once you attach and send it, they are transmitted through email to the association. Authorised staff import the file into their private local administration. Your card is sent to you by the association after approval and payment confirmation. The QR code opens the official website.'
+    : 'Tes informations et ta photo figurent dans le dossier préparé sur ton appareil. Lorsque tu le joins et l’envoies, elles sont transmises par email à l’association. Les responsables autorisés importent ce dossier dans leur administration locale privée. L’association te transmet ta carte après validation et paiement confirmé. Le QR renvoie au site officiel.';
+  fetch('settings.json', {cache:'no-store'}).then(response => response.json()).then(settings => {
+    document.querySelector('#contact').textContent = settings.emailRecipient;
+    document.querySelector('#contact').href = 'mailto:' + settings.emailRecipient;
+    document.querySelector('#version').textContent = settings.consentVersion;
+  }).catch(() => {});
+} else LNH.api('/api/membership/config').then(config => {
   const link = document.querySelector('#contact');
   link.textContent = config.privacy_contact; link.href = 'mailto:' + config.privacy_contact;
   document.querySelector('#version').textContent = config.consent_version;

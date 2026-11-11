@@ -1,5 +1,15 @@
 # Vérification finale du 11 novembre 2026
 
+## Parcours retenu : email et traitement local
+
+Destinataire fourni par le demandeur : **lanaturetlhumain@gmail.com**, conservé exactement. La page publique ne contacte aucune API de candidature ; elle prépare un dossier contenant les informations et la photo, un téléchargement et un email prérempli. Le demandeur joint le fichier avant d’envoyer. Aucun message réel n’a été envoyé pendant les tests, et la réception dans la boîte Gmail n’a pas été testée.
+
+Parcours navigateur effectué sur la compilation statique : saisie et photo fictives, consentement, préparation, lien mailto vers l’adresse fournie, téléchargement effectif du dossier, puis import de ce même fichier dans l’administration locale de QA. Les données et la photo sont retrouvées ; l’historique identifie la provenance email. Attribution d’une fonction, validation, paiement fictif et aperçu recto-verso à deux canvas réussis. Le fichier téléchargé contient une photo JPEG de 600 × 800 pixels sans EXIF. Aucune donnée fictive n’est copiée dans l’artefact public.
+
+Contrôle en anglais et à largeur mobile réellement mesurée de **390 px** (largeur document 375 px, sans débordement). Les dates et tarifs des démonstrations restent fictifs. L’import authentifié contrôle les fichiers, le consentement, les doublons et les conditions de délivrance. **69 tests exécutés : 67 réussis et 2 ignorés sous Windows**. Les scripts JavaScript sont vérifiés ; la préparation Pages contient 18 fichiers et exclut administration, cartes, serveur et tests. Le guide pratique et le lanceur local sont fournis.
+
+Les paragraphes suivants retracent les vérifications des modes précédents. Ils ne signifient pas qu’un service Render ou Supabase est utilisé pour ce parcours.
+
 ## Complément : hébergement gratuit
 
 Budget demandé : 0 €. Même module Python, stockage PostgreSQL et Supabase privé en option, conservation du mode SQLite local. Les secrets sont exclus des pages publiques ; schéma PostgreSQL privé avec RLS, bucket privé, verrou transactionnel des écritures, contrôle des deux conditions de délivrance et numéros conservés. Le profil éphémère refuse de démarrer sans les deux stockages distants.

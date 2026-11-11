@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import time
+import webbrowser
 from pathlib import Path
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 
@@ -16,13 +17,24 @@ from .web import Application
 
 def main():
     parser = argparse.ArgumentParser(description='Administration du module adhésion LNH')
-    parser.add_argument('command', choices=('migrate', 'create-admin', 'serve-dev', 'serve', 'flush-email', 'purge-closed'))
+    parser.add_argument('command', choices=('migrate', 'create-admin', 'serve-dev', 'serve', 'flush-email', 'purge-closed', 'manage-local'))
     parser.add_argument('--email')
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--port', type=int, default=8787)
     parser.add_argument('--confirm', action='store_true', help='Confirmer la suppression des dossiers refusés expirés')
     args = parser.parse_args()
     settings = Settings.from_env()
+    if args.command == 'manage-local':
+        if args.host not in ('127.0.0.1', 'localhost'):
+            parser.error('La gestion locale reste sur cet ordinateur.')
+        settings.database_url = ''
+        settings.storage_backend = 'local'
+        settings.require_remote_storage = False
+        settings.data = Path(__file__).resolve().parent.parent / 'var'
+        settings.origin = f'http://127.0.0.1:{args.port}'
+        settings.secure_cookies = False
+        settings.allowed_origins = ()
+        settings.qr_mode, settings.public_verification = 'website', False
     service = Service(settings)
     if args.command == 'create-admin':
         address = args.email or input('Email administrateur : ')
@@ -63,6 +75,18 @@ def main():
             server.serve_forever()
     else:
         from waitress import serve
+        if args.command == 'manage-local':
+            with contextlib.closing(service.connection()) as db:
+                needs_admin = db.execute('SELECT 1 FROM admins LIMIT 1').fetchone() is None
+            if needs_admin:
+                print('Première ouverture : protège l’administration locale avec ton email et un mot de passe.')
+                address = input('Ton email : ')
+                password = getpass.getpass('Mot de passe (14 caractères minimum) : ')
+                if password != getpass.getpass('Confirmer le mot de passe : '):
+                    parser.error('Les mots de passe diffèrent.')
+                service.add_admin(address, password)
+            print(f'Gestion locale : {settings.origin}/admin/adhesions/\nGarde cette fenêtre ouverte pendant l’utilisation.', flush=True)
+            webbrowser.open(settings.origin + '/admin/adhesions/')
         bootstrap_email = os.environ.get('LNH_BOOTSTRAP_ADMIN_EMAIL', '')
         bootstrap_password = os.environ.get('LNH_BOOTSTRAP_ADMIN_PASSWORD', '')
         if bootstrap_email or bootstrap_password:

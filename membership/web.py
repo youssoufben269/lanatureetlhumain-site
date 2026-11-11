@@ -136,6 +136,13 @@ class Application:
             except ValueError:
                 raise Problem('Pagination incorrecte.')
             return self.json(self.service.list(offset))
+        if path == '/api/admin/applications/import' and method == 'POST':
+            _, session = self.auth(env, True)
+            envelope = data.get('request')
+            if not isinstance(envelope, dict) or envelope.get('format') != 'lnh-membership-request' or type(envelope.get('version')) is not int or envelope['version'] != 1 or not isinstance(envelope.get('application'), dict):
+                raise Problem('Ce fichier n’est pas un dossier d’adhésion compatible.')
+            identifier = self.service.submit(envelope['application'], remote, actor=session['admin_id'])
+            return self.json(self.service.detail(identifier))
         match = re.fullmatch(r'/api/admin/applications/([a-f0-9]{32})(?:/(photo|card|action))?', path)
         if match:
             identifier, item = match.groups()
@@ -166,7 +173,7 @@ class Application:
                    '/adhesion/': 'adhesion/index.html', '/admin/adhesions': 'admin/adhesions/index.html',
                    '/admin/adhesions/': 'admin/adhesions/index.html', '/robots.txt': 'robots.txt', '/sitemap.xml': 'sitemap.xml'}
         relative = aliases.get(path)
-        if relative is None and (path in ('/adhesion/carte.html', '/adhesion/confidentialite.html') or re.fullmatch(r'/adhesion/assets/[a-z0-9-]+\.(?:css|js|mjs|png)', path) or re.fullmatch(r'/assets/(?:logo-officiel\.jpg|accueil-[1-3]\.webp)', path)):
+        if relative is None and (path in ('/adhesion/carte.html', '/adhesion/confidentialite.html', '/adhesion/settings.json') or re.fullmatch(r'/adhesion/assets/[a-z0-9-]+\.(?:css|js|mjs|png)', path) or re.fullmatch(r'/assets/(?:logo-officiel\.jpg|accueil-[1-3]\.webp)', path)):
             relative = path.lstrip('/')
         if relative is None:
             raise Problem('Page introuvable.', 404)

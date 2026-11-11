@@ -1,5 +1,7 @@
 # Module d’adhésion, administration et cartes
 
+**Mode actuellement retenu : formulaire public par email et administration locale.** Suivre [PRISE_EN_MAIN.md](PRISE_EN_MAIN.md) pour l’usage courant. Les instructions d’hébergement de cette page concernent une activation distante éventuelle. Le build Pages bascule le formulaire en mode email, sans API et sans publication de l’administration.
+
 Le site et le module appartiennent au même dépôt. La demande est accessible à `/adhesion/`, l’administration à `/admin/adhesions/`. Le nom et le slogan restent « La Nature et l’Humain » et « RÉSEAUX · PARTENARIATS · SOLUTIONS ».
 
 ## Base inspectée

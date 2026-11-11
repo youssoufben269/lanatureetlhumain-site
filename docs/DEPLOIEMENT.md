@@ -1,5 +1,11 @@
 # Mise à jour et hébergement
 
+## Parcours choisi : email, sans nouveau compte
+
+Le demandeur a retenu une collecte par email vers **lanaturetlhumain@gmail.com**, puis un traitement dans l’administration locale et l’envoi manuel des cartes PDF. Le formulaire est publié en mode email sur GitHub Pages. Aucun service Python distant n’est nécessaire pour cette collecte. Le serveur existant reste utilisé uniquement sur l’ordinateur pour importer les dossiers et créer les cartes. Les sections d’hébergement ci-dessous décrivent des options antérieures, non activées.
+
+Le script `scripts/prepare_public.py` crée un artefact de 18 fichiers publics, configure le mode email et exclut l’administration et les lecteurs de cartes. Il faut sélectionner GitHub Actions comme source Pages avant de publier la branche mise à jour sur `main`. Le domaine, le `CNAME` et HTTPS sont conservés. Voir [le guide d’utilisation](PRISE_EN_MAIN.md).
+
 Le demandeur a confirmé disposer uniquement de GitHub et du nom de domaine, avec un budget d’hébergement de **0 €**. Le profil gratuit Render + Supabase est préparé dans [RENDER.md](RENDER.md) et `render.yaml`. Aucun service n’a été créé. Les sources sont envoyées sur la branche dédiée ; `main` et le site public restent inchangés. Les options de serveur avec disque décrites plus bas restent des alternatives, pas une souscription à effectuer.
 
 ## État vérifié le 11 novembre 2026

@@ -1,10 +1,12 @@
 # Administration du site La Nature et l'Humain
 
+**Parcours retenu : demandes par email vers `lanaturetlhumain@gmail.com`, traitement et cartes sur l’ordinateur.** Aucun compte supplémentaire ni serveur distant n’est nécessaire. Voir [le guide pratique](docs/PRISE_EN_MAIN.md) et ouvrir `GERER_ADHESIONS.cmd` pour l’administration locale.
+
 Le module d’adhésion, son administration et le générateur de cartes sont intégrés à ce dépôt. Consulte [le guide d’utilisation et de configuration](docs/ADHESION.md). L’interface publique se trouve dans `adhesion/`, l’administration dans `admin/adhesions/`, le service privé dans `membership/`. Un service Python avec stockage persistant est nécessaire en plus de GitHub Pages.
 
 La branche `codex/adhesion-en-ligne` a été actualisée sur `origin/main` `82f0ad0` le 11 novembre 2026 et prépare le module pour publication. Son hébergement Python reste à configurer avant activation sur le site. Voir [les vérifications](docs/VALIDATION.md) et [la procédure de déploiement](docs/DEPLOIEMENT.md).
 
-Pour le budget d’hébergement de 0 €, le même service peut utiliser PostgreSQL et le stockage privé Supabase, avec Render Free : [configuration et limites de l’option gratuite](docs/RENDER.md). Ce profil nécessite les comptes correspondants ; il n’est pas encore activé sur le site public.
+L’option PostgreSQL + Supabase + Render reste une alternative technique non activée, décrite dans [RENDER.md](docs/RENDER.md). Elle n’est pas nécessaire au parcours par email choisi.
 
 Ce dépôt contient le site public de l'association.
 

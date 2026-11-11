@@ -185,8 +185,8 @@ class Service:
         except (ValueError, OSError, UnidentifiedImageError, Image.DecompressionBombError, Image.DecompressionBombWarning):
             raise Problem('Photo invalide : JPEG/PNG non animé, au moins 240 × 320 pixels, maximum 3 Mo et 16 mégapixels.')
 
-    def submit(self, data, remote):
-        self.rate_limit('submission:' + digest(remote), 10, 3600)
+    def submit(self, data, remote, *, actor='public'):
+        self.rate_limit(('submission:' + digest(remote)) if actor == 'public' else ('import:' + digest(actor)), 10 if actor == 'public' else 120, 3600)
         if data.get('website', ''):
             raise Problem('Demande non recevable.')
         if data.get('consent') is not True or data.get('consent_version') != CONSENT_VERSION:
@@ -206,18 +206,21 @@ class Service:
         photo_path = 'photos/' + identifier + '.jpg'
         with self.transaction() as db:
             # Same response for duplicate submissions; no public email enumeration.
-            if db.execute('SELECT 1 FROM applications WHERE email=?', (address,)).fetchone():
-                return
+            existing = db.execute('SELECT id FROM applications WHERE email=?', (address,)).fetchone()
+            if existing:
+                return existing['id']
             self.storage.put(photo_path, image)
             try:
                 keys = [*values, 'id', 'email', 'photo_path', 'consent_at', 'consent_version', 'status', 'created_at', 'updated_at']
                 db.execute(f'INSERT INTO applications({",".join(keys)}) VALUES({",".join("?" for _ in keys)})',
                            [*values.values(), identifier, address, photo_path, stamp, CONSENT_VERSION, 'soumise', stamp, stamp])
-                self.audit(db, identifier, 'public', 'submit', None, 'soumise')
-                self.enqueue(db, identifier, 'reception', address, {})
+                self.audit(db, identifier, actor, 'submit' if actor == 'public' else 'import_email', None, 'soumise')
+                if actor == 'public':
+                    self.enqueue(db, identifier, 'reception', address, {})
             except Exception:
                 self.storage.delete(photo_path)
                 raise
+        return identifier
 
     def audit(self, db, identifier, actor, action, old, new):
         db.execute('INSERT INTO audit(application_id,actor,action,old_status,new_status,created_at) VALUES(?,?,?,?,?,?)',
