@@ -55,6 +55,7 @@
     } catch (error) { display(error.message, true); }
     const dl = node('dl');
     const fields = [['Email', current.email], ['Téléphone', current.phone], ['Adresse', current.address], ['Ville / pays', [current.city, current.country].filter(Boolean).join(', ')], ['Profession déclarée', current.profession], ['Fonction attribuée', current.function], ['Catégorie', current.category], ['Motivation', current.motivation], ['Consentement', current.consent_at + ' · ' + current.consent_version], ['Décision', current.approved_at ? 'Approbation enregistrée le ' + current.approved_at : 'À examiner'], ['Paiement', current.payment ? `Confirmé · ${money(current.payment.amount_minor, current.payment.currency)} · ${current.payment.reference}` : 'Non confirmé'], ['Numéro', current.member_number], ['Adhésion / expiration', current.joined_on ? current.joined_on + ' / ' + current.expires_on : 'À attribuer']];
+    fields[0][0] = 'Email de notification';
     fields.forEach(([title, value]) => { dl.append(node('dt', title), node('dd', value || 'Non renseigné')); }); detail.append(dl);
     if (current.card_error) detail.append(node('p', current.card_error, 'notice'));
     if (current.refusal_reason) detail.append(node('p', 'Motif du refus : ' + current.refusal_reason, 'notice'));

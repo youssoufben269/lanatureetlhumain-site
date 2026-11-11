@@ -42,9 +42,10 @@ class EmailMembershipTest(unittest.TestCase):
         h = self.harness
         for value in ({}, {'format':'wrong','version':1,'application':{}}, {'format':'lnh-membership-request','version':True,'application':{}}):
             self.assertEqual(h.request('/api/admin/applications/import', {'request':value}, authenticated=True)['code'], 400)
-        for field in ('consent','photo'):
+        for field in ('consent','photo','email'):
             value = self.envelope()
             if field == 'consent': value['application']['consent'] = False
+            elif field == 'email': value['application']['email'] = ''
             else: value['application']['photo']['base64'] = 'not-base64'
             self.assertEqual(h.request('/api/admin/applications/import', {'request':value}, authenticated=True)['code'], 400)
         self.assertEqual(h.service.list()['total'], 0)

@@ -1,5 +1,7 @@
 # Vérification finale du 11 novembre 2026
 
+**Publication effective du parcours par email :** [bilan et déploiement](PUBLICATION_EMAIL.md). L’accueil et le formulaire sont en ligne ; l’administration et les cartes restent locales. La mention « non publié » dans les comptes rendus historiques ci-dessous décrit les étapes antérieures. Le champ email du demandeur est obligatoire ; le libellé et le message préparé précisent son usage pour les notifications manuelles.
+
 ## Parcours retenu : email et traitement local
 
 Destinataire fourni par le demandeur : **lanaturetlhumain@gmail.com**, conservé exactement. La page publique ne contacte aucune API de candidature ; elle prépare un dossier contenant les informations et la photo, un téléchargement et un email prérempli. Le demandeur joint le fichier avant d’envoyer. Aucun message réel n’a été envoyé pendant les tests, et la réception dans la boîte Gmail n’a pas été testée.

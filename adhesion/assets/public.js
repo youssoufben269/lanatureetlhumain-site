@@ -13,6 +13,7 @@
   };
   const french = Object.fromEntries([...document.querySelectorAll('[data-t]')].map(x => [x.dataset.t, x.textContent]));
   Object.assign(english, {
+    email:'Email for notifications *', emailHint:'The association will use this address for updates on your application and to send your card.',
     emailTitle:'Send your application by email', emailStep1:'Download your application file. It contains your details and photo.',
     emailStep2:'Open your email app, attach this file to the message and send it.', emailDownload:'1. Download my application', emailOpen:'2. Open my email app',
     emailAttachment:'The file is not attached to the email automatically. Attach the downloaded application before sending.',
