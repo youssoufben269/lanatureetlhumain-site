@@ -5,7 +5,7 @@ Le parcours choisi ne nécessite aucun nouveau compte de service et aucun héber
 ## Pour le demandeur
 
 1. Ouvrir la rubrique **Adhérer** du site et remplir le formulaire avec la photo et le consentement.
-2. Cliquer sur **Préparer mon email**, puis **Télécharger mon dossier**. Ce fichier contient les informations et la photo ; celle-ci est redimensionnée et réencodée sans métadonnées EXIF.
+2. Cliquer sur **Envoyer**, puis **Télécharger mon dossier**. Ce fichier contient les informations et la photo ; celle-ci est redimensionnée et réencodée sans métadonnées EXIF.
 3. Cliquer sur **Ouvrir ma messagerie**, joindre le dossier téléchargé au message et l’envoyer. La pièce jointe n’est pas ajoutée automatiquement.
 
 Si aucune messagerie ne s’ouvre, l’adresse et le texte à copier sont affichés. Le site ne prétend jamais que le message est envoyé ou reçu. Les données ne sont enregistrées ni sur GitHub ni dans le stockage du navigateur.

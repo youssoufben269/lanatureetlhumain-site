@@ -1,6 +1,8 @@
 """Create the Pages artifact from an explicit list, never the repository root."""
 import shutil
 import json
+import hashlib
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,6 +40,16 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, destination)
     (output / 'adhesion/assets/config.js').write_text("window.LNH_API_BASE = '';\nwindow.LNH_MEMBERSHIP_MODE = 'email';\n", encoding='utf-8')
+    # Change asset URLs with their content so browsers cannot reuse old scripts.
+    for name in ('adhesion/index.html', 'adhesion/confidentialite.html'):
+        page = output / name
+        def version_asset(match):
+            asset = page.parent / match.group(2)
+            digest = hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
+            return f'{match.group(1)}="{match.group(2)}?v={digest}"'
+        page.write_text(re.sub(r'(src|href)="(assets/[^"?]+\.(?:js|css))"',
+                               version_asset, page.read_text(encoding='utf-8')),
+                        encoding='utf-8')
     actual = {path.relative_to(output) for path in output.rglob('*') if path.is_file()}
     if actual != expected:
         raise ValueError('Le dossier .pages-build contient des fichiers inattendus. Utiliser un dossier de compilation propre.')
