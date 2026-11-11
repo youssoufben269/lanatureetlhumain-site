@@ -19,17 +19,25 @@ if (englishNotice) {
 }
 document.querySelector('#back').href = './?lang=' + (englishNotice ? 'en' : 'fr');
 document.querySelector('.brand').href = '../?lang=' + (englishNotice ? 'en' : 'fr');
-if (window.LNH_MEMBERSHIP_MODE === 'email') {
+if (['email','google'].includes(window.LNH_MEMBERSHIP_MODE)) {
   document.querySelector('[data-t="intro"]').textContent = englishNotice
     ? 'La Nature et l’Humain uses the application sent by email to review your request, manage membership and produce your card. Completing the form alone sends nothing: you download the application file and send it through your own email app.'
     : 'La Nature et l’Humain utilise le dossier transmis par email pour examiner ta demande, gérer ton adhésion et produire ta carte. Remplir le formulaire ne transmet rien : tu télécharges ton dossier et l’envoies depuis ta propre messagerie.';
   document.querySelector('[data-t="access"]').textContent = englishNotice
     ? 'Your details and photo are contained in the application file prepared on your device. Once you attach and send it, they are transmitted through email to the association. Authorised staff import the file into their private local administration. Your card is sent to you by the association after approval and payment confirmation. The QR code opens the official website.'
     : 'Tes informations et ta photo figurent dans le dossier préparé sur ton appareil. Lorsque tu le joins et l’envoies, elles sont transmises par email à l’association. Les responsables autorisés importent ce dossier dans leur administration locale privée. L’association te transmet ta carte après validation et paiement confirmé. Le QR renvoie au site officiel.';
+  if (window.LNH_MEMBERSHIP_MODE === 'google') {
+    document.querySelector('[data-t="intro"]').textContent = englishNotice
+      ? 'Clicking Send transmits your application and photo to the association through Google Apps Script. They are saved in its private Google Drive space to review your application, manage membership and produce your card.'
+      : 'Le bouton Envoyer transmet ton dossier et ta photo à l’association par Google Apps Script. Ils sont enregistrés dans son espace Google Drive privé pour examiner ta demande, gérer ton adhésion et produire ta carte.';
+    document.querySelector('[data-t="access"]').textContent = englishNotice
+      ? 'Google processes the transfer, storage and email notices on behalf of the association. Access to files is restricted to authorised staff. The association receives an email with your file, and a receipt is sent to your email address. Staff import the file into the private local administration. No application or photo is published on GitHub. Your card is issued after approval and confirmed payment. The QR opens the official website.'
+      : 'Google assure la transmission, le stockage et les notifications par email pour le compte de l’association. Les fichiers sont réservés aux responsables autorisés. L’association reçoit ton dossier par email et un accusé est adressé à ton email. Les responsables importent le dossier dans l’administration locale privée. Aucun dossier ni aucune photo n’est publié sur GitHub. La carte est délivrée après validation et paiement confirmé. Le QR ouvre le site officiel.';
+  }
   fetch('settings.json', {cache:'no-store'}).then(response => response.json()).then(settings => {
     document.querySelector('#contact').textContent = settings.emailRecipient;
     document.querySelector('#contact').href = 'mailto:' + settings.emailRecipient;
-    document.querySelector('#version').textContent = settings.consentVersion;
+    document.querySelector('#version').textContent = window.LNH_MEMBERSHIP_MODE === 'google' ? settings.directConsentVersion : settings.consentVersion;
   }).catch(() => {});
 } else LNH.api('/api/membership/config').then(config => {
   const link = document.querySelector('#contact');

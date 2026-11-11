@@ -1,4 +1,5 @@
 import json
+import contextlib
 import unittest
 from membership.config import ROOT
 from scripts.prepare_public import public_files
@@ -61,3 +62,15 @@ class EmailMembershipTest(unittest.TestCase):
         self.assertNotIn('adhesion/assets/pdf.mjs', paths)
         settings = json.loads((ROOT / 'adhesion/settings.json').read_text())
         self.assertEqual(settings['emailRecipient'], 'lanaturetlhumain@gmail.com')
+        self.assertIn('adhesion/assets/direct.js', paths)
+        self.assertFalse(any(p.startswith('google-apps-script/') for p in paths))
+
+    def test_google_consent_import_keeps_actual_version_and_legacy_compatibility(self):
+        h = self.harness
+        value = self.envelope()
+        value['application']['consent_version'] = '2026-11-11-v2'
+        imported = h.request('/api/admin/applications/import', {'request':value}, authenticated=True)
+        self.assertEqual(imported['code'], 200)
+        with contextlib.closing(h.service.connection()) as db:
+            row = db.execute('SELECT consent_version FROM applications WHERE id=?', (imported['body']['id'],)).fetchone()
+        self.assertEqual(row['consent_version'], '2026-11-11-v2')

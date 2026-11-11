@@ -1,4 +1,6 @@
-# Demandes par email, cartes sur ton ordinateur
+# Demandes d’adhésion, cartes sur ton ordinateur
+
+**Envoi direct préparé :** le service Google Apps Script et son intégration sont disponibles. L’activation exige une connexion et une autorisation dans `lanaturetlhumain@gmail.com`, puis une URL de déploiement `/exec`. Suivre [ENVOI_DIRECT_GOOGLE.md](ENVOI_DIRECT_GOOGLE.md). Tant que `googleEndpoint` est vide, le parcours manuel ci-dessous reste le parcours publié. Après activation, le demandeur clique sur **Envoyer** et reçoit la confirmation Google, sans télécharger de fichier ni ouvrir sa messagerie. L’association reçoit le dossier joint et l’importe localement comme indiqué ci-dessous.
 
 Le parcours choisi ne nécessite aucun nouveau compte de service et aucun hébergement payant. Le site prépare les dossiers ; tu reçois les emails sur **lanaturetlhumain@gmail.com** et tu traites les demandes localement.
 

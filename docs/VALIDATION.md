@@ -1,5 +1,10 @@
 # Vérification finale du 11 novembre 2026
 
+## Envoi direct Google préparé
+
+Le service de réception Google Apps Script et le POST direct du formulaire sont préparés, avec notice FR/EN adaptée et import local de la nouvelle version de consentement. La photo est jointe au même envoi. `googleEndpoint` reste vide jusqu’à l’activation dans le compte de l’association ; la production conserve donc le parcours manuel. Aucun dossier ni email réel n’a été transmis à Google pendant les tests locaux. Suite Python complète : **70 tests, 68 réussis, 2 ignorés sous Windows**. Le harnais Node hors ligne couvre validation, idempotence, limites, stockage en échec, reprise des notifications, contrôle du propriétaire et POST direct. Les services Google y sont simulés. Affichage du mode direct vérifié dans le navigateur, FR/EN, largeur réelle de 390 px (document 375 px, sans débordement), champs requis et panneau de téléchargement masqué. Voir [l’activation et les limites](ENVOI_DIRECT_GOOGLE.md).
+
+
 **Publication effective du parcours par email :** [bilan et déploiement](PUBLICATION_EMAIL.md). L’accueil et le formulaire sont en ligne ; l’administration et les cartes restent locales. La mention « non publié » dans les comptes rendus historiques ci-dessous décrit les étapes antérieures. Le champ email du demandeur est obligatoire ; le libellé et le message préparé précisent son usage pour les notifications manuelles.
 
 ## Parcours retenu : email et traitement local

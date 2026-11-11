@@ -4,6 +4,10 @@
   const button = document.querySelector('#submit'), photo = document.querySelector('#photo');
   const preview = document.querySelector('#photo-preview');
   const emailMode = window.LNH_MEMBERSHIP_MODE === 'email';
+  const directMode = window.LNH_MEMBERSHIP_MODE === 'google';
+  let directEndpoint, sending = false, navigating = false;
+  let requestId = crypto.randomUUID().replaceAll('-', '');
+  let startedAt = Date.now();
   let recipient, requestURL, preparedApplication;
   let config, imageURL, lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'fr';
   const english = {
@@ -22,6 +26,10 @@
   if (emailMode) {
     Object.assign(french, {intro:'Prépare ta demande et ta photo, puis envoie le dossier par email. L’association examine les pièces reçues et traite ton adhésion.', submit:'Envoyer', step1:'Tu prépares le dossier et l’envoies par email avec ta photo.'});
     Object.assign(english, {intro:'Prepare your application and photo, then send the file by email. The association reviews the documents received and processes your membership.', submit:'Send', step1:'Prepare your application and send it by email with your photo.'});
+  }
+  if (directMode) {
+    Object.assign(french, {intro:'Envoie ta demande et ta photo directement depuis ce formulaire. L’association examinera ton dossier et te contactera par email.', submit:'Envoyer', step1:'Tu transmets tes informations et ta photo depuis le formulaire.'});
+    Object.assign(english, {intro:'Send your application and photo directly from this form. The association will review your application and contact you by email.', submit:'Send', step1:'Send your details and photo from the form.'});
   }
   function renderEmail() {
     const draft = LNH_EMAIL.prepare(preparedApplication, recipient, lang);
@@ -77,6 +85,7 @@
     document.querySelector('#email-delivery').hidden = true;
   });
   form.addEventListener('input', event => {
+    requestId = crypto.randomUUID().replaceAll('-', '');
     if (event.target.id !== 'email-body') {
       preparedApplication = undefined;
       document.querySelector('#email-delivery').hidden = true;
@@ -84,7 +93,8 @@
   });
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (!config || !form.reportValidity()) return;
+    if (sending || !config || !form.reportValidity()) return;
+    sending = true;
     button.disabled = true; status.className = 'status';
     status.textContent = lang === 'en' ? 'Sending…' : 'Envoi en cours…';
     try {
@@ -96,7 +106,7 @@
       });
       const data = Object.fromEntries(new FormData(form));
       data.photo = { name: file.name, mime: file.type, base64: encoded };
-      if (emailMode) {
+      if (emailMode || directMode) {
         const scale = Math.min(1, 1200 / preview.naturalWidth, 1600 / preview.naturalHeight);
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(preview.naturalWidth * scale); canvas.height = Math.round(preview.naturalHeight * scale);
@@ -110,6 +120,11 @@
         renderEmail();
         return;
       }
+      if (directMode) {
+        LNH_DIRECT.submit(data, directEndpoint, lang, requestId, startedAt);
+        navigating = true;
+        return;
+      }
       const result = await api('/api/membership/applications', { data });
       form.reset(); preview.hidden = true;
       if (imageURL) URL.revokeObjectURL(imageURL);
@@ -117,13 +132,18 @@
       status.textContent = lang === 'en' ? 'Your application has been received. The association will review the information provided. If this email has already been used, contact us to follow up.' : result.message;
     } catch (error) {
       status.className = 'status error'; status.textContent = error.message;
-    } finally { button.disabled = false; }
+    } finally { if (!navigating) { sending = false; button.disabled = false; } }
   });
-  const configuration = emailMode
+  const configuration = emailMode || directMode
     ? fetch('settings.json', {cache:'no-store'}).then(async response => {
         if (!response.ok) throw new Error('Configuration indisponible.');
         const settings = await response.json();
         recipient = settings.emailRecipient;
+        if (directMode) {
+          directEndpoint = settings.googleEndpoint;
+          if (!LNH_DIRECT.validEndpoint(directEndpoint)) throw new Error('Service d’envoi indisponible.');
+          settings.consentVersion = settings.directConsentVersion;
+        }
         if (!recipient) throw new Error('Adresse de réception indisponible.');
         return {categories:settings.categories,consent_version:settings.consentVersion,fee_minor:null,currency:'EUR'};
       })
@@ -135,5 +155,13 @@
     config.categories.forEach(value => select.add(new Option(value, value)));
     select.disabled = false; button.disabled = false; translate();
   }).catch(error => { status.className = 'status error'; status.textContent = error.message; });
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) {
+      navigating = false; sending = false; button.disabled = !config; startedAt = Date.now(); status.textContent = '';
+      if (photo.files[0]) {
+        imageURL = URL.createObjectURL(photo.files[0]); preview.src = imageURL; preview.hidden = false;
+      }
+    }
+  });
   window.addEventListener('pagehide', () => { if (requestURL) URL.revokeObjectURL(requestURL); if (imageURL) URL.revokeObjectURL(imageURL); });
 })();

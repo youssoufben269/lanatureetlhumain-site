@@ -1,0 +1,234 @@
+/* La Nature et l'Humain: private intake only. No membership/card issuance. */
+const LNH_GOOGLE = Object.freeze({
+  owner: 'lanaturetlhumain@gmail.com', recipient: 'lanaturetlhumain@gmail.com',
+  site: 'https://www.lanatureetlhumain.org', consent: '2026-11-11-v2',
+  categories: ['actif', 'sympathisant', 'institutionnel'], dailyLimit: 30, hourlyLimit: 10
+});
+
+// Run once, as the association account. No email is sent by this setup.
+function installer() {
+  owner_();
+  const properties = PropertiesService.getScriptProperties();
+  if (!properties.getProperty('LNH_FOLDER_ID')) {
+    const folder = DriveApp.createFolder('LNH - Demandes adhesion - PRIVE');
+    folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+    properties.setProperty('LNH_FOLDER_ID', folder.getId());
+  }
+  if (!ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === 'relancerNotifications')) {
+    ScriptApp.newTrigger('relancerNotifications').timeBased().everyHours(1).create();
+  }
+  return 'Service prêt. Déployer une application Web exécutée en tant que propriétaire, accessible à tous.';
+}
+
+function owner_() {
+  if (Session.getEffectiveUser().getEmail().toLowerCase() !== LNH_GOOGLE.owner) {
+    throw new Error('Utiliser le compte Google de l’association.');
+  }
+}
+
+function doGet() {
+  return receipt_(true, 'fr', '', '');
+}
+
+function doPost(e) {
+  let language = 'fr';
+  try {
+    owner_();
+    if (!e || !e.postData || e.postData.length > 4400000 || !e.parameter) throw new Error('Dossier invalide.');
+    language = e.parameter.language === 'en' ? 'en' : 'fr';
+    const raw = JSON.parse(e.parameter.request || 'null');
+    const application = validate_(raw);
+    const id = e.parameter.requestId || '';
+    if (!/^[a-f0-9]{32}$/.test(id)) throw new Error('Référence incorrecte.');
+    const started = Number(e.parameter.startedAt);
+    if (!Number.isFinite(started) || Date.now() - started < 1500 || Date.now() - started > 7200000) {
+      throw new Error('Recharge le formulaire avant de réessayer.');
+    }
+    const result = receive_(id, application, language);
+    return receipt_(true, language, result.reference, result.notifications);
+  } catch (error) {
+    // Never expose exception details, folder IDs, applicant data or stack traces.
+    return receipt_(false, language, '', '');
+  }
+}
+
+function field_(value, maximum, required) {
+  if (typeof value !== 'string') value = '';
+  value = value.trim();
+  if ((required && !value) || value.length > maximum || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value)) {
+    throw new Error('Champ invalide.');
+  }
+  return value;
+}
+
+function validate_(envelope) {
+  if (!envelope || envelope.format !== 'lnh-membership-request' || envelope.version !== 1) throw new Error('Format invalide.');
+  const input = envelope.application;
+  if (!input || input.consent !== true || input.consent_version !== LNH_GOOGLE.consent || input.website) throw new Error('Consentement requis.');
+  const data = {};
+  [['first_name',80,true],['last_name',80,true],['email',254,true],['phone',40,true],
+   ['address',250,false],['city',100,false],['country',100,false],['profession',120,false],
+   ['motivation',2000,false],['category',60,true]].forEach(spec => {
+    data[spec[0]] = field_(input[spec[0]], spec[1], spec[2]);
+  });
+  if (/[\r\n\t]/.test(data.first_name + data.last_name) ||
+      !/^[^\s<>@\r\n]+@[^\s<>@\r\n]+\.[^\s<>@\r\n]+$/.test(data.email) ||
+      !LNH_GOOGLE.categories.includes(data.category)) throw new Error('Coordonnées invalides.');
+  data.email = data.email.toLowerCase();
+  const photo = input.photo;
+  if (!photo || !['image/jpeg','image/png'].includes(photo.mime) || typeof photo.base64 !== 'string' ||
+      photo.base64.length > 4000000 || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(photo.base64)) {
+    throw new Error('Photo invalide.');
+  }
+  const bytes = Utilities.base64Decode(photo.base64).map(b => b & 255);
+  const size = imageSize_(bytes, photo.mime);
+  if (bytes.length > 3000000 || size[0] < 240 || size[1] < 320 || size[0] * size[1] > 16000000) throw new Error('Dimensions invalides.');
+  data.photo = {name:photo.mime === 'image/png' ? 'photo.png' : 'photo.jpg', mime:photo.mime, base64:photo.base64};
+  data.consent = true;
+  data.consent_version = LNH_GOOGLE.consent;
+  // Unknown keys, especially function/status/payment/number, are discarded.
+  return data;
+}
+
+function imageSize_(bytes, mime) {
+  const u32 = i => bytes[i]*16777216 + bytes[i+1]*65536 + bytes[i+2]*256 + bytes[i+3];
+  if (mime === 'image/png') {
+    if (bytes.length < 33 || bytes.slice(0,8).join(',') !== '137,80,78,71,13,10,26,10' ||
+        bytes.slice(12,16).join(',') !== '73,72,68,82') throw new Error('PNG invalide.');
+    return [u32(16),u32(20)];
+  }
+  if (bytes[0] !== 255 || bytes[1] !== 216 || bytes[bytes.length-2] !== 255 || bytes[bytes.length-1] !== 217) throw new Error('JPEG invalide.');
+  let offset = 2;
+  while (offset + 4 < bytes.length) {
+    if (bytes[offset++] !== 255) throw new Error('JPEG invalide.');
+    while (bytes[offset] === 255) offset++;
+    const marker = bytes[offset++];
+    if (marker === 218 || marker === 217) break;
+    const length = bytes[offset]*256 + bytes[offset+1];
+    if (length < 2 || offset + length > bytes.length) break;
+    if ([192,193,194].includes(marker) && length >= 8) return [bytes[offset+5]*256+bytes[offset+6],bytes[offset+3]*256+bytes[offset+4]];
+    offset += length;
+  }
+  throw new Error('Dimensions JPEG absentes.');
+}
+
+function hash_(value) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, value, Utilities.Charset.UTF_8)
+    .map(b => ('0' + (b & 255).toString(16)).slice(-2)).join('');
+}
+
+function read_(folder, name) {
+  const files = folder.getFilesByName(name);
+  return files.hasNext() ? JSON.parse(files.next().getBlob().getDataAsString()) : null;
+}
+
+function write_(folder, name, value) {
+  const files = folder.getFilesByName(name);
+  const text = JSON.stringify(value);
+  if (files.hasNext()) files.next().setContent(text);
+  else folder.createFile(name, text, MimeType.PLAIN_TEXT);
+}
+
+function receive_(id, application, language) {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(25000)) throw new Error('Service occupé.');
+  try {
+    const properties = PropertiesService.getScriptProperties();
+    const rootId = properties.getProperty('LNH_FOLDER_ID');
+    if (!rootId) throw new Error('Installer le service.');
+    const root = DriveApp.getFolderById(rootId);
+    const folders = root.getFoldersByName('demande-' + id);
+    let folder, state;
+    const payloadHash = hash_(JSON.stringify(application));
+    if (folders.hasNext()) {
+      folder = folders.next();
+      state = read_(folder, 'etat.json');
+      if (!state || state.hash !== payloadHash) throw new Error('Référence déjà utilisée.');
+    } else {
+      const current = new Date().toISOString();
+      const day = current.slice(0,10), hour = current.slice(0,13);
+      let rate = JSON.parse(properties.getProperty('LNH_RATE') || '{}');
+      if (rate.day !== day) rate = {day:day, hour:hour, total:0, hourly:0, emails:{}};
+      if (rate.hour !== hour) { rate.hour = hour; rate.hourly = 0; }
+      const emailHash = hash_(application.email);
+      if (rate.total >= LNH_GOOGLE.dailyLimit || rate.hourly >= LNH_GOOGLE.hourlyLimit || (rate.emails[emailHash] || 0) >= 2) throw new Error('Limite atteinte.');
+      // Count attempts before writing, so storage failures cannot bypass limits.
+      rate.total++; rate.hourly++; rate.emails[emailHash] = (rate.emails[emailHash] || 0) + 1;
+      properties.setProperty('LNH_RATE', JSON.stringify(rate));
+      folder = root.createFolder('demande-' + id);
+      state = {hash:payloadHash, reference:'LNH-D-' + id, receivedAt:current, language:language, admin:false, applicant:false};
+      try {
+        folder.createFile(Utilities.newBlob(Utilities.base64Decode(application.photo.base64),application.photo.mime,application.photo.name));
+        write_(folder, 'demande-adhesion-lnh.json', {format:'lnh-membership-request', version:1, application:application, received_at:current});
+        write_(folder, 'etat.json', state);
+      } catch (error) {
+        folder.setTrashed(true); // Incomplete record, recoverable by the account owner.
+        throw error;
+      }
+    }
+    notify_(folder, state);
+    return {reference:state.reference, notifications:state.admin && state.applicant ? 'sent' : 'pending'};
+  } finally { lock.releaseLock(); }
+}
+
+function notify_(folder, state) {
+  const envelope = read_(folder, 'demande-adhesion-lnh.json');
+  if (!envelope) return;
+  const data = envelope.application;
+  try {
+    if (!state.admin && MailApp.getRemainingDailyQuota() > 0) {
+      const files = folder.getFilesByName('demande-adhesion-lnh.json');
+      const attachment = files.next().getBlob().setName('demande-adhesion-lnh.json').setContentType('application/json');
+      MailApp.sendEmail({to:LNH_GOOGLE.recipient, replyTo:data.email, name:'La Nature et l’Humain',
+        subject:'Nouvelle demande d’adhésion | ' + state.reference,
+        body:'Une demande a été enregistrée depuis le site officiel.\n\nRéférence : ' + state.reference +
+          '\nNom : ' + data.first_name + ' ' + data.last_name + '\nE-mail : ' + data.email +
+          '\nTéléphone : ' + data.phone + '\nCatégorie souhaitée : ' + data.category +
+          '\n\nLe dossier joint contient les informations et la photo pour l’import dans l’administration locale. La fonction, la validation et le paiement restent à traiter par l’association.',
+        attachments:[attachment]});
+      state.admin = true; write_(folder, 'etat.json', state);
+    }
+    if (!state.applicant && MailApp.getRemainingDailyQuota() > 0) {
+      const en = state.language === 'en';
+      MailApp.sendEmail({to:data.email, replyTo:LNH_GOOGLE.recipient, name:'La Nature et l’Humain',
+        subject:en ? 'Membership application received | La Nature et l’Humain' : 'Demande d’adhésion reçue | La Nature et l’Humain',
+        body:en ? 'Your membership application has been recorded.\nReference: ' + state.reference + '\n\nThe association will review it and contact you. This receipt does not constitute membership approval.\n\nLa Nature et l’Humain\n' + LNH_GOOGLE.site
+          : 'Ta demande d’adhésion a été enregistrée.\nRéférence : ' + state.reference + '\n\nL’association examinera ton dossier et te contactera. Cet accusé de réception ne vaut pas validation de ton adhésion.\n\nLa Nature et l’Humain\n' + LNH_GOOGLE.site});
+      state.applicant = true; write_(folder, 'etat.json', state);
+    }
+  } catch (error) {
+    // Record stays safe; hourly trigger retries unsent notices. No private logs.
+  }
+}
+
+function relancerNotifications() {
+  owner_();
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(1000)) return;
+  try {
+    const id = PropertiesService.getScriptProperties().getProperty('LNH_FOLDER_ID');
+    if (!id) return;
+    const folders = DriveApp.getFolderById(id).getFolders();
+    let attempted = 0;
+    const start = Date.now();
+    while (folders.hasNext() && attempted < 20 && Date.now() - start < 120000 && MailApp.getRemainingDailyQuota() > 0) {
+      const folder = folders.next();
+      const state = read_(folder, 'etat.json');
+      if (state && (!state.admin || !state.applicant)) { notify_(folder, state); attempted++; }
+    }
+  } finally { lock.releaseLock(); }
+}
+
+function receipt_(ok, language, reference, notifications) {
+  const en = language === 'en';
+  const recorded = ok && reference;
+  const title = recorded ? (en ? 'Application received' : 'Demande reçue') : ok ? (en ? 'Membership' : 'Adhésion') : (en ? 'Sending could not be confirmed' : 'L’envoi n’a pas pu être confirmé');
+  const text = recorded ? (en ? 'Your application and photo have been recorded. The association will review your application.' : 'Ton dossier et ta photo ont été enregistrés. L’association examinera ta demande.')
+    : ok ? (en ? 'Use the membership form on our official website.' : 'Utilise le formulaire d’adhésion sur notre site officiel.')
+    : (en ? 'Return to the form and try again. If you have already received a receipt email, do not send it again. Otherwise contact the association if the problem persists.' : 'Reviens au formulaire et réessaie. Si tu as déjà reçu un accusé par email, ne renvoie pas le dossier. Sinon, contacte l’association si le problème persiste.');
+  const escape = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const notification = !recorded ? '' : notifications === 'sent' ? (en ? 'A receipt email has been sent. Check your spam folder if needed.' : 'Un accusé de réception a été envoyé par email. Vérifie les courriers indésirables si nécessaire.')
+    : (en ? 'Your application is saved. Email notices are pending and will be retried automatically.' : 'Ton dossier est enregistré. Les notifications par email sont en attente et seront réessayées automatiquement.');
+  const html = '<!doctype html><html lang="' + (en?'en':'fr') + '"><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:16px/1.6 Arial,sans-serif;color:#263331;background:#f6f4ef}header{background:#075889;color:white;padding:20px}main{max-width:650px;margin:40px auto;background:white;padding:30px}h1{font-weight:400;font-size:30px}a{color:#075889}small{display:block;letter-spacing:.08em}p{overflow-wrap:anywhere}@media(max-width:700px){main{margin:20px 12px;padding:22px}}</style></head><body><header>La Nature et l’Humain<small>RÉSEAUX · PARTENARIATS · SOLUTIONS</small></header><main><img src="' + LNH_GOOGLE.site + '/adhesion/assets/logo.png" width="70" height="70" alt="Logo La Nature et l’Humain"><h1>' + title + '</h1><p>' + text + '</p>' + (recorded ? '<p>' + (en?'Reference: ':'Référence : ') + escape(reference) + '</p><p>' + notification + '</p>' : '') + '<p><a href="mailto:' + LNH_GOOGLE.recipient + '">' + LNH_GOOGLE.recipient + '</a></p><p><a href="' + LNH_GOOGLE.site + '/adhesion/?lang=' + (en?'en':'fr') + '">' + (en?'Back to form':'Retour au formulaire') + '</a> · <a href="' + LNH_GOOGLE.site + '/">' + (en?'Website':'Site internet') + '</a></p></main></body></html>';
+  return HtmlService.createHtmlOutput(html).setTitle(title).addMetaTag('viewport','width=device-width, initial-scale=1');
+}

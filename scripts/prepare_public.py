@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent
 FILES = ('index.html', 'CNAME', 'robots.txt', 'sitemap.xml',
          'adhesion/index.html', 'adhesion/confidentialite.html', 'adhesion/settings.json')
 ASSET_TYPES = {'.css', '.js', '.mjs', '.png', '.jpg', '.webp'}
-FORM_ASSETS = {'app.css', 'common.js', 'config.js', 'email.js', 'logo.png', 'privacy.js', 'public.js'}
+FORM_ASSETS = {'app.css', 'common.js', 'config.js', 'direct.js', 'email.js', 'logo.png', 'privacy.js', 'public.js'}
 
 
 def public_files(root=ROOT):
@@ -39,7 +39,12 @@ def main():
         destination = output / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, destination)
-    (output / 'adhesion/assets/config.js').write_text("window.LNH_API_BASE = '';\nwindow.LNH_MEMBERSHIP_MODE = 'email';\n", encoding='utf-8')
+    endpoint = settings.get('googleEndpoint', '')
+    if endpoint and not re.fullmatch(r'https://script\.google\.com/macros/s/[A-Za-z0-9_-]+/exec', endpoint):
+        raise ValueError('URL de déploiement Google invalide.')
+    mode = 'google' if endpoint else 'email'
+    (output / 'adhesion/assets/config.js').write_text(
+        f"window.LNH_API_BASE = '';\nwindow.LNH_MEMBERSHIP_MODE = '{mode}';\n", encoding='utf-8')
     # Change asset URLs with their content so browsers cannot reuse old scripts.
     for name in ('adhesion/index.html', 'adhesion/confidentialite.html'):
         page = output / name

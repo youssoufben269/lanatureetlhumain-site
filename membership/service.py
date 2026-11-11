@@ -189,7 +189,7 @@ class Service:
         self.rate_limit(('submission:' + digest(remote)) if actor == 'public' else ('import:' + digest(actor)), 10 if actor == 'public' else 120, 3600)
         if data.get('website', ''):
             raise Problem('Demande non recevable.')
-        if data.get('consent') is not True or data.get('consent_version') != CONSENT_VERSION:
+        if data.get('consent') is not True or data.get('consent_version') not in ({CONSENT_VERSION, '2026-11-11-v2'} if actor != 'public' else {CONSENT_VERSION}):
             raise Problem('Le consentement à la notice de confidentialité est nécessaire.')
         values = {key: clean(data.get(key, ''), key, maximum, required)
                   for key, maximum, required in (
@@ -213,7 +213,7 @@ class Service:
             try:
                 keys = [*values, 'id', 'email', 'photo_path', 'consent_at', 'consent_version', 'status', 'created_at', 'updated_at']
                 db.execute(f'INSERT INTO applications({",".join(keys)}) VALUES({",".join("?" for _ in keys)})',
-                           [*values.values(), identifier, address, photo_path, stamp, CONSENT_VERSION, 'soumise', stamp, stamp])
+                           [*values.values(), identifier, address, photo_path, stamp, data['consent_version'], 'soumise', stamp, stamp])
                 self.audit(db, identifier, actor, 'submit' if actor == 'public' else 'import_email', None, 'soumise')
                 if actor == 'public':
                     self.enqueue(db, identifier, 'reception', address, {})

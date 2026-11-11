@@ -1,6 +1,8 @@
 # Administration du site La Nature et l'Humain
 
-**Parcours retenu : demandes par email vers `lanaturetlhumain@gmail.com`, traitement et cartes sur l’ordinateur.** Aucun compte supplémentaire ni serveur distant n’est nécessaire. Voir [le guide pratique](docs/PRISE_EN_MAIN.md) et ouvrir `GERER_ADHESIONS.cmd` pour l’administration locale.
+**Envoi direct préparé avec le compte Google de l’association :** voir [la procédure d’activation](docs/ENVOI_DIRECT_GOOGLE.md). Le demandeur pourra transmettre ses informations et sa photo en un seul clic, sans téléchargement ni messagerie. L’envoi direct exige le déploiement Apps Script et son URL dans `adhesion/settings.json` ; tant que cette URL est vide, le parcours manuel reste actif.
+
+**Parcours actuellement publié : demandes par email vers `lanaturetlhumain@gmail.com`, traitement et cartes sur l’ordinateur.** Aucun compte supplémentaire ni serveur distant n’est nécessaire. Voir [le guide pratique](docs/PRISE_EN_MAIN.md) et ouvrir `GERER_ADHESIONS.cmd` pour l’administration locale.
 
 Le module d’adhésion, son administration et le générateur de cartes sont intégrés à ce dépôt. Consulte [le guide d’utilisation et de configuration](docs/ADHESION.md). L’interface publique se trouve dans `adhesion/`, l’administration dans `admin/adhesions/`, le service privé dans `membership/`. Un service Python avec stockage persistant est nécessaire en plus de GitHub Pages.
 
