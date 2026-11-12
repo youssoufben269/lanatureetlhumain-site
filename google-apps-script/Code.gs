@@ -36,29 +36,35 @@ function doPost(e) {
   let language = 'fr';
   try {
     owner_();
-    if (!e || !e.postData || e.postData.length > 4400000 || !e.parameter) throw new Error('Dossier invalide.');
+    if (!e || !e.postData || e.postData.length > 4400000 || !e.parameter) throw intakeError_('FORMAT');
     language = e.parameter.language === 'en' ? 'en' : 'fr';
     const raw = JSON.parse(e.parameter.request || 'null');
     const application = validate_(raw);
     const id = e.parameter.requestId || '';
-    if (!/^[a-f0-9]{32}$/.test(id)) throw new Error('Référence incorrecte.');
+    if (!/^[a-f0-9]{32}$/.test(id)) throw intakeError_('SESSION');
     const started = Number(e.parameter.startedAt);
     if (!Number.isFinite(started) || Date.now() - started < 1500 || Date.now() - started > 7200000) {
-      throw new Error('Recharge le formulaire avant de réessayer.');
+      throw intakeError_('SESSION');
     }
     const result = receive_(id, application, language);
     return receipt_(true, language, result.reference, result.notifications);
   } catch (error) {
     // Never expose exception details, folder IDs, applicant data or stack traces.
-    return receipt_(false, language, '', '');
+    return receipt_(false, language, '', '', error.intakeCode || '');
   }
 }
 
-function field_(value, maximum, required) {
+function intakeError_(code) {
+  const error = new Error('Demande non enregistrée.');
+  error.intakeCode = code;
+  return error;
+}
+
+function field_(value, maximum, required, key) {
   if (typeof value !== 'string') value = '';
   value = value.trim();
   if ((required && !value) || value.length > maximum || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value)) {
-    throw new Error('Champ invalide.');
+    throw intakeError_(key === 'motivation' ? 'MOTIVATION' : 'FIELDS');
   }
   return value;
 }
@@ -71,7 +77,7 @@ function validate_(envelope) {
   [['first_name',80,true],['last_name',80,true],['email',254,true],['phone',40,true],
    ['address',250,false],['city',100,false],['country',100,false],['profession',120,false],
    ['motivation',2000,true],['category',60,true]].forEach(spec => {
-    data[spec[0]] = field_(input[spec[0]], spec[1], spec[2]);
+    data[spec[0]] = field_(input[spec[0]], spec[1], spec[2], spec[0]);
   });
   if (/[\r\n\t]/.test(data.first_name + data.last_name) ||
       !/^[^\s<>@\r\n]+@[^\s<>@\r\n]+\.[^\s<>@\r\n]+$/.test(data.email) ||
@@ -133,7 +139,7 @@ function write_(folder, name, value) {
 
 function receive_(id, application, language) {
   const lock = LockService.getScriptLock();
-  if (!lock.tryLock(25000)) throw new Error('Service occupé.');
+  if (!lock.tryLock(25000)) throw intakeError_('BUSY');
   try {
     const properties = PropertiesService.getScriptProperties();
     const rootId = properties.getProperty('LNH_FOLDER_ID');
@@ -145,7 +151,7 @@ function receive_(id, application, language) {
     if (folders.hasNext()) {
       folder = folders.next();
       state = read_(folder, 'etat.json');
-      if (!state || state.hash !== payloadHash) throw new Error('Référence déjà utilisée.');
+      if (!state || state.hash !== payloadHash) throw intakeError_('REFERENCE');
     } else {
       const current = new Date().toISOString();
       const day = current.slice(0,10), hour = current.slice(0,13);
@@ -153,10 +159,18 @@ function receive_(id, application, language) {
       if (rate.day !== day) rate = {day:day, hour:hour, total:0, hourly:0, emails:{}};
       if (rate.hour !== hour) { rate.hour = hour; rate.hourly = 0; }
       const emailHash = hash_(application.email);
-      if (rate.total >= LNH_GOOGLE.dailyLimit || rate.hourly >= LNH_GOOGLE.hourlyLimit || (rate.emails[emailHash] || 0) >= 2) throw new Error('Limite atteinte.');
-      // Count attempts before writing, so storage failures cannot bypass limits.
-      rate.total++; rate.hourly++; rate.emails[emailHash] = (rate.emails[emailHash] || 0) + 1;
-      properties.setProperty('LNH_RATE', JSON.stringify(rate));
+      // Owner-configured temporary exception; no personal email in source/Git.
+      // Test submissions do not consume the public site's application limits.
+      const testHashes = (properties.getProperty('LNH_TEST_EMAIL_HASHES') || '').split(',')
+        .map(value => value.trim()).filter(value => /^[a-f0-9]{64}$/.test(value));
+      if (!testHashes.includes(emailHash)) {
+        if ((rate.emails[emailHash] || 0) >= 2) throw intakeError_('LIMIT_EMAIL');
+        if (rate.total >= LNH_GOOGLE.dailyLimit) throw intakeError_('LIMIT_DAY');
+        if (rate.hourly >= LNH_GOOGLE.hourlyLimit) throw intakeError_('LIMIT_HOUR');
+        // Count attempts before writing, so storage failures cannot bypass limits.
+        rate.total++; rate.hourly++; rate.emails[emailHash] = (rate.emails[emailHash] || 0) + 1;
+        properties.setProperty('LNH_RATE', JSON.stringify(rate));
+      }
       folder = root.createFolder('demande-' + id);
       state = {hash:payloadHash, reference:'LNH-D-' + id, receivedAt:current, language:language, admin:false, applicant:false};
       try {
@@ -279,13 +293,28 @@ function relancerNotifications() {
   } finally { lock.releaseLock(); }
 }
 
-function receipt_(ok, language, reference, notifications) {
+function failureText_(code, en) {
+  const messages = {
+    LIMIT_EMAIL: ['La limite de deux demandes par jour pour cette adresse email est atteinte. Consulte les accusés déjà reçus. Pour un nouvel essai aujourd’hui, contacte l’association ; sinon, réessaie demain.', 'The limit of two applications per day for this email address has been reached. Check your existing receipt emails. Contact the association to try again today, or try tomorrow.'],
+    LIMIT_DAY: ['La capacité quotidienne de dépôt est atteinte. Réessaie demain ou contacte l’association.', 'The daily application limit has been reached. Try tomorrow or contact the association.'],
+    LIMIT_HOUR: ['Le service a reçu de nombreuses demandes cette heure-ci. Réessaie dans une heure.', 'The service has received many applications this hour. Try again in one hour.'],
+    SESSION: ['Le formulaire doit être rechargé avant cet envoi. Vérifie également la date et l’heure de ton appareil, puis complète à nouveau le formulaire.', 'Reload the form before sending. Also check your device date and time, then complete the form again.'],
+    MOTIVATION: ['La motivation est obligatoire et doit contenir au maximum 2 000 caractères. Reviens au formulaire pour la compléter.', 'Motivation is required and must contain no more than 2,000 characters. Return to the form to complete it.'],
+    FIELDS: ['Vérifie les champs obligatoires et la longueur des informations saisies, puis réessaie.', 'Check the required fields and the length of the information entered, then try again.'],
+    BUSY: ['Le service traite actuellement un autre dossier. Reviens au formulaire et réessaie dans quelques instants.', 'The service is processing another application. Return to the form and try again shortly.'],
+    REFERENCE: ['Cette référence d’envoi est déjà associée à un dossier différent. Rouvre le formulaire pour déposer une nouvelle demande.', 'This submission reference is already associated with a different application. Reopen the form to submit a new application.'],
+    FORMAT: ['Le dossier transmis est incomplet ou dépasse la taille autorisée. Rouvre le formulaire et vérifie la photo jointe.', 'The submitted application is incomplete or exceeds the allowed size. Reopen the form and check the attached photo.']
+  };
+  return Object.prototype.hasOwnProperty.call(messages, code) ? messages[code][en ? 1 : 0] : '';
+}
+
+function receipt_(ok, language, reference, notifications, failureCode) {
   const en = language === 'en';
   const recorded = ok && reference;
   const title = recorded ? (en ? 'Application received' : 'Demande reçue') : ok ? (en ? 'Membership' : 'Adhésion') : (en ? 'Sending could not be confirmed' : 'L’envoi n’a pas pu être confirmé');
   const text = recorded ? (en ? 'Your application and photo have been recorded. The association will review your application.' : 'Ton dossier et ta photo ont été enregistrés. L’association examinera ta demande.')
     : ok ? (en ? 'Use the membership form on our official website.' : 'Utilise le formulaire d’adhésion sur notre site officiel.')
-    : (en ? 'Return to the form and try again. If you have already received a receipt email, do not send it again. Otherwise contact the association if the problem persists.' : 'Reviens au formulaire et réessaie. Si tu as déjà reçu un accusé par email, ne renvoie pas le dossier. Sinon, contacte l’association si le problème persiste.');
+    : failureText_(failureCode, en) || (en ? 'Return to the form and try again. If you have already received a receipt email, do not send it again. Otherwise contact the association if the problem persists.' : 'Reviens au formulaire et réessaie. Si tu as déjà reçu un accusé par email, ne renvoie pas le dossier. Sinon, contacte l’association si le problème persiste.');
   const escape = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const notification = !recorded ? '' : notifications === 'sent' ? (en ? 'A receipt email has been sent. Check your spam folder if needed.' : 'Un accusé de réception a été envoyé par email. Vérifie les courriers indésirables si nécessaire.')
     : (en ? 'Your application is saved. Email notices are pending and will be retried automatically.' : 'Ton dossier est enregistré. Les notifications par email sont en attente et seront réessayées automatiquement.');

@@ -88,11 +88,33 @@ h = harness();h.controls.storageFail=true;assert.match(h.post(),/L’envoi n’a
 h.controls.storageFail=false;assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);
 h = harness();h.controls.locked=true;assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.equal(h.sent.length,0);
 h = harness();h.controls.owner='wrong@example.org';assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.throws(()=>h.context.installer());
-h = harness();h.post();h.post(h.application,'b'.repeat(32));assert.match(h.post(h.application,'c'.repeat(32)),/L’envoi n’a pas pu être confirmé/);assert.equal(h.sent.length,4);
+h = harness();h.post();h.post(h.application,'b'.repeat(32));assert.match(h.post(h.application,'c'.repeat(32)),/La limite de deux demandes par jour/);assert.equal(h.sent.length,4);
 for (const cap of [{total:30,hourly:0},{total:10,hourly:10}]) {
   h=harness();const now=new Date().toISOString();h.properties.LNH_RATE=JSON.stringify({day:now.slice(0,10),hour:now.slice(0,13),emails:{},...cap});
   assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.equal(h.sent.length,0);
 }
+h=harness();
+// Private, reversible test exception bypasses application limits for listed
+// hashes only. Other emails, validation, idempotency and Google quotas remain.
+const testHash=h.context.hash_(h.application.email), stamp=new Date().toISOString();
+h.properties.LNH_RATE=JSON.stringify({day:stamp.slice(0,10),hour:stamp.slice(0,13),total:30,hourly:10,emails:{[testHash]:2}});
+const originalRate=h.properties.LNH_RATE;
+h.properties.LNH_TEST_EMAIL_HASHES='invalid-value, '+testHash;
+for(let i=1;i<=4;i++) assert.match(h.post(h.application,i.toString(16).padStart(32,'0')),/Ton dossier et ta photo ont été enregistrés/);
+assert.equal(h.sent.length,8);assert.equal(h.properties.LNH_RATE,originalRate);
+assert.match(h.post(h.application,'1'.padStart(32,'0')),/Ton dossier et ta photo ont été enregistrés/);assert.equal(h.sent.length,8);
+assert.match(h.post({...h.application,email:'other@example.org'},'e'.repeat(32)),/capacité quotidienne/);
+assert.match(h.post({...h.application,motivation:'  '},'f'.repeat(32)),/motivation est obligatoire/);
+assert.match(h.post({...h.application,consent:false},'f'.repeat(32)),/L’envoi n’a pas pu être confirmé/);
+h.properties.LNH_TEST_EMAIL_HASHES='';assert.match(h.post(h.application,'f'.repeat(32)),/La limite de deux demandes par jour/);
+assert.equal(h.sent.length,8);assert.equal(h.properties.LNH_RATE,originalRate);
+assert.equal([...h.folders.values()].filter(f=>f.name.startsWith('demande-')&&!f.trashed).length,4);
+assert.equal(h.context.failureText_('<script>private</script>',false),'');
+assert.doesNotMatch(h.context.receipt_(false,'fr','','','<script>private</script>').html,/<script>private/);
+assert.match(h.context.receipt_(false,'en','','','LIMIT_EMAIL').html,/limit of two applications per day/);
+h=harness();h.properties.LNH_TEST_EMAIL_HASHES=h.context.hash_(h.application.email);h.controls.quota=0;
+assert.match(h.post(),/notifications par email sont en attente/);assert.equal(h.sent.length,0);
+h.controls.quota=2;h.context.relancerNotifications();assert.equal(h.sent.length,2);
 h=harness();
 assert.match(h.context.doPost({postData:{length:4400001},parameter:{}}).html,/L’envoi n’a pas pu être confirmé/);
 assert.match(h.context.doPost({postData:{length:100},parameter:{request:JSON.stringify(h.payload()),requestId:'a'.repeat(32),startedAt:Date.now(),language:'en'}}).html,/Sending could not be confirmed/);
