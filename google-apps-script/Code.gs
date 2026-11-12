@@ -254,7 +254,7 @@ function applicationHtml_(data, state) {
     '</style></head><body>' + header + '<h1>Demande d’adhésion</h1>' + reference +
     '<div class="status">Demande enregistrée · En attente d’examen<br>L’adhésion est soumise à l’examen du dossier et à la validation de l’association.</div>' +
     '<h2>01. Identité du demandeur</h2><table><tr><td><table class="fields">' + row('Nom', data.last_name) + row('Prénom(s)', data.first_name) + '</table></td>' +
-    '<td class="portrait"><img src="data:' + data.photo.mime + ';base64,' + data.photo.base64 + '" alt="Photographie du demandeur"><div class="small">Photographie fournie</div></td></tr></table>' +
+    '<td class="portrait"><img src="data:' + data.photo.mime + ';base64,' + data.photo.base64 + '" alt="Photo d’identité"><div class="small">Photo d’identité</div></td></tr></table>' +
     '<h2>02. Coordonnées</h2><table class="fields">' + row('E-mail', data.email) + row('Téléphone', data.phone) + row('Adresse', data.address) + row('Ville', data.city) + row('Pays', data.country) + '</table>' +
     '<h2>03. Catégorie d’adhésion sollicitée</h2><table class="fields">' + row('Catégorie sollicitée', categories[data.category] || data.category) + row('Profession déclarée', data.profession) + '</table>' +
     '<p class="small">L’association détermine la fonction figurant sur la carte de membre, indépendamment de la profession déclarée.</p>' + footer(1) +
