@@ -1,5 +1,9 @@
 # Vérification finale du 11 novembre 2026
 
+## Finition du 12 novembre : motivation obligatoire et en-tête centré
+
+Service Google déployé en version 5, URL inchangée. Motivation obligatoire dans le formulaire public et sur le serveur ; anciens imports préservés. PDF relu en français institutionnel, textes noirs et gris, logo en couleurs et en-tête centré avec les coordonnées officielles du site (Marseille, téléphone et email). Dépôt fictif depuis le site public, réception Gmail, téléchargement du PDF réel, rendu visuel et contrôle du centrage effectués. Deux pages A4 lisibles, photo intégrée et jointe séparément. **72 tests Python : 70 réussis, 2 ignorés sous Windows**, harnais Node réussi. FR/EN, champ vide et espaces refusés, mobile 390 px sans débordement. [Bilan détaillé](PUBLICATION_DIRECTE.md).
+
 ## Complément du 12 novembre : dossier PDF et photo jointe
 
 Le service Google existant est maintenant en version 3. Les nouvelles demandes arrivent dans la boîte de l’association avec un PDF administratif lisible et la photo en pièce jointe séparée ; le fichier JSON reste privé pour l’import local. Deux dépôts réels de données fictives, PDF normal et texte long, ont été contrôlés depuis le site public jusque dans Gmail et après téléchargement. Rendu visuel Poppler vérifié, photo JPEG 600 × 800 sans EXIF. Harnais Node réussi ; suite Python : 70 tests, 68 réussis, 2 ignorés sous Windows ; liste Pages inchangée à 19 fichiers publics. [Bilan et limites](PUBLICATION_DIRECTE.md).
