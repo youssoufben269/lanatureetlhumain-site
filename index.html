@@ -623,6 +623,9 @@ header{
   text-transform:uppercase;
 }
 .team-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.team-link{display:inline-block;margin-top:14px;color:var(--deep);font-size:.87rem;border-bottom:1px solid currentColor;padding-bottom:3px;transition:color .2s ease,border-color .2s ease}
+.team-link:hover{color:var(--green-2)}
+.team-link:focus-visible{outline:2px solid var(--deep);outline-offset:4px;border-radius:2px}
 .team-info{padding:18px 1px 0}
 .team-name{font-size:1.05rem;color:#111;font-weight:300;margin:0}
 .team-role{color:var(--green-2);margin-top:4px;font-size:.83rem;letter-spacing:.03em}
@@ -1056,8 +1059,8 @@ footer{
         <div class="team-info"><h3 class="team-name">Ayouba SALI</h3><div class="team-role" data-i18n="team2Role">Chargé de projets</div><p class="team-profile" data-i18n="team2Profile">Profil : Consultant en agrobusiness et projets</p></div>
       </article>
       <article class="team-card">
-        <div class="team-photo"><img src="assets/ali-abdallah-youssouf-ben.webp" width="800" height="800" alt="Portrait d’Ali Abdallah Youssouf Ben" loading="lazy" decoding="async"></div>
-        <div class="team-info"><h3 class="team-name">Ali Abdallah Youssouf Ben</h3><div class="team-role" data-i18n="team3Role">Chargé de l’environnement et du climat</div><p class="team-profile" data-i18n="team3Profile">Profil : Consultant en environnement</p></div>
+        <div class="team-photo"><img src="assets/ali-abdallah-youssouf-ben.webp" width="800" height="800" alt="Portrait de Youssouf Ben Ali Abdallah" loading="lazy" decoding="async"></div>
+        <div class="team-info"><h3 class="team-name">Youssouf Ben Ali Abdallah</h3><div class="team-role" data-i18n="team3Role">Responsable Environnement, Biodiversité et Climat</div><p class="team-profile" data-i18n="team3Profile">Ingénieur océanographe et gestionnaire d’aires protégées, Youssouf Ben Ali Abdallah est expert en évaluation environnementale et sociale des aménagements côtiers, portuaires et aéroportuaires. Basé aux Comores, il contribue aux projets et partenariats de l’association pour la biodiversité et la résilience climatique.</p><a class="team-link" href="https://www.linkedin.com/in/youssouf-ben-a-02b5475a/" target="_blank" rel="noopener noreferrer" data-i18n="teamLinkedIn">Profil LinkedIn</a></div>
       </article>
       <article class="team-card">
         <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
@@ -1323,8 +1326,9 @@ footer{
     team1Profile:["Profil : Aide médico-psychologique", "Background: Psychological and social care assistant"],
     team2Role:["Chargé de projets", "Project Officer"],
     team2Profile:["Profil : Consultant en agrobusiness et projets", "Background: Agribusiness and project consultant"],
-    team3Role:["Chargé de l’environnement et du climat", "Environment and Climate Officer"],
-    team3Profile:["Profil : Consultant en environnement", "Background: Environmental consultant"],
+    team3Role:["Responsable Environnement, Biodiversité et Climat", "Environment, Biodiversity and Climate Lead"],
+    team3Profile:["Ingénieur océanographe et gestionnaire d’aires protégées, Youssouf Ben Ali Abdallah est expert en évaluation environnementale et sociale des aménagements côtiers, portuaires et aéroportuaires. Basé aux Comores, il contribue aux projets et partenariats de l’association pour la biodiversité et la résilience climatique.", "An oceanographic engineer and protected area manager, Youssouf Ben Ali Abdallah specializes in environmental and social assessment of coastal, port and airport developments. Based in the Comoros, he contributes to the association’s projects and partnerships for biodiversity and climate resilience."],
+    teamLinkedIn:["Profil LinkedIn","LinkedIn profile"],
     team4Role:["Fonction à préciser", "Role to be confirmed"],
     team4Profile:["Profil : Expert en BTP", "Background: Construction and civil engineering specialist"],
     team5Role:["Fonction à préciser", "Role to be confirmed"],
