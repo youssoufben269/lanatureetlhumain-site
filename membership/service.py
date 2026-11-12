@@ -195,7 +195,7 @@ class Service:
                   for key, maximum, required in (
                       ('first_name', 80, True), ('last_name', 80, True), ('phone', 40, True),
                       ('address', 250, False), ('city', 100, False), ('country', 100, False),
-                      ('profession', 120, False), ('motivation', 2000, False), ('category', 60, True))}
+                      ('profession', 120, False), ('motivation', 2000, actor == 'public'), ('category', 60, True))}
         if values['category'] not in self.cfg.categories:
             raise Problem('Catégorie de membre inconnue.')
         if any(ch in values['first_name'] + values['last_name'] for ch in '\n\t'):

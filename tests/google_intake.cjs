@@ -32,7 +32,7 @@ function harness() {
     HtmlService:{createHtmlOutput:html=>({html,setTitle(){return this;},addMetaTag(){return this;},getAs(type){controls.conversions++;if(controls.pdfFail)throw Error('Conversion failed');return blob('PDF-SIMULATED\n'+html,type,'output.pdf');}})}});
   vm.runInContext(source,context);
   context.installer();
-  const application = {first_name:'Amina',last_name:'Test',email:'applicant@example.org',phone:'+229 00000000',category:'actif',profession:'Biologiste',consent:true,consent_version:'2026-11-11-v2',photo:{mime:'image/png',base64:png.toString('base64')},function:'Présidente',payment:true};
+  const application = {first_name:'Amina',last_name:'Test',email:'applicant@example.org',phone:'+229 00000000',category:'actif',profession:'Biologiste',motivation:'Contribuer aux initiatives de l’association.',consent:true,consent_version:'2026-11-11-v2',photo:{mime:'image/png',base64:png.toString('base64')},function:'Présidente',payment:true};
   const payload = a=>({format:'lnh-membership-request',version:1,application:a||application});
   const post = (a=application,id='a'.repeat(32))=>context.doPost({postData:{length:JSON.stringify(a).length},parameter:{request:JSON.stringify(payload(a)),requestId:id,startedAt:String(Date.now()-2000),language:'fr'}}).html;
   return {context,application,payload,post,controls,sent,folders,properties};
@@ -40,7 +40,7 @@ function harness() {
 let h = harness();
 const clean = h.context.validate_(h.payload());
 assert.equal(clean.profession,'Biologiste'); assert.equal(clean.function,undefined);assert.equal(clean.payment,undefined);
-for (const change of [{email:''},{email:'a@example.org\r\nBcc:evil@example.org'},{consent:false},{consent_version:'old'},{category:'president'},{website:'robot'},{photo:{mime:'image/jpeg',base64:'eHh4eA=='}}]) {
+for (const change of [{motivation:undefined},{motivation:''},{motivation:' \n\t '},{email:''},{email:'a@example.org\r\nBcc:evil@example.org'},{consent:false},{consent_version:'old'},{category:'president'},{website:'robot'},{photo:{mime:'image/jpeg',base64:'eHh4eA=='}}]) {
   assert.throws(()=>h.context.validate_(h.payload({...h.application,...change})));
 }
 assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);
@@ -60,7 +60,11 @@ const html=h.context.applicationHtml_({...clean,first_name:'<script>attack</scri
 assert.match(html,/&lt;script&gt;attack/);assert.match(html,/&lt;img src=&quot;https:\/\/evil.org&quot;&gt; Une motivation/);
 assert.doesNotMatch(html,/<script>|<img src="https:\/\/evil.org/);
 assert.match(html,/data:image\/png;base64,/);assert.match(html,/RÉSEAUX · PARTENARIATS · SOLUTIONS/);
-for(const label of ['Identité du demandeur','Coordonnées','Adhésion souhaitée','Message et motivation','Consentement et pièces transmises','Cadre réservé à l’association'])assert.ok(html.includes(label));
+for(const label of ['Identité du demandeur','Coordonnées','Catégorie d’adhésion sollicitée','04. Motivation','Consentement et pièces du dossier','Examen réservé à l’association'])assert.ok(html.includes(label));
+assert.ok(html.includes('L’adhésion est soumise à l’examen du dossier et à la validation de l’association.'));
+assert.doesNotMatch(html,/Ce dépôt ne vaut|Message et motivation|#075889/);
+assert.match(html,/\.brand strong\{[^}]*font-weight:normal;color:#202020/);
+assert.match(html,/\.slogan\{[^}]*color:#666660/);
 const longHtml=h.context.applicationHtml_({...clean,motivation:'a\n'.repeat(1000),address:'<'.repeat(250)}, {reference:'LNH-D-'+ 'a'.repeat(32),receivedAt:new Date().toISOString()});
 assert.ok(longHtml.includes(('a '.repeat(1000)).trim()));assert.match(longHtml,/&lt;&lt;&lt;/);
 assert.match(longHtml,/Partie 2 \/ 2/);assert.doesNotMatch(longHtml.match(/<div class="message">([\s\S]*?)<\/div>/)[1],/<br>/);

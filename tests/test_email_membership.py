@@ -17,6 +17,14 @@ class EmailMembershipTest(unittest.TestCase):
         data['function'] = 'Président auto-attribué'
         return {'format':'lnh-membership-request','version':1,'application':data}
 
+    def test_legacy_import_without_motivation_remains_readable(self):
+        value = self.envelope()
+        value['application'].pop('motivation')
+        result = self.harness.request('/api/admin/applications/import', {'request':value}, authenticated=True)
+        self.assertEqual(result['code'], 200)
+        self.assertEqual(result['body']['motivation'], '')
+        self.assertIsNone(result['body']['member_number'])
+
     def test_private_import_validation_duplicate_photo_and_card_gates(self):
         h = self.harness
         request = {'request':self.envelope()}

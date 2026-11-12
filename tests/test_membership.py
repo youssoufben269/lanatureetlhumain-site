@@ -71,6 +71,7 @@ class MembershipTest(unittest.TestCase):
         image.save(raw, 'JPEG', exif=b'Exif\x00\x00metadata-to-strip')
         return {'first_name': 'Youssouf', 'last_name': 'Ben Ali ' + suffix, 'email': suffix + '@example.org',
                 'phone': '+269 000 00 00', 'profession': 'Profession déclarée privée', 'category': 'actif',
+                'motivation': 'Contribuer aux initiatives de biodiversité et de coopération.',
                 'consent': True, 'consent_version': CONSENT_VERSION,
                 'photo': {'name': 'photo.jpg', 'mime': 'image/jpeg', 'base64': base64.b64encode(raw.getvalue()).decode()}}
 
@@ -79,6 +80,17 @@ class MembershipTest(unittest.TestCase):
         self.assertEqual(result['code'], 202, result['body'])
         with contextlib.closing(self.service.connection()) as db:
             return db.execute('SELECT id FROM applications WHERE email=?', (suffix + '@example.org',)).fetchone()[0]
+
+    def test_motivation_required_for_new_public_requests(self):
+        for value in (None, '', ' \n\t '):
+            payload = self.payload('motivation-required')
+            if value is None:
+                payload.pop('motivation')
+            else:
+                payload['motivation'] = value
+            self.assertEqual(self.request('/api/membership/applications', payload)['code'], 400)
+        with contextlib.closing(self.service.connection()) as db:
+            self.assertEqual(db.execute('SELECT COUNT(*) FROM applications').fetchone()[0], 0)
 
     def action(self, identifier, action, **values):
         member = self.service.detail(identifier)

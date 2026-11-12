@@ -68,7 +68,7 @@ function validate_(envelope) {
   const data = {};
   [['first_name',80,true],['last_name',80,true],['email',254,true],['phone',40,true],
    ['address',250,false],['city',100,false],['country',100,false],['profession',120,false],
-   ['motivation',2000,false],['category',60,true]].forEach(spec => {
+   ['motivation',2000,true],['category',60,true]].forEach(spec => {
     data[spec[0]] = field_(input[spec[0]], spec[1], spec[2]);
   });
   if (/[\r\n\t]/.test(data.first_name + data.last_name) ||
@@ -223,32 +223,32 @@ function applicationHtml_(data, state) {
   const categories = {actif:'Membre actif', sympathisant:'Membre sympathisant', institutionnel:'Membre institutionnel'};
   const date = Utilities.formatDate(new Date(state.receivedAt), 'Africa/Porto-Novo', 'dd/MM/yyyy à HH:mm') + ' (Bénin, UTC+1)';
   const header = '<table class="brand"><tr><td style="width:65px"><img width="58" height="58" src="' + LNH_GOOGLE.site + '/adhesion/assets/logo.png" alt=""></td><td><strong>La Nature et l’Humain</strong><div class="slogan">RÉSEAUX · PARTENARIATS · SOLUTIONS</div></td></tr></table>';
-  const reference = '<div class="ref">Référence de dépôt : ' + escapeHtml_(state.reference) + '<br>Reçue le ' + escapeHtml_(date) + '</div>';
-  const footer = part => '<div class="footer">Dossier confidentiel · Examen par l’association · Partie ' + part + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.recipient + '</div>';
+  const reference = '<div class="ref">Référence du dossier : ' + escapeHtml_(state.reference) + '<br>Date de réception : ' + escapeHtml_(date) + '</div>';
+  const footer = part => '<div class="footer">Document confidentiel · Usage interne à l’association · Partie ' + part + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.recipient + '</div>';
   return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>' +
-    '@page{size:A4;margin:16mm 17mm}body{font:10pt/1.4 Arial,sans-serif;color:#243431;margin:0}' +
+    '@page{size:A4;margin:16mm 17mm}body{font:10pt/1.4 Arial,sans-serif;color:#252525;margin:0}' +
     'table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}' +
-    '.brand{border-bottom:2px solid #075889;margin-bottom:18px}.brand td{padding:0 0 12px}.brand strong{font-size:18pt;color:#075889}.slogan{font-size:8pt;letter-spacing:1px;margin-top:5px}' +
-    'h1{font-size:23pt;font-weight:normal;color:#075889;margin:0 0 10px}h2{font-size:12pt;color:#075889;margin:19px 0 8px;border-bottom:1px solid #dce5de;padding-bottom:5px;page-break-after:avoid}tr{page-break-inside:avoid}' +
-    '.ref{font-size:8pt;color:#52615d;word-wrap:break-word}.status{background:#f0f5ec;border-left:3px solid #4b9824;padding:10px 12px;margin:14px 0;font-size:9pt}' +
-    '.fields th{width:30%;text-align:left;font-weight:normal;color:#52615d}.fields th,.fields td{border-bottom:1px solid #e5e9e6;padding:7px 8px 7px 0}' +
-    '.portrait{text-align:right;width:100px}.portrait img{max-width:90px;max-height:120px}.small{font-size:8pt;color:#52615d}' +
+    '.brand{border-bottom:1px solid #dedbd4;margin-bottom:18px}.brand td{padding:0 0 12px}.brand strong{font-size:18pt;font-weight:normal;color:#202020}.slogan{font-size:8pt;color:#666660;letter-spacing:1.3px;margin-top:5px}' +
+    'h1{font-size:23pt;font-weight:normal;color:#202020;margin:0 0 10px}h2{font-size:12pt;color:#303030;margin:19px 0 8px;border-bottom:1px solid #dedbd4;padding-bottom:5px;page-break-after:avoid}tr{page-break-inside:avoid}' +
+    '.ref{font-size:8pt;color:#555550;word-wrap:break-word}.status{background:#f6f4ef;border-left:3px solid #4b9824;padding:10px 12px;margin:14px 0;font-size:9pt}' +
+    '.fields th{width:30%;text-align:left;font-weight:normal;color:#555550}.fields th,.fields td{border-bottom:1px solid #e5e3de;padding:7px 8px 7px 0}' +
+    '.portrait{text-align:right;width:100px}.portrait img{max-width:90px;max-height:120px}.small{font-size:8pt;color:#555550}' +
     '.message{white-space:normal;word-wrap:break-word;overflow-wrap:break-word;font-size:10pt;line-height:1.4;min-height:48px}' +
-    '.footer{font-size:8pt;color:#52615d;border-top:1px solid #dce5de;margin-top:22px;padding-top:8px}.page2{page-break-before:always}.note{font-size:9pt}.admin{font-size:9pt;border:1px solid #dce5de;padding:10px 12px;margin-top:17px;page-break-inside:avoid}' +
+    '.footer{font-size:8pt;color:#555550;border-top:1px solid #dedbd4;margin-top:22px;padding-top:8px}.page2{page-break-before:always}.note{font-size:9pt}.admin{font-size:9pt;border:1px solid #dedbd4;padding:10px 12px;margin-top:17px;page-break-inside:avoid}' +
     '</style></head><body>' + header + '<h1>Demande d’adhésion</h1>' + reference +
-    '<div class="status">Demande reçue · En attente d’examen<br>Ce dépôt ne vaut pas acceptation de l’adhésion.</div>' +
+    '<div class="status">Demande enregistrée · En attente d’examen<br>L’adhésion est soumise à l’examen du dossier et à la validation de l’association.</div>' +
     '<h2>01. Identité du demandeur</h2><table><tr><td><table class="fields">' + row('Nom', data.last_name) + row('Prénom(s)', data.first_name) + '</table></td>' +
-    '<td class="portrait"><img src="data:' + data.photo.mime + ';base64,' + data.photo.base64 + '" alt="Photo du demandeur"><div class="small">Photo fournie</div></td></tr></table>' +
+    '<td class="portrait"><img src="data:' + data.photo.mime + ';base64,' + data.photo.base64 + '" alt="Photographie du demandeur"><div class="small">Photographie fournie</div></td></tr></table>' +
     '<h2>02. Coordonnées</h2><table class="fields">' + row('E-mail', data.email) + row('Téléphone', data.phone) + row('Adresse', data.address) + row('Ville', data.city) + row('Pays', data.country) + '</table>' +
-    '<h2>03. Adhésion souhaitée</h2><table class="fields">' + row('Catégorie demandée', categories[data.category] || data.category) + row('Profession déclarée', data.profession) + '</table>' +
-    '<p class="small">La profession déclarée ne constitue pas la fonction sur la carte. La fonction est attribuée exclusivement par l’association.</p>' + footer(1) +
-    '<div class="page2">' + header + '<h1>Éléments pour l’examen</h1>' + reference +
-    '<h2>04. Message et motivation</h2><div class="message">' + text(data.motivation) + '</div>' +
-    '<h2>05. Consentement et pièces transmises</h2><p class="note">Le demandeur a coché son consentement au traitement de ses données pour l’examen de sa demande, la gestion de son adhésion et la délivrance de sa carte.</p>' +
-    '<table class="fields">' + row('Consentement', 'Accepté dans le formulaire') + row('Version de la notice', data.consent_version) + row('Enregistrement du dépôt', date) +
-    row('Pièces transmises', 'Présent dossier PDF et photo du demandeur jointe séparément à l’email.') + '</table>' +
-    '<p class="small">Le consentement est une déclaration recueillie dans le formulaire, sans signature manuscrite ni vérification d’identité.</p>' +
-    '<div class="admin"><strong>Cadre réservé à l’association</strong><p>Fonction attribuée : __________________________________________</p><p>Décision / observations : ______________________________________</p><p>Responsable et date : _________________________________________</p><span class="small">À compléter après examen. Le suivi, la validation et la confirmation du paiement restent dans l’administration privée. Aucun numéro de membre n’est attribué par ce document.</span></div>' + footer(2) + '</div></body></html>';
+    '<h2>03. Catégorie d’adhésion sollicitée</h2><table class="fields">' + row('Catégorie sollicitée', categories[data.category] || data.category) + row('Profession déclarée', data.profession) + '</table>' +
+    '<p class="small">L’association détermine la fonction figurant sur la carte de membre, indépendamment de la profession déclarée.</p>' + footer(1) +
+    '<div class="page2">' + header + '<h1>Examen de la demande</h1>' + reference +
+    '<h2>04. Motivation</h2><div class="message">' + text(data.motivation) + '</div>' +
+    '<h2>05. Consentement et pièces du dossier</h2><p class="note">Le demandeur a exprimé son consentement au traitement de ses données personnelles aux fins d’examen de sa demande, de gestion de son adhésion et d’établissement de sa carte de membre.</p>' +
+    '<table class="fields">' + row('Consentement recueilli', 'Confirmé dans le formulaire') + row('Notice de confidentialité', data.consent_version) + row('Date de réception', date) +
+    row('Pièces du dossier', 'Formulaire de demande au format PDF et photographie jointe à l’email.') + '</table>' +
+    '<p class="small">Le consentement est recueilli par déclaration dans le formulaire. Il ne constitue ni une signature manuscrite ni une vérification de l’identité du demandeur.</p>' +
+    '<div class="admin"><strong>Examen réservé à l’association</strong><p>Fonction attribuée : __________________________________________</p><p>Décision et observations : _____________________________________</p><p>Nom du responsable et date : __________________________________</p><span class="small">À compléter par un responsable habilité. La décision et, le cas échéant, la confirmation du paiement sont enregistrées dans l’administration privée. Ce document n’attribue aucun numéro de membre.</span></div>' + footer(2) + '</div></body></html>';
 }
 
 function applicationPdf_(folder, data, state) {

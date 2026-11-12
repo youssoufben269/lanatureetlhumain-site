@@ -4,7 +4,7 @@ if (englishNotice) {
     back: 'Back to the form', eyebrow: 'Membership form privacy notice', title: 'Your personal data',
     intro: 'La Nature et l’Humain uses the information provided to review your application, verify payment, manage your membership, produce your card and keep you informed about your application.',
     fieldsTitle: 'Information requested',
-    fields: 'Your first and last names, email, phone number, requested category and a photo are required for review. Address, city, country, profession and motivation are optional. The role printed on your card is assigned by the association. Do not send a national identity document or bank details through this form.',
+    fields: 'Your first and last names, email, phone number, requested category, motivation and a photo are required for review. Address, city, country and profession are optional. The role printed on your card is assigned by the association. Do not send a national identity document or bank details through this form.',
     accessTitle: 'Access and security',
     access: 'Your contact details and photo are restricted to authorised administrators. Files are stored in private server storage. The QR code opens the official website; if individual verification is enabled, it shows only the number and whether the card is active. The PDF is accessible to the administration and through a temporary private link.',
     retentionTitle: 'Retention and requests',

@@ -28,7 +28,7 @@ Les variables de `.env.example` doivent être définies dans l’environnement d
 
 ## Utiliser le module
 
-1. Le demandeur saisit nom, prénom, email, téléphone et catégorie souhaitée, puis ajoute une photo JPEG/PNG et donne son consentement. Adresse, ville, pays, profession et motivation restent facultatifs. La photo dispose d’un aperçu avant envoi. Les données ne sont pas enregistrées en brouillon dans le navigateur.
+1. Le demandeur saisit nom, prénom, email, téléphone et catégorie souhaitée, puis ajoute une photo JPEG/PNG et donne son consentement. La motivation est obligatoire pour les nouvelles demandes. Adresse, ville, pays et profession restent facultatifs. Les anciens dossiers sans motivation restent importables par un administrateur. La photo dispose d’un aperçu avant envoi. Les données ne sont pas enregistrées en brouillon dans le navigateur.
 2. L’administrateur se connecte, sélectionne le dossier et vérifie les informations et la photo. Aucune copie de pièce d’identité nationale n’est demandée.
 3. L’association saisit la **fonction attribuée** dans son champ réservé. La profession déclarée est distincte et ne s’imprime pas sur la carte. Une fonction envoyée clandestinement par un demandeur est ignorée.
 4. L’administrateur valide la demande et confirme le paiement reçu, avec une référence de reçu/transaction. L’ordre des deux actions est libre. La fonction doit être enregistrée avant la validation. La confirmation manuelle ne débite aucun compte.

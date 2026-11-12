@@ -4,7 +4,7 @@
 
 ## Pour le demandeur
 
-1. Ouvrir **Adhérer** sur [le site officiel](https://www.lanatureetlhumain.org/adhesion/) et remplir le formulaire avec son email, sa photo et le consentement.
+1. Ouvrir **Adhérer** sur [le site officiel](https://www.lanatureetlhumain.org/adhesion/) et remplir le formulaire avec son email, sa photo, sa motivation et le consentement. La motivation est obligatoire.
 2. Cliquer sur **Envoyer**. Le dossier et la photo sont transmis ensemble. Aucun fichier à télécharger ni email à composer.
 3. Lire la page de confirmation Google portant l’identité de l’association. La référence affichée est une référence de dépôt, pas un numéro de membre. Un accusé de réception est envoyé à l’email saisi ; vérifier les courriers indésirables si nécessaire.
 
