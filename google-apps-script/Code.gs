@@ -177,17 +177,26 @@ function notify_(folder, state) {
   const data = envelope.application;
   try {
     if (!state.admin && MailApp.getRemainingDailyQuota() > 0) {
-      const files = folder.getFilesByName('demande-adhesion-lnh.json');
-      const attachment = files.next().getBlob().setName('demande-adhesion-lnh.json').setContentType('application/json');
+      const attachment = applicationPdf_(folder, data, state);
+      const photo = Utilities.newBlob(Utilities.base64Decode(data.photo.base64), data.photo.mime,
+        'photo-' + state.reference + (data.photo.mime === 'image/png' ? '.png' : '.jpg'));
       MailApp.sendEmail({to:LNH_GOOGLE.recipient, replyTo:data.email, name:'La Nature et l’Humain',
         subject:'Nouvelle demande d’adhésion | ' + state.reference,
         body:'Une demande a été enregistrée depuis le site officiel.\n\nRéférence : ' + state.reference +
           '\nNom : ' + data.first_name + ' ' + data.last_name + '\nE-mail : ' + data.email +
           '\nTéléphone : ' + data.phone + '\nCatégorie souhaitée : ' + data.category +
-          '\n\nLe dossier joint contient les informations et la photo pour l’import dans l’administration locale. La fonction, la validation et le paiement restent à traiter par l’association.',
-        attachments:[attachment]});
+          '\n\nPièces jointes : dossier de demande en PDF et photo du demandeur en fichier image séparé.' +
+          '\nLe PDF est destiné à l’examen administratif. La demande reste en attente de décision ; aucune carte ni aucun numéro de membre ne sont délivrés.' +
+          '\n\nDossier privé (compte de l’association uniquement) : ' + folder.getUrl() +
+          '\nPour l’import dans l’administration locale, le fichier technique demande-adhesion-lnh.json reste disponible dans ce dossier privé. Il n’est pas nécessaire pour lire le dossier PDF.',
+        attachments:[attachment, photo]});
       state.admin = true; write_(folder, 'etat.json', state);
     }
+  } catch (error) {
+    // A PDF/conversion or mail failure must not prevent the applicant receipt.
+    // The saved application is retained; the hourly trigger retries this notice.
+  }
+  try {
     if (!state.applicant && MailApp.getRemainingDailyQuota() > 0) {
       const en = state.language === 'en';
       MailApp.sendEmail({to:data.email, replyTo:LNH_GOOGLE.recipient, name:'La Nature et l’Humain',
@@ -199,6 +208,53 @@ function notify_(folder, state) {
   } catch (error) {
     // Record stays safe; hourly trigger retries unsent notices. No private logs.
   }
+}
+
+function escapeHtml_(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+// Two A4 pages for human review. Technical import data stays in private Drive.
+function applicationHtml_(data, state) {
+  const text = value => escapeHtml_(value || 'Non renseigné').replace(/\r\n|\r|\n/g, '<br>');
+  const row = (label, value) => '<tr><th>' + label + '</th><td>' + text(value) + '</td></tr>';
+  const categories = {actif:'Membre actif', sympathisant:'Membre sympathisant', institutionnel:'Membre institutionnel'};
+  const date = Utilities.formatDate(new Date(state.receivedAt), 'Africa/Porto-Novo', 'dd/MM/yyyy à HH:mm') + ' (Bénin, UTC+1)';
+  const header = '<table class="brand"><tr><td style="width:65px"><img width="58" height="58" src="' + LNH_GOOGLE.site + '/adhesion/assets/logo.png" alt=""></td><td><strong>La Nature et l’Humain</strong><div class="slogan">RÉSEAUX · PARTENARIATS · SOLUTIONS</div></td></tr></table>';
+  const reference = '<div class="ref">Référence de dépôt : ' + escapeHtml_(state.reference) + '<br>Reçue le ' + escapeHtml_(date) + '</div>';
+  const footer = page => '<div class="footer">Dossier confidentiel · Examen par l’association · ' + page + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.recipient + '</div>';
+  return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>' +
+    '@page{size:A4;margin:16mm 17mm}body{font:10pt/1.4 Arial,sans-serif;color:#243431;margin:0}' +
+    'table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}' +
+    '.brand{border-bottom:2px solid #075889;margin-bottom:18px}.brand td{padding:0 0 12px}.brand strong{font-size:18pt;color:#075889}.slogan{font-size:8pt;letter-spacing:1px;margin-top:5px}' +
+    'h1{font-size:23pt;font-weight:normal;color:#075889;margin:0 0 10px}h2{font-size:12pt;color:#075889;margin:19px 0 8px;border-bottom:1px solid #dce5de;padding-bottom:5px}' +
+    '.ref{font-size:8pt;color:#52615d;word-wrap:break-word}.status{background:#f0f5ec;border-left:3px solid #4b9824;padding:10px 12px;margin:14px 0;font-size:9pt}' +
+    '.fields th{width:30%;text-align:left;font-weight:normal;color:#52615d}.fields th,.fields td{border-bottom:1px solid #e5e9e6;padding:7px 8px 7px 0}' +
+    '.portrait{text-align:right;width:100px}.portrait img{max-width:90px;max-height:120px}.small{font-size:8pt;color:#52615d}' +
+    '.message{white-space:normal;word-wrap:break-word;overflow-wrap:break-word;font-size:10pt;line-height:1.4;min-height:48px}' +
+    '.footer{font-size:8pt;color:#52615d;border-top:1px solid #dce5de;margin-top:22px;padding-top:8px}.page2{page-break-before:always}.note{font-size:9pt}.admin{font-size:9pt;border:1px solid #dce5de;padding:10px 12px;margin-top:17px}' +
+    '</style></head><body>' + header + '<h1>Demande d’adhésion</h1>' + reference +
+    '<div class="status">Demande reçue · En attente d’examen<br>Ce dépôt ne vaut pas acceptation de l’adhésion.</div>' +
+    '<h2>01. Identité du demandeur</h2><table><tr><td><table class="fields">' + row('Nom', data.last_name) + row('Prénom(s)', data.first_name) + '</table></td>' +
+    '<td class="portrait"><img src="data:' + data.photo.mime + ';base64,' + data.photo.base64 + '" alt="Photo du demandeur"><div class="small">Photo fournie</div></td></tr></table>' +
+    '<h2>02. Coordonnées</h2><table class="fields">' + row('E-mail', data.email) + row('Téléphone', data.phone) + row('Adresse', data.address) + row('Ville', data.city) + row('Pays', data.country) + '</table>' +
+    '<h2>03. Adhésion souhaitée</h2><table class="fields">' + row('Catégorie demandée', categories[data.category] || data.category) + row('Profession déclarée', data.profession) + '</table>' +
+    '<p class="small">La profession déclarée ne constitue pas la fonction sur la carte. La fonction est attribuée exclusivement par l’association.</p>' + footer(1) +
+    '<div class="page2">' + header + '<h1>Éléments pour l’examen</h1>' + reference +
+    '<h2>04. Message et motivation</h2><div class="message">' + text(data.motivation) + '</div>' +
+    '<h2>05. Consentement et pièces transmises</h2><p class="note">Le demandeur a coché son consentement au traitement de ses données pour l’examen de sa demande, la gestion de son adhésion et la délivrance de sa carte.</p>' +
+    '<table class="fields">' + row('Consentement', 'Accepté dans le formulaire') + row('Version de la notice', data.consent_version) + row('Enregistrement du dépôt', date) +
+    row('Pièces transmises', 'Présent dossier PDF et photo du demandeur jointe séparément à l’email.') + '</table>' +
+    '<p class="small">Le consentement est une déclaration recueillie dans le formulaire, sans signature manuscrite ni vérification d’identité.</p>' +
+    '<div class="admin"><strong>Cadre réservé à l’association</strong><p>Fonction attribuée : __________________________________________</p><p>Décision / observations : ______________________________________</p><p>Responsable et date : _________________________________________</p><span class="small">À compléter après examen. Le suivi, la validation et la confirmation du paiement restent dans l’administration privée. Aucun numéro de membre n’est attribué par ce document.</span></div>' + footer(2) + '</div></body></html>';
+}
+
+function applicationPdf_(folder, data, state) {
+  const name = 'demande-adhesion-' + state.reference + '.pdf';
+  const existing = folder.getFilesByName(name);
+  if (existing.hasNext()) return existing.next().getBlob();
+  const pdf = HtmlService.createHtmlOutput(applicationHtml_(data, state)).getAs('application/pdf').setName(name);
+  return folder.createFile(pdf).getBlob();
 }
 
 function relancerNotifications() {

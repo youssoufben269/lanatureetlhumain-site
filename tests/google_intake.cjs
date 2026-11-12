@@ -8,12 +8,12 @@ const png = Buffer.alloc(45); Buffer.from([137,80,78,71,13,10,26,10]).copy(png);
 png.writeUInt32BE(13,8); png.write('IHDR',12); png.writeUInt32BE(600,16); png.writeUInt32BE(800,20);
 function harness() {
   const properties = {}, sent = [], folders = new Map(); let serial = 0;
-  const controls = {owner:'lanaturetlhumain@gmail.com', mailFail:false, storageFail:false, quota:100, locked:false};
+  const controls = {owner:'lanaturetlhumain@gmail.com', mailFail:false, storageFail:false, pdfFail:false, conversions:0, quota:100, locked:false};
   const iterator = values => {let i=0;return {hasNext:()=>i<values.length,next:()=>values[i++]};};
   const blob = (value,type,name) => ({value,name,type,getDataAsString:()=>String(value),setName(n){this.name=n;return this;},setContentType(t){this.type=t;return this;}});
   function folder(name) {
     const f = {name,id:String(++serial),children:[],files:[],trashed:false,sharing:'private',
-      getId(){return this.id;},setSharing(){this.sharing='private';},setTrashed(v){this.trashed=v;},
+      getId(){return this.id;},getUrl(){return 'https://drive.google.com/drive/folders/'+this.id;},setSharing(){this.sharing='private';},setTrashed(v){this.trashed=v;},
       createFolder(n){const child=folder(n);this.children.push(child);return child;},
       getFoldersByName(n){return iterator(this.children.filter(x=>x.name===n&&!x.trashed));},getFolders(){return iterator(this.children.filter(x=>!x.trashed));},
       createFile(n,value){if(controls.storageFail)throw Error('Drive failed');const b=typeof n==='object'?n:blob(value,'text/plain',n);const item={name:b.name,value:b.value,getBlob(){return blob(this.value,b.type,this.name);},setContent(v){this.value=v;}};this.files.push(item);return item;},
@@ -27,9 +27,9 @@ function harness() {
     ScriptApp:{getProjectTriggers:()=>[],newTrigger:()=>({timeBased(){return this;},everyHours(){return this;},create(){}})},
     LockService:{getScriptLock:()=>({tryLock:()=>!controls.locked,releaseLock(){}})},
     MimeType:{PLAIN_TEXT:'text/plain'},
-    Utilities:{base64Decode:v=>[...Buffer.from(v,'base64')],newBlob:blob,DigestAlgorithm:{SHA_256:'sha256'},Charset:{UTF_8:'utf8'},computeDigest:(_,v)=>[...crypto.createHash('sha256').update(v).digest()]},
+    Utilities:{formatDate:()=> '12/11/2026 à 10:30',base64Decode:v=>[...Buffer.from(v,'base64')],newBlob:blob,DigestAlgorithm:{SHA_256:'sha256'},Charset:{UTF_8:'utf8'},computeDigest:(_,v)=>[...crypto.createHash('sha256').update(v).digest()]},
     MailApp:{getRemainingDailyQuota:()=>controls.quota,sendEmail:v=>{if(controls.mailFail)throw Error('Mail failed');sent.push(v);controls.quota--; }},
-    HtmlService:{createHtmlOutput:html=>({html,setTitle(){return this;},addMetaTag(){return this;}})}});
+    HtmlService:{createHtmlOutput:html=>({html,setTitle(){return this;},addMetaTag(){return this;},getAs(type){controls.conversions++;if(controls.pdfFail)throw Error('Conversion failed');return blob('PDF-SIMULATED\n'+html,type,'output.pdf');}})}});
   vm.runInContext(source,context);
   context.installer();
   const application = {first_name:'Amina',last_name:'Test',email:'applicant@example.org',phone:'+229 00000000',category:'actif',profession:'Biologiste',consent:true,consent_version:'2026-11-11-v2',photo:{mime:'image/png',base64:png.toString('base64')},function:'Présidente',payment:true};
@@ -46,13 +46,31 @@ for (const change of [{email:''},{email:'a@example.org\r\nBcc:evil@example.org'}
 assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);
 assert.equal(h.sent.length,2);
 assert.equal(h.sent[0].to,'lanaturetlhumain@gmail.com');assert.equal(h.sent[0].replyTo,'applicant@example.org');
-assert.equal(h.sent[1].to,'applicant@example.org');assert.equal(h.sent[0].attachments.length,1);
-assert.equal(JSON.parse(h.sent[0].attachments[0].value).application.function,undefined);
-assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);assert.equal(h.sent.length,2);
+assert.equal(h.sent[1].to,'applicant@example.org');assert.equal(h.sent[0].attachments.length,2);
+assert.equal(h.sent[0].attachments[0].type,'application/pdf');
+assert.match(h.sent[0].attachments[0].name,/^demande-adhesion-LNH-D-[a-f0-9]{32}\.pdf$/);
+assert.equal(h.sent[0].attachments[1].type,'image/png');
+assert.deepEqual(Buffer.from(h.sent[0].attachments[1].value),png);
+assert.match(h.sent[0].body,/dossier privé/i);
+assert.doesNotMatch(h.sent[0].attachments.map(a=>a.name).join(','),/\.json/);
+const record=[...h.folders.values()].find(f=>f.name.startsWith('demande-'));
+assert.equal(h.context.read_(record,'demande-adhesion-lnh.json').application.function,undefined);
+assert.equal(record.sharing,'private');assert.equal(h.controls.conversions,1);
+const html=h.context.applicationHtml_({...clean,first_name:'<script>attack</script>',motivation:'<img src="https://evil.org">\nUne motivation'}, {reference:'LNH-D-'+ 'a'.repeat(32),receivedAt:new Date().toISOString()});
+assert.match(html,/&lt;script&gt;attack/);assert.match(html,/&lt;img src=&quot;https:\/\/evil.org&quot;&gt;<br>Une motivation/);
+assert.doesNotMatch(html,/<script>|<img src="https:\/\/evil.org/);
+assert.match(html,/data:image\/png;base64,/);assert.match(html,/RÉSEAUX · PARTENARIATS · SOLUTIONS/);
+for(const label of ['Identité du demandeur','Coordonnées','Adhésion souhaitée','Message et motivation','Consentement et pièces transmises','Cadre réservé à l’association'])assert.ok(html.includes(label));
+assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);assert.equal(h.sent.length,2);assert.equal(h.controls.conversions,1);
 assert.match(h.post({...h.application,profession:'Changed'}),/L’envoi n’a pas pu être confirmé/);
 assert.equal([...h.folders.values()].filter(f=>f.name.startsWith('demande-')&&!f.trashed).length,1);
 h = harness();h.controls.mailFail=true;assert.match(h.post(),/notifications par email sont en attente/);assert.equal(h.sent.length,0);
-h.controls.mailFail=false;h.context.relancerNotifications();assert.equal(h.sent.length,2);h.context.relancerNotifications();assert.equal(h.sent.length,2);
+h.controls.mailFail=false;h.context.relancerNotifications();assert.equal(h.sent.length,2);h.context.relancerNotifications();assert.equal(h.sent.length,2);assert.equal(h.controls.conversions,1);
+h=harness();h.controls.pdfFail=true;assert.match(h.post(),/notifications par email sont en attente/);
+assert.equal(h.sent.length,1);assert.equal(h.sent[0].to,'applicant@example.org');
+assert.equal([...h.folders.values()].filter(f=>f.name.startsWith('demande-')&&!f.trashed).length,1);
+h.controls.pdfFail=false;h.context.relancerNotifications();assert.equal(h.sent.length,2);
+assert.equal(h.sent[1].attachments.length,2);h.context.relancerNotifications();assert.equal(h.sent.length,2);
 h = harness();h.controls.quota=0;assert.match(h.post(),/notifications par email sont en attente/);h.controls.quota=2;h.context.relancerNotifications();assert.equal(h.sent.length,2);
 h = harness();h.controls.storageFail=true;assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.equal(h.sent.length,0);
 h.controls.storageFail=false;assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);
