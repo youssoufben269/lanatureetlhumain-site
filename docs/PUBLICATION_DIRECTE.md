@@ -2,6 +2,12 @@
 
 Le [formulaire public](https://www.lanatureetlhumain.org/adhesion/) utilise **Google Apps Script**. Le demandeur clique sur **Envoyer** ; le dossier et la photo sont transmis ensemble, sans téléchargement ni email manuel. Il reçoit une page de confirmation et un accusé par email. Le site reste sur GitHub Pages ; l’administration et les cartes restent locales.
 
+## Notifications institutionnelles du 12 novembre 2026
+
+Le déploiement existant est actif en **version 8**, avec la même URL `/exec`. L’email commence par « Madame, Monsieur » et confirme la réception de votre demande. La réserve « Cet accusé de réception ne vaut pas validation » est remplacée par : « L’association examinera votre demande et vous informera de la décision prise ainsi que des prochaines étapes, le cas échéant. » La confirmation affichée après envoi et les messages d’erreur utilisent également le vouvoiement. La version anglaise est harmonisée.
+
+Harnais Node réexécuté avec succès ; version 8 confirmée dans Google. Aucun nouvel email réel envoyé pour cette correction de texte. Les emails déjà reçus ne sont pas modifiés.
+
 ## Légende de la photo du 12 novembre 2026
 
 Le déploiement Google existant est en **version 7**. À la demande du propriétaire, la légende du portrait et son texte alternatif deviennent **« Photo d’identité »** dans les nouveaux PDF, à la place de « Photographie fournie ». L’URL, les coordonnées, la mise en page et l’exception privée d’essai sont conservées. Harnais Node réexécuté avec succès et mise à jour du déploiement confirmée dans Google. Les PDF déjà reçus ne sont pas réécrits.
