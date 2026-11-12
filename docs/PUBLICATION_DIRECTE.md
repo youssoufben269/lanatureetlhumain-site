@@ -8,6 +8,7 @@ Le [formulaire public](https://www.lanatureetlhumain.org/adhesion/) utilise **Go
 - Projet existant : **LNH - Réception des adhésions**. Autorisations accordées personnellement par le propriétaire ; installation terminée sans erreur affichée.
 - Service Web Google : version 1, exécution en tant que propriétaire et accès aux dépôts sans connexion Google. L’URL de production est dans `adhesion/settings.json` ; aucun secret n’est nécessaire dans le navigateur.
 - Version fonctionnelle publiée : commit **71c1b5d** sur `main`, [déploiement GitHub Pages réussi](https://github.com/youssoufben269/lanatureetlhumain-site/actions/runs/43144727203). L’exécution initiale était restée en file d’attente ; une relance par l’API officielle GitHub a abouti. Le mode `google`, le destinataire et l’URL `/exec` ont été relus depuis le site public.
+- Finition publiée : **078330b**, [déploiement réussi](https://github.com/youssoufben269/lanatureetlhumain-site/actions/runs/43146320689). Le JavaScript distribué par le site est identique au fichier Git de cette version. Le retour arrière après sélection d’une photo a été retesté dans le navigateur : aperçu conservé. Les chemins `/admin/adhesions/`, `/.env`, `/membership/config.py` et `/var/members.sqlite3` répondent tous **404**.
 - Le build publie seulement **19 fichiers publics**. Le serveur Python, les sources Google, l’administration, les tests et les données privées en sont exclus. Le domaine et le fichier `CNAME` sont conservés.
 
 ## Vérifications réalisées
