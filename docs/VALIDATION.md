@@ -1,5 +1,9 @@
 # Vérification finale du 11 novembre 2026
 
+## Correction du 12 novembre : essai bloqué par la limite par email
+
+Service Google version 6. Exception temporaire configurée dans les seules propriétés privées pour l’adresse du propriétaire, à sa demande ; aucune adresse ni empreinte privée dans Git. Dépôt réel fictif avec cette adresse accepté malgré les deux demandes précédentes, référence terminant par `f89ae613`, dossier et photo enregistrés et accusé envoyé. Les autres adresses restent limitées et les quotas Google restent applicables. Harnais Node réexécuté avec succès : exemption, révocation, compteurs inchangés, validations, idempotence, reprise et explications FR/EN. [Fonctionnement et retrait de l’exception](ENVOI_DIRECT_GOOGLE.md).
+
 ## Finition du 12 novembre : motivation obligatoire et en-tête centré
 
 Service Google déployé en version 5, URL inchangée. Motivation obligatoire dans le formulaire public et sur le serveur ; anciens imports préservés. PDF relu en français institutionnel, textes noirs et gris, logo en couleurs et en-tête centré avec les coordonnées officielles du site (Marseille, téléphone et email). Dépôt fictif depuis le site public, réception Gmail, téléchargement du PDF réel, rendu visuel et contrôle du centrage effectués. Deux pages A4 lisibles, photo intégrée et jointe séparément. **72 tests Python : 70 réussis, 2 ignorés sous Windows**, harnais Node réussi. FR/EN, champ vide et espaces refusés, mobile 390 px sans débordement. [Bilan détaillé](PUBLICATION_DIRECTE.md).

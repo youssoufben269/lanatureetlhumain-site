@@ -6,7 +6,7 @@ Compte propriétaire prévu : **lanaturetlhumain@gmail.com**. Aucun compte suppl
 
 Le projet **LNH - Réception des adhésions** est installé dans le compte de l’association : [ouvrir le projet](https://script.google.com/home/projects/1Cn6q4KvG-42_6MhU0ofMvbwMwgSHedocvrGD-4eSmstc6MrUYR246z4X/edit). Le propriétaire a accordé les autorisations Google. L’installation s’est terminée sans erreur ; le dossier **LNH - Demandes adhesion - PRIVE** a été vérifié en accès général **Limité**, avec le seul compte de l’association comme propriétaire.
 
-Le déploiement Web **version 5** est actif depuis le 12 novembre 2026 : [service de réception](https://script.google.com/macros/s/AKfycbzv0FPJvqn-2luW_vuMmG2jU1U8IA4BnEDOZH1L3HXnEZyjX5beQm2LJbUUbPrSWMPP/exec). Exécution en tant que propriétaire ; accès public au dépôt des demandes, sans accès public aux fichiers. `googleEndpoint` est renseigné et le site publié sert le mode `google`. L’association reçoit le PDF et la photo en deux pièces jointes, vérifiées dans Gmail. Le PDF utilise des textes noirs et gris et un en-tête centré avec le siège social à Marseille, le téléphone et l’email publiés sur le site. La motivation est obligatoire pour les nouvelles demandes.
+Le déploiement Web **version 6** est actif depuis le 12 novembre 2026 : [service de réception](https://script.google.com/macros/s/AKfycbzv0FPJvqn-2luW_vuMmG2jU1U8IA4BnEDOZH1L3HXnEZyjX5beQm2LJbUUbPrSWMPP/exec). Exécution en tant que propriétaire ; accès public au dépôt des demandes, sans accès public aux fichiers. `googleEndpoint` est renseigné et le site publié sert le mode `google`. L’association reçoit le PDF et la photo en deux pièces jointes, vérifiées dans Gmail. Le PDF utilise des textes noirs et gris et un en-tête centré avec le siège social à Marseille, le téléphone et l’email publiés sur le site. La motivation est obligatoire pour les nouvelles demandes.
 
 Un dossier fictif a été envoyé avec une photo de test. Les deux emails ont été retrouvés dans la boîte de l’association ; le fichier reçu a été téléchargé et importé dans une administration locale de test. Photo 600 × 800, sans EXIF, consentement v2 conservé, second import sans doublon, aucune fonction, aucun numéro et aucune carte délivrés. Aucun dossier réel n’a été utilisé. [Bilan complet](PUBLICATION_DIRECTE.md).
 
@@ -46,6 +46,14 @@ Le demandeur reçoit séparément un accusé. Une conversion PDF ou une notifica
 - Décider la durée de conservation et supprimer les dossiers arrivés à échéance dans Drive et les emails correspondants. La reprise horaire parcourt les dossiers conservés ; archiver les dossiers traités hors du dossier d’entrée pour limiter le temps d’exécution, sans perdre les sauvegardes privées.
 
 ## Mise à jour et retour arrière
+
+### Exception temporaire pour les essais du propriétaire
+
+À la demande explicite du propriétaire, une adresse peut être exemptée des limites applicatives pendant la configuration. La propriété privée Apps Script `LNH_TEST_EMAIL_HASHES` contient l’empreinte SHA-256 hexadécimale de l’adresse normalisée (minuscules, espaces extérieurs supprimés). Aucun email personnel ni sa valeur d’empreinte n’est conservé dans les sources ou ce guide. Ne pas ajouter une autre adresse sans autorisation.
+
+Pour cette seule adresse, les limites de 2 demandes par jour, 10 par heure et 30 par jour ne sont pas appliquées, et ses essais n’incrémentent pas les compteurs publics. Les limites restent actives pour les autres adresses. Les champs obligatoires, consentement, validation de la photo, verrou, référence unique et interdiction de délivrer une carte restent inchangés. Les quotas de Google Drive, conversion PDF et MailApp continuent de s’appliquer ; les notifications en attente sont reprises automatiquement.
+
+Une propriété vide ou absente désactive immédiatement l’exception, sans nouveau déploiement. À la fin de la configuration, vider uniquement `LNH_TEST_EMAIL_HASHES` ; conserver `LNH_RATE`, `LNH_FOLDER_ID` et tous les dossiers reçus. Aucun compteur existant n’est remis à zéro. Les refus connus affichent maintenant une explication en FR/EN (limite, session, motivation, champs ou service occupé), sans afficher les données du demandeur ni les erreurs internes.
 
 Après un changement du service Google, créer une nouvelle version du déploiement existant pour conserver la même URL `/exec`. Sans ce geste, modifier les fichiers de l’éditeur ne met pas le service en production à jour. Pour revenir temporairement au parcours manuel, vider `googleEndpoint` puis republier Pages. Conserver les dossiers déjà reçus et le déclencheur tant que des notifications restent en attente.
 

@@ -2,6 +2,18 @@
 
 Le [formulaire public](https://www.lanatureetlhumain.org/adhesion/) utilise **Google Apps Script**. Le demandeur clique sur **Envoyer** ; le dossier et la photo sont transmis ensemble, sans téléchargement ni email manuel. Il reçoit une page de confirmation et un accusé par email. Le site reste sur GitHub Pages ; l’administration et les cartes restent locales.
 
+## Correction du refus d’essai : exception privée demandée par le propriétaire
+
+Le service Google est actif en **version 6**, même URL `/exec`. Deux dossiers antérieurs de l’adresse utilisée pour les essais ont été retrouvés dans Gmail, et le compteur privé de cette adresse était à 2. Le propriétaire a confirmé utiliser la même adresse et a demandé un nombre illimité d’essais pendant la configuration.
+
+La propriété privée `LNH_TEST_EMAIL_HASHES` contient une seule empreinte autorisée. Elle exonère cette adresse des limites applicatives et exclut ses essais des compteurs publics, sans remettre les anciens compteurs à zéro. Les autres adresses conservent leurs limites. La valeur privée et l’adresse personnelle ne figurent pas dans Git. Les quotas Google et toutes les validations restent applicables. Pour rétablir les limites à la fin des essais, vider cette propriété dans le projet existant.
+
+Le message générique est complété par une explication FR/EN pour les refus connus : limite par email, horaire ou quotidienne, formulaire à recharger, motivation, champs, référence conflictuelle ou service occupé. Les erreurs internes et données saisies ne sont pas exposées.
+
+Le harnais Node a été réexécuté : exemption avec compteurs saturés, plusieurs dépôts, compteurs inchangés, autres adresses toujours limitées, révocation immédiate de l’exemption, validations et idempotence conservées, quota MailApp épuisé et reprise, textes FR/EN et absence de réflexion d’un code d’erreur non reconnu. Aucun email n’est envoyé par ces tests simulés. La suite Python n’est pas modifiée par cette correction.
+
+Vérification réelle depuis le formulaire public, avec la seule adresse autorisée et un dossier clairement fictif : référence se terminant par `f89ae613`, page **Demande reçue**, dossier et photo enregistrés et accusé envoyé. Ce dépôt passe malgré les deux essais précédents. Aucune carte ni numéro de membre n’a été délivré. Ne pas valider le dossier de contrôle.
+
 ## Finition du 12 novembre 2026 : motivation et en-tête institutionnel
 
 Le service Google existant est actif en **version 5**, avec la même URL `/exec`. Le PDF comporte un en-tête centré sur les deux parties : logo original en couleurs, nom en noir, slogan gris, siège social au **60 traverse Moulin de la Villette, 13003 Marseille, France**, téléphone **+33 7 45 95 39 60** et **contact@lanatureetlhumain.org**. Les coordonnées sont identiques à celles du site actuel. Les polices bleues ont été remplacées par du noir ou du gris foncé ; les rubriques et mentions ont été relues dans un registre institutionnel. Le statut précise : « L’adhésion est soumise à l’examen du dossier et à la validation de l’association. » Les champs facultatifs vides portent la mention « Information non communiquée ».
