@@ -173,7 +173,7 @@ class Application:
                    '/adhesion/': 'adhesion/index.html', '/admin/adhesions': 'admin/adhesions/index.html',
                    '/admin/adhesions/': 'admin/adhesions/index.html', '/robots.txt': 'robots.txt', '/sitemap.xml': 'sitemap.xml'}
         relative = aliases.get(path)
-        if relative is None and (path in ('/adhesion/carte.html', '/adhesion/confidentialite.html', '/adhesion/settings.json') or re.fullmatch(r'/adhesion/assets/[a-z0-9-]+\.(?:css|js|mjs|png)', path) or re.fullmatch(r'/assets/(?:logo-officiel\.jpg|accueil-[1-3]\.webp)', path)):
+        if relative is None and (path in ('/adhesion/carte.html', '/adhesion/confidentialite.html', '/adhesion/settings.json') or re.fullmatch(r'/adhesion/assets/[a-z0-9-]+\.(?:css|js|mjs|png)', path) or re.fullmatch(r'/assets/(?:logo-officiel\.jpg|accueil-[1-3]\.webp|ali-abdallah-youssouf-ben\.webp)', path)):
             relative = path.lstrip('/')
         if relative is None:
             raise Problem('Page introuvable.', 404)

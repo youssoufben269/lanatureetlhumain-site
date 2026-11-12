@@ -584,6 +584,7 @@ header{
 .step h3{margin:0 0 5px;font-size:1.12rem;font-weight:400}
 .step p{margin:0;color:var(--muted);font-size:.91rem}
 .team-section{
+  scroll-margin-top:90px;
   padding:88px 0;
   background:#fff;
   border-top:1px solid #e5e3de;
@@ -611,7 +612,8 @@ header{
   padding-top:18px;
 }
 .team-photo{
-  aspect-ratio:4/3;
+  aspect-ratio:1;
+  overflow:hidden;
   background:linear-gradient(145deg,#f3f1eb,#e6e4dd);
   display:grid;
   place-items:center;
@@ -620,8 +622,9 @@ header{
   letter-spacing:.13em;
   text-transform:uppercase;
 }
+.team-photo img{display:block;width:100%;height:100%;object-fit:cover}
 .team-info{padding:18px 1px 0}
-.team-name{font-size:1.05rem;color:#111;font-weight:300}
+.team-name{font-size:1.05rem;color:#111;font-weight:300;margin:0}
 .team-role{color:var(--green-2);margin-top:4px;font-size:.83rem;letter-spacing:.03em}
 .team-info p{color:#6b6b67;font-size:.87rem;margin:11px 0 0}
 .region{
@@ -801,6 +804,7 @@ footer{
   font-size:.74rem;
 }
 @media(max-width:1080px){
+  .team-section{scroll-margin-top:160px}
   .nav{align-items:flex-start;flex-direction:column;padding:14px 0}
   .menu{width:100%;justify-content:flex-start;flex-wrap:wrap;gap:8px 16px}
   .menu a{padding:5px 0 8px}
@@ -809,13 +813,14 @@ footer{
 }
 @media(max-width:980px){
   .position-grid,.flagship-head,.model-grid,.region-grid,.donation-grid,.contact-grid,.footer-grid,.team-head{grid-template-columns:1fr}
-  .pillars,.partner-grid{grid-template-columns:1fr 1fr}
+  .pillars,.partner-grid,.team-grid{grid-template-columns:1fr 1fr}
   .partner-fit{grid-template-columns:1fr 1fr}
   .fit-panel ul{grid-template-columns:1fr}
   .fit:nth-child(2){border-right:0}
   .contact-card{justify-self:start}
 }
 @media(max-width:650px){
+  .team-section{scroll-margin-top:250px}
   .container{width:min(100% - 24px,1180px)}
   .topbar .container{justify-content:center;text-align:center}
   .topbar .anchor{display:none}
@@ -1037,14 +1042,43 @@ footer{
     <div class="team-head">
       <div>
         <div class="label" data-i18n="teamLabel">Gouvernance</div>
-        <h2 class="section-title" data-i18n="teamTitle">Une organisation tournée vers l'action collective</h2>
+        <h2 class="section-title" data-i18n="teamTitle">Notre équipe</h2>
       </div>
-      <p data-i18n="teamIntro">La Nature et l'Humain s'appuie sur une gouvernance associative et sur des fonctions de coordination capables de relier institutions, partenaires techniques, financeurs et relais locaux.</p>
+      <p data-i18n="teamIntro">La présidence, les fonctions de coordination et les commissions organisent l’action de l’association en lien avec ses partenaires et ses relais locaux.</p>
     </div>
     <div class="team-grid">
-      <article class="team-card"><div class="team-photo"><span data-i18n="photo">Pôle</span></div><div class="team-info"><div class="team-name" data-i18n="team1Name">Gouvernance associative</div><div class="team-role" data-i18n="team1Role">Orientation et représentation</div><p data-i18n="team1Text">Définition des priorités, représentation de l'association et relations avec les acteurs publics.</p></div></article>
-      <article class="team-card"><div class="team-photo"><span data-i18n="photo">Pôle</span></div><div class="team-info"><div class="team-name" data-i18n="team2Name">Partenariats et alliances</div><div class="team-role" data-i18n="team2Role">Mobilisation des réseaux</div><p data-i18n="team2Text">Dialogue avec les partenaires techniques, financiers, publics et territoriaux.</p></div></article>
-      <article class="team-card"><div class="team-photo"><span data-i18n="photo">Pôle</span></div><div class="team-info"><div class="team-name" data-i18n="team3Name">Programmes et projets</div><div class="team-role" data-i18n="team3Role">Structuration des initiatives</div><p data-i18n="team3Text">Préparation des projets, coordination avec les relais locaux et suivi des coopérations.</p></div></article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name">Fayidat ABDALLAH KOUATI</h3><div class="team-role" data-i18n="team1Role">Présidente de l’association</div><p class="team-profile" data-i18n="team1Profile">Profil : Aide médico-psychologique</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name">Ayouba SALI</h3><div class="team-role" data-i18n="team2Role">Chargé de projets</div><p class="team-profile" data-i18n="team2Profile">Profil : Consultant en agrobusiness et projets</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><img src="assets/ali-abdallah-youssouf-ben.webp" width="800" height="800" alt="Portrait d’Ali Abdallah Youssouf Ben" loading="lazy" decoding="async"></div>
+        <div class="team-info"><h3 class="team-name">Ali Abdallah Youssouf Ben</h3><div class="team-role" data-i18n="team3Role">Chargé de l’environnement et du climat</div><p class="team-profile" data-i18n="team3Profile">Profil : Consultant en environnement</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name">Jeannot AGBAHEY</h3><div class="team-role" data-i18n="team4Role">Fonction à préciser</div><p class="team-profile" data-i18n="team4Profile">Profil : Expert en BTP</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name">Lorena RANELY</h3><div class="team-role" data-i18n="team5Role">Fonction à préciser</div><p class="team-profile" data-i18n="team5Profile">Profil : Infirmière</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name">Abdou Gafar Mikael LAWANI</h3><div class="team-role" data-i18n="team6Role">Fonction à préciser</div><p class="team-profile" data-i18n="team6Profile">Profil : Entrepreneur agricole</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name">Kassim KADAFI</h3><div class="team-role" data-i18n="team7Role">Fonction à préciser</div><p class="team-profile" data-i18n="team7Profile">Profil : Entrepreneur en bâtiment</p></div>
+      </article>
+      <article class="team-card">
+        <div class="team-photo"><span data-i18n="teamPhoto">Photo à venir</span></div>
+        <div class="team-info"><h3 class="team-name" data-i18n="teamPendingName">Nom à compléter</h3><div class="team-role" data-i18n="team8Role">Community Manager</div></div>
+      </article>
     </div>
   </div>
 </section>
@@ -1282,18 +1316,25 @@ footer{
     step5Title:["Apprentissage et mise en réseau","Learning and networking"],
     step5Text:["Diffuser les méthodes utiles et relier progressivement les réseaux locaux, régionaux et internationaux.","Disseminate useful methods and progressively connect local, regional and international networks."],
     teamLabel:["Gouvernance","Governance"],
-    teamTitle:["Une organisation tournée vers l'action collective","An organization focused on collective action"],
-    teamIntro:["La Nature et l'Humain s'appuie sur une gouvernance associative et sur des fonctions de coordination capables de relier institutions, partenaires techniques, financeurs et relais locaux.","La Nature et l'Humain relies on associative governance and coordination functions able to connect institutions, technical partners, funders and local relays."],
-    photo:["Pôle","Unit"],
-    team1Name:["Gouvernance associative","Associative governance"],
-    team1Role:["Orientation et représentation","Guidance and representation"],
-    team1Text:["Définition des priorités, représentation de l'association et relations avec les acteurs publics.","Definition of priorities, association representation and relations with public actors."],
-    team2Name:["Partenariats et alliances","Partnerships and alliances"],
-    team2Role:["Mobilisation des réseaux","Network mobilization"],
-    team2Text:["Dialogue avec les partenaires techniques, financiers, publics et territoriaux.","Dialogue with technical, financial, public and territorial partners."],
-    team3Name:["Programmes et projets","Programs and projects"],
-    team3Role:["Structuration des initiatives","Structuring initiatives"],
-    team3Text:["Préparation des projets, coordination avec les relais locaux et suivi des coopérations.","Project preparation, coordination with local relays and cooperation follow-up."],
+    teamTitle:["Notre équipe","Our team"],
+    teamIntro:["La présidence, les fonctions de coordination et les commissions organisent l’action de l’association en lien avec ses partenaires et ses relais locaux.","The presidency, coordination roles and committees organize the association’s activities with its partners and local networks."],
+    teamPhoto:["Photo à venir","Photo forthcoming"],
+    teamPendingName:["Nom à compléter","Name to be added"],
+    team1Role:["Présidente de l’association", "President of the association"],
+    team1Profile:["Profil : Aide médico-psychologique", "Background: Psychological and social care assistant"],
+    team2Role:["Chargé de projets", "Project Officer"],
+    team2Profile:["Profil : Consultant en agrobusiness et projets", "Background: Agribusiness and project consultant"],
+    team3Role:["Chargé de l’environnement et du climat", "Environment and Climate Officer"],
+    team3Profile:["Profil : Consultant en environnement", "Background: Environmental consultant"],
+    team4Role:["Fonction à préciser", "Role to be confirmed"],
+    team4Profile:["Profil : Expert en BTP", "Background: Construction and civil engineering specialist"],
+    team5Role:["Fonction à préciser", "Role to be confirmed"],
+    team5Profile:["Profil : Infirmière", "Background: Nurse"],
+    team6Role:["Fonction à préciser", "Role to be confirmed"],
+    team6Profile:["Profil : Entrepreneur agricole", "Background: Agricultural entrepreneur"],
+    team7Role:["Fonction à préciser", "Role to be confirmed"],
+    team7Profile:["Profil : Entrepreneur en bâtiment", "Background: Building contractor"],
+    team8Role:["Community Manager", "Community Manager"],
     baseLabel:["Cadre associatif","Associative framework"],
     baseTitle:["Une association loi 1901 dédiée à l'environnement et au développement humain","A French 1901-law association dedicated to the environment and human development"],
     baseP1:["Fondée à Marseille le 8 avril 2026, La Nature et l'Humain agit pour la protection de l'environnement, la biodiversité, le climat, le développement durable, la solidarité et le développement humain.","Founded in Marseille on 8 April 2026, La Nature et l'Humain works for environmental protection, biodiversity, climate, sustainable development, solidarity and human development."],

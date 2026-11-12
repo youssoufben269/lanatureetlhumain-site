@@ -252,7 +252,7 @@ class MembershipTest(unittest.TestCase):
         self.assertIn('60 traverse Moulin de la Villette', html)
         self.assertNotIn('data:image/', html)
         self.assertEqual((ROOT / 'CNAME').read_text().strip(), 'www.lanatureetlhumain.org')
-        for path in ('/assets/logo-officiel.jpg', '/assets/accueil-1.webp', '/assets/accueil-2.webp', '/assets/accueil-3.webp'):
+        for path in ('/assets/logo-officiel.jpg', '/assets/accueil-1.webp', '/assets/accueil-2.webp', '/assets/accueil-3.webp', '/assets/ali-abdallah-youssouf-ben.webp'):
             self.assertEqual(self.request(path)['code'], 200, path)
         for path in ('/adhesion', '/admin/adhesions'):
             response = self.request(path)
