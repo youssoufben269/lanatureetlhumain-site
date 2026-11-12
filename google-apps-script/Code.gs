@@ -2,6 +2,8 @@
 const LNH_GOOGLE = Object.freeze({
   owner: 'lanaturetlhumain@gmail.com', recipient: 'lanaturetlhumain@gmail.com',
   site: 'https://www.lanatureetlhumain.org', consent: '2026-11-11-v2',
+  publicEmail: 'contact@lanatureetlhumain.org', phone: '+33 7 45 95 39 60',
+  address: '60 traverse Moulin de la Villette, 13003 Marseille, France',
   categories: ['actif', 'sympathisant', 'institutionnel'], dailyLimit: 30, hourlyLimit: 10
 });
 
@@ -222,13 +224,13 @@ function applicationHtml_(data, state) {
   const row = (label, value) => '<tr><th>' + label + '</th><td>' + text(value) + '</td></tr>';
   const categories = {actif:'Membre actif', sympathisant:'Membre sympathisant', institutionnel:'Membre institutionnel'};
   const date = Utilities.formatDate(new Date(state.receivedAt), 'Africa/Porto-Novo', 'dd/MM/yyyy à HH:mm') + ' (Bénin, UTC+1)';
-  const header = '<table class="brand"><tr><td style="width:65px"><img width="58" height="58" src="' + LNH_GOOGLE.site + '/adhesion/assets/logo.png" alt=""></td><td><strong>La Nature et l’Humain</strong><div class="slogan">RÉSEAUX · PARTENARIATS · SOLUTIONS</div></td></tr></table>';
+  const header = '<div class="brand"><img width="50" height="50" src="' + LNH_GOOGLE.site + '/adhesion/assets/logo.png" alt="Logo La Nature et l’Humain"><strong>La Nature et l’Humain</strong><div class="slogan">RÉSEAUX · PARTENARIATS · SOLUTIONS</div><div class="contacts">Siège social : ' + escapeHtml_(LNH_GOOGLE.address) + '<br>Tél. : ' + escapeHtml_(LNH_GOOGLE.phone) + ' · E-mail : ' + escapeHtml_(LNH_GOOGLE.publicEmail) + '</div></div>';
   const reference = '<div class="ref">Référence du dossier : ' + escapeHtml_(state.reference) + '<br>Date de réception : ' + escapeHtml_(date) + '</div>';
-  const footer = part => '<div class="footer">Document confidentiel · Usage interne à l’association · Partie ' + part + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.recipient + '</div>';
+  const footer = part => '<div class="footer">Document confidentiel · Usage interne à l’association · Partie ' + part + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.publicEmail + '</div>';
   return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>' +
     '@page{size:A4;margin:16mm 17mm}body{font:10pt/1.4 Arial,sans-serif;color:#252525;margin:0}' +
     'table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}' +
-    '.brand{border-bottom:1px solid #dedbd4;margin-bottom:18px}.brand td{padding:0 0 12px}.brand strong{font-size:18pt;font-weight:normal;color:#202020}.slogan{font-size:8pt;color:#666660;letter-spacing:1.3px;margin-top:5px}' +
+    '.brand{text-align:center;border-bottom:1px solid #dedbd4;padding-bottom:12px;margin-bottom:18px}.brand img{display:block;margin:0 auto 6px}.brand strong{display:block;font-size:18pt;font-weight:normal;color:#202020}.slogan{font-size:8pt;color:#666660;letter-spacing:1.3px;margin-top:4px}.contacts{font:8pt/1.5 Arial,sans-serif;color:#555550;margin-top:7px}' +
     'h1{font-size:23pt;font-weight:normal;color:#202020;margin:0 0 10px}h2{font-size:12pt;color:#303030;margin:19px 0 8px;border-bottom:1px solid #dedbd4;padding-bottom:5px;page-break-after:avoid}tr{page-break-inside:avoid}' +
     '.ref{font-size:8pt;color:#555550;word-wrap:break-word}.status{background:#f6f4ef;border-left:3px solid #4b9824;padding:10px 12px;margin:14px 0;font-size:9pt}' +
     '.fields th{width:30%;text-align:left;font-weight:normal;color:#555550}.fields th,.fields td{border-bottom:1px solid #e5e3de;padding:7px 8px 7px 0}' +
