@@ -2,6 +2,10 @@
 
 Le [formulaire public](https://www.lanatureetlhumain.org/adhesion/) utilise **Google Apps Script**. Le demandeur clique sur **Envoyer** ; le dossier et la photo sont transmis ensemble, sans téléchargement ni email manuel. Il reçoit une page de confirmation et un accusé par email. Le site reste sur GitHub Pages ; l’administration et les cartes restent locales.
 
+## Légende de la photo du 12 novembre 2026
+
+Le déploiement Google existant est en **version 7**. À la demande du propriétaire, la légende du portrait et son texte alternatif deviennent **« Photo d’identité »** dans les nouveaux PDF, à la place de « Photographie fournie ». L’URL, les coordonnées, la mise en page et l’exception privée d’essai sont conservées. Harnais Node réexécuté avec succès et mise à jour du déploiement confirmée dans Google. Les PDF déjà reçus ne sont pas réécrits.
+
 ## Correction du refus d’essai : exception privée demandée par le propriétaire
 
 Le service Google est actif en **version 6**, même URL `/exec`. Deux dossiers antérieurs de l’adresse utilisée pour les essais ont été retrouvés dans Gmail, et le compteur privé de cette adresse était à 2. Le propriétaire a confirmé utiliser la même adresse et a demandé un nombre illimité d’essais pendant la configuration.
