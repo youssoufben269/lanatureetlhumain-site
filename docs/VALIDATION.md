@@ -1,5 +1,9 @@
 # Vérification finale du 11 novembre 2026
 
+## Complément du 12 novembre : dossier PDF et photo jointe
+
+Le service Google existant est maintenant en version 3. Les nouvelles demandes arrivent dans la boîte de l’association avec un PDF administratif lisible et la photo en pièce jointe séparée ; le fichier JSON reste privé pour l’import local. Deux dépôts réels de données fictives, PDF normal et texte long, ont été contrôlés depuis le site public jusque dans Gmail et après téléchargement. Rendu visuel Poppler vérifié, photo JPEG 600 × 800 sans EXIF. Harnais Node réussi ; suite Python : 70 tests, 68 réussis, 2 ignorés sous Windows ; liste Pages inchangée à 19 fichiers publics. [Bilan et limites](PUBLICATION_DIRECTE.md).
+
 ## Envoi direct Google publié et vérifié
 
 Voir [PUBLICATION_DIRECTE.md](PUBLICATION_DIRECTE.md). Le service Google est installé, autorisé par le propriétaire et déployé en version 1. Le formulaire public utilise le mode `google`. Dépôt avec photo testé sans connexion Google ; dossier et accusé reçus dans Gmail ; dossier téléchargé et importé localement avec photo nettoyée, consentement v2 et absence de numéro/carte. Le stockage Drive est limité au compte de l’association. FR/EN et mobile 390 px vérifiés sur le site publié, sans débordement et sans erreur JavaScript observée.

@@ -2,6 +2,16 @@
 
 Le [formulaire public](https://www.lanatureetlhumain.org/adhesion/) utilise **Google Apps Script**. Le demandeur clique sur **Envoyer** ; le dossier et la photo sont transmis ensemble, sans téléchargement ni email manuel. Il reçoit une page de confirmation et un accusé par email. Le site reste sur GitHub Pages ; l’administration et les cartes restent locales.
 
+## Mise à jour du 12 novembre 2026 : PDF et photo séparée
+
+Le service existant est déployé en **version 3**, avec la même URL `/exec`, sans nouvelle autorisation ni modification du formulaire public. L’email destiné à l’association comporte désormais **un dossier PDF administratif et une photo JPEG/PNG en pièce jointe distincte**. Le JSON n’est plus joint ; il reste dans le dossier Drive privé, dont le lien figure dans l’email, pour l’import local sans ressaisie. Les emails antérieurs restent inchangés.
+
+Deux dépôts fictifs effectués depuis le site public ont été retrouvés dans Gmail, avec les deux pièces jointes et les accusés séparés. Le PDF normal comporte deux pages A4 ; le dossier long, avec une motivation de 1 980 caractères et une adresse longue, comporte trois pages sans texte tronqué. Les fichiers réellement reçus ont été téléchargés, rendus avec Poppler et inspectés : logo, slogan, accents, référence, date locale au Bénin, photo intégrée, rubriques et cadre administratif lisibles. Les références de dépôt de test finissent par `ebbd548a` et `c4052f6e`. Ne pas les valider ni générer de cartes. Le second accusé utilise un alias `+controlepdf` de la même boîte de l’association ; aucun tiers n’a reçu de message.
+
+La photo séparée a été téléchargée depuis Gmail et décodée : JPEG, 600 × 800 pixels, sans EXIF. Tests : harnais Node réussi (deux pièces jointes, type PDF/image, conservation privée du JSON, échappement HTML, textes longs, idempotence, conversion en échec et reprise, accusé indépendant) ; **70 tests Python exécutés, 68 réussis et 2 ignorés sous Windows**. Build Pages : toujours 19 fichiers publics, aucune pièce de dossier. Les incidents de conversion et quotas sont simulés ; ils n’ont pas été provoqués sur Google.
+
+Le PDF provient de la conversion HTML Google (`HtmlOutput.getAs`), avec les scopes déjà autorisés. Les quotas de conversion et d’email du compte restent applicables. La nouvelle version ne délivre aucun numéro de membre ni carte et conserve les règles de l’administration locale.
+
 ## Publication effective
 
 - Compte Google propriétaire et destinataire : **lanaturetlhumain@gmail.com**.
