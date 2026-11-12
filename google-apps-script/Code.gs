@@ -214,25 +214,27 @@ function escapeHtml_(value) {
   return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
 
-// Two A4 pages for human review. Technical import data stays in private Drive.
+// Two parts, normally two A4 pages; long entries may flow onto additional pages.
+// Technical import data stays in private Drive. Whitespace is normalized only
+// for print, so repeated newlines cannot force hundreds of near-empty pages.
 function applicationHtml_(data, state) {
-  const text = value => escapeHtml_(value || 'Non renseigné').replace(/\r\n|\r|\n/g, '<br>');
+  const text = value => escapeHtml_(String(value || 'Non renseigné').replace(/\s+/g, ' ').trim());
   const row = (label, value) => '<tr><th>' + label + '</th><td>' + text(value) + '</td></tr>';
   const categories = {actif:'Membre actif', sympathisant:'Membre sympathisant', institutionnel:'Membre institutionnel'};
   const date = Utilities.formatDate(new Date(state.receivedAt), 'Africa/Porto-Novo', 'dd/MM/yyyy à HH:mm') + ' (Bénin, UTC+1)';
   const header = '<table class="brand"><tr><td style="width:65px"><img width="58" height="58" src="' + LNH_GOOGLE.site + '/adhesion/assets/logo.png" alt=""></td><td><strong>La Nature et l’Humain</strong><div class="slogan">RÉSEAUX · PARTENARIATS · SOLUTIONS</div></td></tr></table>';
   const reference = '<div class="ref">Référence de dépôt : ' + escapeHtml_(state.reference) + '<br>Reçue le ' + escapeHtml_(date) + '</div>';
-  const footer = page => '<div class="footer">Dossier confidentiel · Examen par l’association · ' + page + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.recipient + '</div>';
+  const footer = part => '<div class="footer">Dossier confidentiel · Examen par l’association · Partie ' + part + ' / 2<br>www.lanatureetlhumain.org · ' + LNH_GOOGLE.recipient + '</div>';
   return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>' +
     '@page{size:A4;margin:16mm 17mm}body{font:10pt/1.4 Arial,sans-serif;color:#243431;margin:0}' +
     'table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}' +
     '.brand{border-bottom:2px solid #075889;margin-bottom:18px}.brand td{padding:0 0 12px}.brand strong{font-size:18pt;color:#075889}.slogan{font-size:8pt;letter-spacing:1px;margin-top:5px}' +
-    'h1{font-size:23pt;font-weight:normal;color:#075889;margin:0 0 10px}h2{font-size:12pt;color:#075889;margin:19px 0 8px;border-bottom:1px solid #dce5de;padding-bottom:5px}' +
+    'h1{font-size:23pt;font-weight:normal;color:#075889;margin:0 0 10px}h2{font-size:12pt;color:#075889;margin:19px 0 8px;border-bottom:1px solid #dce5de;padding-bottom:5px;page-break-after:avoid}tr{page-break-inside:avoid}' +
     '.ref{font-size:8pt;color:#52615d;word-wrap:break-word}.status{background:#f0f5ec;border-left:3px solid #4b9824;padding:10px 12px;margin:14px 0;font-size:9pt}' +
     '.fields th{width:30%;text-align:left;font-weight:normal;color:#52615d}.fields th,.fields td{border-bottom:1px solid #e5e9e6;padding:7px 8px 7px 0}' +
     '.portrait{text-align:right;width:100px}.portrait img{max-width:90px;max-height:120px}.small{font-size:8pt;color:#52615d}' +
     '.message{white-space:normal;word-wrap:break-word;overflow-wrap:break-word;font-size:10pt;line-height:1.4;min-height:48px}' +
-    '.footer{font-size:8pt;color:#52615d;border-top:1px solid #dce5de;margin-top:22px;padding-top:8px}.page2{page-break-before:always}.note{font-size:9pt}.admin{font-size:9pt;border:1px solid #dce5de;padding:10px 12px;margin-top:17px}' +
+    '.footer{font-size:8pt;color:#52615d;border-top:1px solid #dce5de;margin-top:22px;padding-top:8px}.page2{page-break-before:always}.note{font-size:9pt}.admin{font-size:9pt;border:1px solid #dce5de;padding:10px 12px;margin-top:17px;page-break-inside:avoid}' +
     '</style></head><body>' + header + '<h1>Demande d’adhésion</h1>' + reference +
     '<div class="status">Demande reçue · En attente d’examen<br>Ce dépôt ne vaut pas acceptation de l’adhésion.</div>' +
     '<h2>01. Identité du demandeur</h2><table><tr><td><table class="fields">' + row('Nom', data.last_name) + row('Prénom(s)', data.first_name) + '</table></td>' +

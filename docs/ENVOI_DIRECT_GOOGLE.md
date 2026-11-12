@@ -16,7 +16,11 @@ Les étapes ci-dessous servent à comprendre ou réinstaller le service. **Ne pa
 
 Le demandeur remplit le formulaire et clique sur **Envoyer**. Le navigateur transmet un POST HTTPS comprenant les champs et la photo, sans téléchargement ni passage par sa messagerie. Il est dirigé vers une page de réception Google portant l’identité de l’association. Cette navigation est volontaire : une requête `fetch` en mode `no-cors` ne permettrait pas de vérifier le résultat et ne doit jamais être présentée comme un envoi réussi.
 
-La page confirme seulement un dossier durablement enregistré. Le dossier JSON, compatible avec l’import local existant, et la photo sont dans un dossier Google Drive privé. Deux emails sont préparés côté serveur : le dossier à l’association et un accusé au demandeur. Si Google refuse temporairement un email, la page précise que le dossier est enregistré et que la notification reste en attente. Un déclencheur horaire réessaie. Aucun numéro de membre ni carte n’est créé par Google.
+La page confirme seulement un dossier durablement enregistré. Le service prépare un **PDF administratif A4** avec le logo, le slogan, la référence, la date au Bénin, l’identité et la photo, les coordonnées, la catégorie, la profession déclarée, la motivation, le consentement et un cadre réservé à l’association. Deux parties commencent chacune sur une nouvelle page ; les textes longs peuvent ajouter des pages sans être tronqués. Les espaces et retours à la ligne sont normalisés pour l’impression ; le texte d’origine reste dans les données privées.
+
+L’association reçoit **deux pièces jointes : le dossier PDF et la photo JPEG/PNG séparée**. Aucun JSON n’est joint à cet email. Une copie du PDF, la photo et les données techniques compatibles avec l’import local restent dans le dossier Drive privé. Le lien de ce dossier dans l’email exige le compte de l’association ; il ne donne aucun accès public. Pour un import local sans ressaisie, y télécharger `demande-adhesion-lnh.json`. Les anciens emails ne sont pas modifiés rétroactivement.
+
+Le demandeur reçoit séparément un accusé. Une conversion PDF ou une notification en échec ne supprime pas le dossier et ne bloque pas l’essai d’envoi de cet accusé. Le déclencheur horaire réessaie les notifications manquantes ; un PDF déjà créé est réutilisé. Les quotas Google de conversion et de mail restent applicables. Aucun nouveau scope OAuth, compte ou service payant n’est ajouté. Aucun numéro de membre ni carte n’est créé par Google.
 
 ## Activation dans le compte de l’association
 

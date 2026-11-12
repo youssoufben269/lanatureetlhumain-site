@@ -25,6 +25,6 @@ Les contrôles automatiques précédents restent valables : **70 tests Python, 6
 
 ## Exploitation
 
-Ouvrir les emails reçus et importer leur dossier joint depuis `GERER_ADHESIONS.cmd`. Suivre [PRISE_EN_MAIN.md](PRISE_EN_MAIN.md). Les montants, catégories et règles réels restent à adopter/configurer pour les cartes ; le gabarit de carte demeure provisoire. Aucun prestataire de paiement n’est ajouté.
+Ouvrir le **PDF joint** pour l’examen du dossier et la **photo jointe séparément**. Pour le traitement local sans ressaisie, télécharger le fichier d’import technique depuis le lien Drive privé de l’email, puis l’importer depuis `GERER_ADHESIONS.cmd`. Suivre [PRISE_EN_MAIN.md](PRISE_EN_MAIN.md). Les montants, catégories et règles réels restent à adopter/configurer pour les cartes ; le gabarit de carte demeure provisoire. Aucun prestataire de paiement n’est ajouté.
 
 Voir [ENVOI_DIRECT_GOOGLE.md](ENVOI_DIRECT_GOOGLE.md) pour les limites gratuites, les autorisations, la maintenance et le retour au parcours manuel. Google Drive contient une copie des dossiers ; prévoir une conservation et des sauvegardes privées cohérentes avec les emails et l’administration locale. Le script ne prétend pas vérifier l’identité du demandeur ni la propriété de son adresse email.

@@ -12,10 +12,10 @@ Si la page indique que l’envoi n’a pas pu être confirmé, revenir au formul
 
 ## Pour toi
 
-1. Dans Gmail, télécharger le dossier joint dans un emplacement privé sur ton ordinateur. Ne le copier ni dans Git ni dans les fichiers publics du site.
+1. Dans Gmail, ouvrir le **dossier PDF** pour l’examen administratif et la **photo JPEG/PNG jointe séparément**. Le PDF inclut aussi la photo. Les rubriques regroupent identité, coordonnées, catégorie, profession, motivation, consentement et cadre réservé à l’association. Conserver les pièces dans un emplacement privé, hors Git et hors fichiers publics du site.
 2. Double-cliquer sur **GERER_ADHESIONS.cmd**, à la racine de `site-web/`. Garder la fenêtre ouverte pendant l’utilisation.
 3. Au premier lancement, choisir ton email et un mot de passe local d’au moins 14 caractères. Ce compte protège l’administration de ton ordinateur ; il ne crée aucun compte chez un fournisseur.
-4. Se connecter à l’administration qui s’ouvre, sélectionner le fichier reçu dans **Dossier reçu par email**, confirmer sa vérification et cliquer sur **Importer le dossier**.
+4. Pour importer les données sans les ressaisir, ouvrir le lien **Dossier privé** de l’email avec le compte de l’association. Télécharger `demande-adhesion-lnh.json`, puis le sélectionner dans **Dossier reçu par email** de l’administration locale et cliquer sur **Importer le dossier** après vérification. Ce fichier technique reste réservé à l’import ; les responsables examinent le PDF, pas le JSON. Le PDF seul n’est pas un fichier d’import.
 5. Vérifier les informations et la photo. Attribuer la **fonction** dans l’administration : elle reste distincte de la profession déclarée. Un second import du même email ne crée pas de doublon et n’écrase pas le dossier existant.
 6. Valider la demande et confirmer manuellement le paiement reçu, selon les règles adoptées par l’association. Le numéro et la carte ne sont créés qu’après ces deux conditions.
 7. Afficher le recto-verso, télécharger le PDF et le joindre toi-même à ton email de réponse au membre. Aucun email automatique n’est requis.
