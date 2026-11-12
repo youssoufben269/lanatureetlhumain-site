@@ -43,7 +43,7 @@ assert.equal(clean.profession,'Biologiste'); assert.equal(clean.function,undefin
 for (const change of [{motivation:undefined},{motivation:''},{motivation:' \n\t '},{email:''},{email:'a@example.org\r\nBcc:evil@example.org'},{consent:false},{consent_version:'old'},{category:'president'},{website:'robot'},{photo:{mime:'image/jpeg',base64:'eHh4eA=='}}]) {
   assert.throws(()=>h.context.validate_(h.payload({...h.application,...change})));
 }
-assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);
+assert.match(h.post(),/Nous avons bien reçu votre demande d’adhésion/);
 assert.equal(h.sent.length,2);
 assert.equal(h.sent[0].to,'lanaturetlhumain@gmail.com');assert.equal(h.sent[0].replyTo,'applicant@example.org');
 assert.equal(h.sent[1].to,'applicant@example.org');assert.equal(h.sent[0].attachments.length,2);
@@ -73,19 +73,19 @@ for (const contact of ['60 traverse Moulin de la Villette, 13003 Marseille, Fran
 const longHtml=h.context.applicationHtml_({...clean,motivation:'a\n'.repeat(1000),address:'<'.repeat(250)}, {reference:'LNH-D-'+ 'a'.repeat(32),receivedAt:new Date().toISOString()});
 assert.ok(longHtml.includes(('a '.repeat(1000)).trim()));assert.match(longHtml,/&lt;&lt;&lt;/);
 assert.match(longHtml,/Partie 2 \/ 2/);assert.doesNotMatch(longHtml.match(/<div class="message">([\s\S]*?)<\/div>/)[1],/<br>/);
-assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);assert.equal(h.sent.length,2);assert.equal(h.controls.conversions,1);
+assert.match(h.post(),/Nous avons bien reçu votre demande d’adhésion/);assert.equal(h.sent.length,2);assert.equal(h.controls.conversions,1);
 assert.match(h.post({...h.application,profession:'Changed'}),/L’envoi n’a pas pu être confirmé/);
 assert.equal([...h.folders.values()].filter(f=>f.name.startsWith('demande-')&&!f.trashed).length,1);
-h = harness();h.controls.mailFail=true;assert.match(h.post(),/notifications par email sont en attente/);assert.equal(h.sent.length,0);
+h = harness();h.controls.mailFail=true;assert.match(h.post(),/notifications par email est en attente/);assert.equal(h.sent.length,0);
 h.controls.mailFail=false;h.context.relancerNotifications();assert.equal(h.sent.length,2);h.context.relancerNotifications();assert.equal(h.sent.length,2);assert.equal(h.controls.conversions,1);
-h=harness();h.controls.pdfFail=true;assert.match(h.post(),/notifications par email sont en attente/);
+h=harness();h.controls.pdfFail=true;assert.match(h.post(),/notifications par email est en attente/);
 assert.equal(h.sent.length,1);assert.equal(h.sent[0].to,'applicant@example.org');
 assert.equal([...h.folders.values()].filter(f=>f.name.startsWith('demande-')&&!f.trashed).length,1);
 h.controls.pdfFail=false;h.context.relancerNotifications();assert.equal(h.sent.length,2);
 assert.equal(h.sent[1].attachments.length,2);h.context.relancerNotifications();assert.equal(h.sent.length,2);
-h = harness();h.controls.quota=0;assert.match(h.post(),/notifications par email sont en attente/);h.controls.quota=2;h.context.relancerNotifications();assert.equal(h.sent.length,2);
+h = harness();h.controls.quota=0;assert.match(h.post(),/notifications par email est en attente/);h.controls.quota=2;h.context.relancerNotifications();assert.equal(h.sent.length,2);
 h = harness();h.controls.storageFail=true;assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.equal(h.sent.length,0);
-h.controls.storageFail=false;assert.match(h.post(),/Ton dossier et ta photo ont été enregistrés/);
+h.controls.storageFail=false;assert.match(h.post(),/Nous avons bien reçu votre demande d’adhésion/);
 h = harness();h.controls.locked=true;assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.equal(h.sent.length,0);
 h = harness();h.controls.owner='wrong@example.org';assert.match(h.post(),/L’envoi n’a pas pu être confirmé/);assert.throws(()=>h.context.installer());
 h = harness();h.post();h.post(h.application,'b'.repeat(32));assert.match(h.post(h.application,'c'.repeat(32)),/La limite de deux demandes par jour/);assert.equal(h.sent.length,4);
@@ -100,9 +100,9 @@ const testHash=h.context.hash_(h.application.email), stamp=new Date().toISOStrin
 h.properties.LNH_RATE=JSON.stringify({day:stamp.slice(0,10),hour:stamp.slice(0,13),total:30,hourly:10,emails:{[testHash]:2}});
 const originalRate=h.properties.LNH_RATE;
 h.properties.LNH_TEST_EMAIL_HASHES='invalid-value, '+testHash;
-for(let i=1;i<=4;i++) assert.match(h.post(h.application,i.toString(16).padStart(32,'0')),/Ton dossier et ta photo ont été enregistrés/);
+for(let i=1;i<=4;i++) assert.match(h.post(h.application,i.toString(16).padStart(32,'0')),/Nous avons bien reçu votre demande d’adhésion/);
 assert.equal(h.sent.length,8);assert.equal(h.properties.LNH_RATE,originalRate);
-assert.match(h.post(h.application,'1'.padStart(32,'0')),/Ton dossier et ta photo ont été enregistrés/);assert.equal(h.sent.length,8);
+assert.match(h.post(h.application,'1'.padStart(32,'0')),/Nous avons bien reçu votre demande d’adhésion/);assert.equal(h.sent.length,8);
 assert.match(h.post({...h.application,email:'other@example.org'},'e'.repeat(32)),/capacité quotidienne/);
 assert.match(h.post({...h.application,motivation:'  '},'f'.repeat(32)),/motivation est obligatoire/);
 assert.match(h.post({...h.application,consent:false},'f'.repeat(32)),/L’envoi n’a pas pu être confirmé/);
@@ -113,7 +113,7 @@ assert.equal(h.context.failureText_('<script>private</script>',false),'');
 assert.doesNotMatch(h.context.receipt_(false,'fr','','','<script>private</script>').html,/<script>private/);
 assert.match(h.context.receipt_(false,'en','','','LIMIT_EMAIL').html,/limit of two applications per day/);
 h=harness();h.properties.LNH_TEST_EMAIL_HASHES=h.context.hash_(h.application.email);h.controls.quota=0;
-assert.match(h.post(),/notifications par email sont en attente/);assert.equal(h.sent.length,0);
+assert.match(h.post(),/notifications par email est en attente/);assert.equal(h.sent.length,0);
 h.controls.quota=2;h.context.relancerNotifications();assert.equal(h.sent.length,2);
 h=harness();
 assert.match(h.context.doPost({postData:{length:4400001},parameter:{}}).html,/L’envoi n’a pas pu être confirmé/);
