@@ -9,7 +9,7 @@ window.LNH = (() => {
         body: data === undefined ? undefined : JSON.stringify(data)
       });
     } catch {
-      throw new Error('Le service est indisponible. Réessaie plus tard ou contacte l’association. / Service unavailable. Please try again later.');
+      throw new Error('Le service est indisponible. Veuillez réessayer plus tard ou contacter l’association. / Service unavailable. Please try again later.');
     }
     if (!response.ok || !binary) {
       if (!(response.headers.get('content-type') || '').includes('application/json')) {

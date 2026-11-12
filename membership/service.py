@@ -107,7 +107,7 @@ class Service:
             db.execute('DELETE FROM rate_limits WHERE expires_at < ?', (stamp,))
             row = db.execute('SELECT * FROM rate_limits WHERE key=?', (key,)).fetchone()
             if row and row['count'] >= limit:
-                raise Problem('Trop de tentatives. Réessaie plus tard.', 429)
+                raise Problem('Trop de tentatives. Veuillez réessayer plus tard.', 429)
             db.execute('INSERT INTO rate_limits VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET count=rate_limits.count+1', (key, stamp + seconds))
 
     def add_admin(self, address, password):
@@ -147,7 +147,7 @@ class Service:
             row = db.execute('SELECT s.*,a.email FROM sessions s JOIN admins a ON a.id=s.admin_id WHERE s.token_hash=? AND s.expires_at>? AND a.active=1',
                              (digest(token), int(time.time()))).fetchone()
         if not row:
-            raise Problem('Connecte-toi à l’administration.', 401)
+            raise Problem('Veuillez vous connecter à l’administration.', 401)
         return dict(row)
 
     def logout(self, token):
@@ -231,7 +231,7 @@ class Service:
         try:
             validate_card_text(values)
         except ValueError:
-            raise Problem('Le nom, la catégorie ou la fonction dépasse la place disponible sur la carte. Contacte l’association ou utilise une fonction plus courte.')
+            raise Problem('Le nom, la catégorie ou la fonction dépasse la place disponible sur la carte. Contactez l’association ou utilisez une fonction plus courte.')
 
     def enqueue(self, db, identifier, kind, recipient, payload):
         db.execute('INSERT INTO outbox(application_id,kind,recipient,payload) VALUES(?,?,?,?) ON CONFLICT DO NOTHING',
@@ -368,7 +368,7 @@ class Service:
         with contextlib.closing(self.connection()) as db:
             row = db.execute("SELECT a.* FROM downloads d JOIN applications a ON a.id=d.application_id WHERE d.token_hash=? AND d.expires_at>? AND a.status='carte_generee' AND a.expires_on>=?", (digest(token), int(time.time()), datetime.now(ZoneInfo(self.cfg.timezone)).date().isoformat())).fetchone()
         if not row:
-            raise Problem('Lien incorrect, expiré ou carte désactivée. Contacte l’association.', 404)
+            raise Problem('Lien incorrect, expiré ou carte désactivée. Contactez l’association.', 404)
         return dict(row)
 
     def verification(self, number):

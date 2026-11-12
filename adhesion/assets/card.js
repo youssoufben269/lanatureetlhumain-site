@@ -10,7 +10,7 @@
       const link = LNH.node('a', 'Télécharger le PDF', 'button'); link.href = url; link.download = 'carte-membre.pdf';
       const container = document.querySelector('#preview'); container.replaceChildren();
       await LNH.preview(blob, container); container.append(link);
-      status.textContent = 'Imprime à 100 %, sans ajustement à la page. Le PDF contient le recto puis le verso.';
+      status.textContent = 'Imprimez à 100 %, sans ajustement à la page. Le PDF contient le recto puis le verso.';
       window.addEventListener('pagehide', () => URL.revokeObjectURL(url), { once: true });
     } catch (error) { status.className = 'status error'; status.textContent = error.message; event.target.disabled = false; }
   });

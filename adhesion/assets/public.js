@@ -11,8 +11,8 @@
   let recipient, requestURL, preparedApplication;
   let config, imageURL, lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'fr';
   const english = {
-    topbar: 'International association · Biodiversity · Climate · Sustainable development', home: 'Back to website', eyebrow: 'Membership', title: 'Join the association',
-    intro: 'Submit your application and photo. The association reviews your application and assigns your role. Your card is issued after approval and payment confirmation.',
+    topbar: 'International association · Biodiversity · Climate · Sustainable development', home: 'Back to website', eyebrow: 'Membership', title: 'Join us', photoCredit: 'Photo: Sampo Kiviniemi · Grand-Popo, Benin',
+    intro: 'Please complete the form below to submit your membership application.',
     formTitle: 'Your membership application', required: 'Fields marked * are required.', first: 'First name *', last: 'Last name *', email: 'Email *', phone: 'Phone *', address: 'Address (optional)', city: 'City (optional)', country: 'Country (optional)', profession: 'Profession (optional)', roleHint: 'The role printed on your card is assigned by the association.', category: 'Requested membership category *', loading: 'Loading…', photo: 'Identity photo *', photoHint: 'Recent portrait with an unobstructed face. JPEG or PNG, up to 3 MB, at least 240 × 320 pixels. The photo will be cropped to portrait format.', motivation: 'Motivation *', consent: 'I consent to the processing of my data to review my application, manage my membership and issue my card. *', privacy: 'Read the privacy notice', submit: 'Submit my application', next: 'What happens next', cardTitle: 'Your membership card', step1: 'Submit your details and photo.', step2: 'The association reviews your application and assigns your role.', step3: 'Payment of the membership fee is confirmed.', step4: 'Your number and card are created after approval.', noInstant: 'Submitting this form does not constitute acceptance of membership.'
   };
   const french = Object.fromEntries([...document.querySelectorAll('[data-t]')].map(x => [x.dataset.t, x.textContent]));
@@ -24,12 +24,12 @@
     emailRecipient:'Recipient:', emailFallback:'If your email app does not open, write to this address, attach your application and copy the message below.', emailMessage:'Message to copy if needed'
   });
   if (emailMode) {
-    Object.assign(french, {intro:'Prépare ta demande et ta photo, puis envoie le dossier par email. L’association examine les pièces reçues et traite ton adhésion.', submit:'Envoyer', step1:'Tu prépares le dossier et l’envoies par email avec ta photo.'});
+    Object.assign(french, {intro:'Préparez votre demande, puis transmettez le dossier par email.', submit:'Envoyer', step1:'Vous préparez le dossier et l’envoyez par email avec votre photo.'});
     Object.assign(english, {intro:'Prepare your application and photo, then send the file by email. The association reviews the documents received and processes your membership.', submit:'Send', step1:'Prepare your application and send it by email with your photo.'});
   }
   if (directMode) {
-    Object.assign(french, {intro:'Envoie ta demande et ta photo directement depuis ce formulaire. L’association examinera ton dossier et te contactera par email.', submit:'Envoyer', step1:'Tu transmets tes informations et ta photo depuis le formulaire.'});
-    Object.assign(english, {intro:'Send your application and photo directly from this form. The association will review your application and contact you by email.', submit:'Send', step1:'Send your details and photo from the form.'});
+    Object.assign(french, {intro:'Adressez-nous votre demande d’adhésion en complétant le formulaire ci-dessous.', submit:'Envoyer', step1:'Vous transmettez vos informations et votre photo depuis le formulaire.'});
+    Object.assign(english, {intro:'Please complete the form below to submit your membership application.', submit:'Send', step1:'Send your details and photo from the form.'});
   }
   function renderEmail() {
     const draft = LNH_EMAIL.prepare(preparedApplication, recipient, lang);
@@ -42,7 +42,7 @@
     document.querySelector('#recipient').href = 'mailto:' + recipient;
     document.querySelector('#email-delivery').hidden = false;
     status.className = 'status';
-    status.textContent = lang === 'en' ? 'Your application is ready. Download the file, then attach and send it from your email app. Nothing has been sent yet.' : 'Ton dossier est prêt. Télécharge-le, puis joins-le et envoie-le depuis ta messagerie. Aucun message n’a encore été envoyé.';
+    status.textContent = lang === 'en' ? 'Your application is ready. Download the file, then attach and send it from your email app. Nothing has been sent yet.' : 'Votre dossier est prêt. Téléchargez-le, puis joignez-le et envoyez-le depuis votre messagerie. Aucun message n’a encore été envoyé.';
   }
   function translate() {
     document.documentElement.lang = lang;
@@ -50,7 +50,7 @@
     document.querySelector('[data-t="home"]').href = '../?lang=' + lang;
     document.querySelector('.brand').href = '../?lang=' + lang;
     document.querySelector('[data-t="privacy"]').href = 'confidentialite.html?lang=' + lang;
-    preview.alt = lang === 'en' ? 'Your photo preview' : 'Aperçu de ta photo';
+    preview.alt = lang === 'en' ? 'Your photo preview' : 'Aperçu de votre photo';
     document.querySelectorAll('[data-t]').forEach(x => { x.textContent = lang === 'en' ? english[x.dataset.t] : french[x.dataset.t]; });
     document.querySelector('#language').textContent = lang === 'en' ? 'FR' : 'EN';
     document.querySelector('#language').setAttribute('aria-label', lang === 'en' ? 'Passer en français' : 'Switch to English');
@@ -61,7 +61,7 @@
       });
     }
     if (config) document.querySelector('#fee').textContent = config.fee_minor === null
-      ? (lang === 'en' ? 'The fee and payment instructions will be provided after review.' : 'Le montant et les modalités de paiement te seront communiqués après examen.')
+      ? (lang === 'en' ? 'The fee and payment instructions will be provided after review.' : 'Le montant et les modalités de paiement vous seront communiqués après examen.')
       : (lang === 'en' ? 'Membership fee: ' : 'Droit d’adhésion : ') + new Intl.NumberFormat(lang, { style: 'currency', currency: config.currency }).format(config.fee_minor / 10 ** new Intl.NumberFormat(lang, { style: 'currency', currency: config.currency }).resolvedOptions().maximumFractionDigits);
     if (emailMode && preparedApplication) renderEmail();
   }
@@ -75,7 +75,7 @@
     if (!['image/jpeg', 'image/png'].includes(file.type) || file.size > 3_000_000) {
       photo.value = '';
       status.className = 'status error';
-      status.textContent = lang === 'en' ? 'Choose a JPEG or PNG image, maximum 3 MB.' : 'Choisis une photo JPEG ou PNG de 3 Mo maximum.';
+      status.textContent = lang === 'en' ? 'Choose a JPEG or PNG image, maximum 3 MB.' : 'Veuillez choisir une photo JPEG ou PNG de 3 Mo maximum.';
       return;
     }
     imageURL = URL.createObjectURL(file);
@@ -104,7 +104,7 @@
         imageURL = URL.createObjectURL(file); preview.src = imageURL; preview.hidden = false;
       }
       await preview.decode();
-      if (preview.naturalWidth < 240 || preview.naturalHeight < 320 || preview.naturalWidth * preview.naturalHeight > 16_000_000) throw new Error(lang === 'en' ? 'Use a photo of at least 240 × 320 pixels, maximum 16 megapixels.' : 'Utilise une photo d’au moins 240 × 320 pixels, maximum 16 mégapixels.');
+      if (preview.naturalWidth < 240 || preview.naturalHeight < 320 || preview.naturalWidth * preview.naturalHeight > 16_000_000) throw new Error(lang === 'en' ? 'Use a photo of at least 240 × 320 pixels, maximum 16 megapixels.' : 'Veuillez utiliser une photo d’au moins 240 × 320 pixels, sans dépasser 16 mégapixels.');
       const encoded = await new Promise((resolve, reject) => {
         const reader = new FileReader(); reader.onload = () => resolve(reader.result.split(',')[1]); reader.onerror = reject; reader.readAsDataURL(file);
       });

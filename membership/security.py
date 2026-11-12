@@ -17,7 +17,7 @@ def digest(value):
 
 def hash_password(password):
     if len(password) < 14 or len(password) > 256 or not password.strip():
-        raise Problem('Choisis un mot de passe de 14 à 256 caractères.')
+        raise Problem('Choisissez un mot de passe de 14 à 256 caractères.')
     salt = secrets.token_bytes(16)
     value = hashlib.scrypt(password.encode(), salt=salt, n=16384, r=8, p=1)
     return 'scrypt$' + base64.b64encode(salt).decode() + '$' + base64.b64encode(value).decode()

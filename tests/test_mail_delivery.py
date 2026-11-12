@@ -103,7 +103,7 @@ class MailDeliveryTest(unittest.TestCase):
                 with self.after_reservation(cancel):
                     result = flush(self.service, messages.append)
                 self.assertEqual(result, {'enabled': True, 'sent': 1, 'failed': 0})
-                self.assertEqual([str(msg['Subject']) for msg in messages], ['Suite à ta demande d’adhésion'])
+                self.assertEqual([str(msg['Subject']) for msg in messages], ['Suite à votre demande d’adhésion'])
                 self.assertEqual(self.row('SELECT state FROM outbox WHERE id=?', (notice,))['state'], 'cancelled')
                 self.assertIsNone(self.row('SELECT * FROM downloads WHERE token_hash=?', (digest(token),)))
 
@@ -135,7 +135,7 @@ class MailDeliveryTest(unittest.TestCase):
         self.assertEqual(self.service.download(token)['id'], identifier)
         self.assertIn('#token=' + token, messages[0].get_content())
         self.assertIn('7 jours à compter de cet envoi', messages[0].get_content())
-        self.assertIn('tant que ton adhésion reste active', messages[0].get_content())
+        self.assertIn('tant que votre adhésion reste active', messages[0].get_content())
         self.assertEqual(self.row('SELECT state,payload FROM outbox WHERE id=?', (notice,)),
                          {'state': 'sent', 'payload': '{}'})
 
@@ -216,7 +216,7 @@ class MailDeliveryTest(unittest.TestCase):
         with ThreadPoolExecutor(max_workers=1) as executor:
             def transport(msg):
                 messages.append(msg)
-                if str(msg['Subject']) != 'Ta carte de membre est disponible':
+                if str(msg['Subject']) != 'Votre carte de membre est disponible':
                     return
                 futures.append(executor.submit(concurrent_refusal))
                 self.assertTrue(started.wait(5))
@@ -231,7 +231,7 @@ class MailDeliveryTest(unittest.TestCase):
             self.assertGreaterEqual(result['sent'], 1)
             self.assertEqual(result['failed'], 0)
             self.assertEqual(futures[0].result(timeout=5)['status'], 'refusee')
-        self.assertEqual(str(messages[0]['Subject']), 'Ta carte de membre est disponible')
+        self.assertEqual(str(messages[0]['Subject']), 'Votre carte de membre est disponible')
         self.assertEqual(self.row('SELECT state FROM outbox WHERE id=?', (notice,))['state'], 'sent')
         with self.assertRaises(Problem):
             self.service.download(token)

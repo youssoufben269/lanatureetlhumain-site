@@ -110,3 +110,12 @@ La demande de démonstration utilise une identité fictive, une silhouette porta
 Le PDF de démonstration a été rendu à 300 dpi et les deux faces inspectées. `pdfinfo` et les tests confirment deux pages ID-1 de 85,60 × 53,98 mm. Le nom, la fonction attribuée, le numéro, les dates, le logo et le slogan sont lisibles. Les textes et le QR sont vectoriels. La photo est à une résolution suffisante pour ce format. La signature simulée est explicitement identifiée.
 
 Restent avant publication : comparaison avec le dépôt distant à jour, hébergement Python et HTTPS, stockage privé persistant, paramètres réels du droit, catégories et validité, création du compte administrateur de l’association, SMTP si souhaité, rapprochement du gabarit avec la maquette validée. Le QR actuel ouvre le site officiel ; la vérification individuelle reste désactivée.
+
+
+## 12 novembre 2026 : bannière d’adhésion et vouvoiement
+
+La bannière du formulaire public affiche « Rejoignez-nous » / « Join us » et une indication courte validée par le propriétaire. Elle réutilise la photographie côtière `assets/accueil-1.webp`, avec un dégradé clair derrière le texte, une attribution et un lien vers la licence CC BY-SA 4.0. Aucune photographie supplémentaire n’est téléchargée. Les styles sont limités à cette bannière ; la notice et l’administration conservent leur présentation.
+
+Audit du vouvoiement : accueil déjà conforme ; formulaire, étapes de la carte, aperçu photo, aides, erreurs, parcours email de secours et notice de confidentialité harmonisés. Le code Google déjà publié en version 8 utilise le vouvoiement et reste inchangé. Les textes de la carte privée, les réponses du service Python et ses modèles SMTP locaux sont également corrigés ; le service Python et le SMTP ne sont pas activés en ligne par cette mise à jour. Les assertions des tests existants sont adaptées aux nouveaux objets et formulations des emails.
+
+Contrôles : syntaxe JavaScript, harnais Google réussi sans email réel, 72 tests Python exécutés avec succès dont 2 ignorés sous Windows, build de 20 fichiers publics. Contrôle navigateur en français et anglais, titre, indication, étapes, notice et retour au formulaire ; absence de débordement à 1280 et 390 pixels. Lisibilité du sélecteur de langue corrigée au survol et au focus. Ni CNAME, ni configuration d’envoi, ni règles de paiement ou de délivrance des cartes ne sont modifiés. Le workflow Pages publie uniquement l’artefact public.

@@ -97,7 +97,7 @@ class Application:
         try:
             content = self.service.storage.get(member['card_path'])
         except FileNotFoundError:
-            raise Problem('Fichier indisponible. Contacte l’association.', 404)
+            raise Problem('Fichier indisponible. Contactez l’association.', 404)
         return 200, 'application/pdf', content, [('Content-Disposition', 'attachment; filename="' + member['member_number'] + '.pdf"')]
 
     def dispatch(self, env, method, path, data):
@@ -110,7 +110,7 @@ class Application:
                               'privacy_contact': self.cfg.privacy_contact, 'retention_days': self.cfg.retention_days})
         if path == '/api/membership/applications' and method == 'POST':
             self.service.submit(data, remote)
-            return self.json({'message': 'Ta demande a été prise en compte. L’association examinera les informations reçues. Si cette adresse a déjà été utilisée, contacte-nous pour suivre ton dossier.'}, 202)
+            return self.json({'message': 'Votre demande a été prise en compte. L’association examinera les informations reçues. Si cette adresse a déjà été utilisée, contactez-nous pour suivre votre dossier.'}, 202)
         if path == '/api/session' and method == 'GET':
             try:
                 _, session = self.auth(env)

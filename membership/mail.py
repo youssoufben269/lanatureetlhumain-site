@@ -14,12 +14,12 @@ from .security import digest, email
 
 
 def _message(row, data, sender):
-    subjects = {'reception': 'Demande d’adhésion reçue', 'validation': 'Adhésion validée', 'refus': 'Suite à ta demande d’adhésion', 'carte': 'Ta carte de membre est disponible'}
+    subjects = {'reception': 'Demande d’adhésion reçue', 'validation': 'Adhésion validée', 'refus': 'Suite à votre demande d’adhésion', 'carte': 'Votre carte de membre est disponible'}
     bodies = {
-        'reception': 'Nous avons reçu ta demande d’adhésion. L’association va l’examiner. La carte sera délivrée après validation et confirmation du paiement.',
-        'validation': 'Ton adhésion est validée et ton paiement confirmé. Ton numéro de membre : ' + data.get('number', '') + '. La carte sera disponible après sa génération.',
-        'refus': 'L’association n’a pas retenu ta demande. Motif : ' + data.get('reason', ''),
-        'carte': 'Ta carte ' + data.get('number', '') + ' est disponible. Ce lien privé est valable 7 jours à compter de cet envoi, tant que ton adhésion reste active :\n' + data.get('link', '') + '\nNe partage pas ce lien.',
+        'reception': 'Nous avons bien reçu votre demande d’adhésion. L’association examinera votre dossier et vous informera des suites données.',
+        'validation': 'Votre adhésion est validée et votre paiement confirmé. Votre numéro de membre : ' + data.get('number', '') + '. La carte sera disponible après sa génération.',
+        'refus': 'L’association n’a pas retenu votre demande. Motif : ' + data.get('reason', ''),
+        'carte': 'Votre carte ' + data.get('number', '') + ' est disponible. Ce lien privé est valable 7 jours à compter de cet envoi, tant que votre adhésion reste active :\n' + data.get('link', '') + '\nNe partagez pas ce lien.',
     }
     msg = EmailMessage()
     msg['From'], msg['To'], msg['Subject'] = sender, row['recipient'], subjects[row['kind']]
