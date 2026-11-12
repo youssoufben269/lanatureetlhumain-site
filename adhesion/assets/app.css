@@ -5,8 +5,8 @@
 /* Public membership banner: existing licensed photo, protected text area. */
 .intro-membership{position:relative;background-color:#f6f4ef;background-image:linear-gradient(90deg,rgba(246,244,239,.99) 0%,rgba(246,244,239,.97) 40%,rgba(246,244,239,.83) 64%,rgba(246,244,239,.08) 100%),url("../../assets/accueil-1.webp");background-size:cover;background-position:center 62%;padding:56px 0 54px}
 .intro-membership p{max-width:620px;width:66%;color:#424b46;margin-bottom:0}
-.intro-credit{position:absolute;right:max(18px,calc((100% - 1120px)/2));bottom:10px;max-width:calc(100% - 36px);padding:3px 7px;border-radius:2px;background:rgba(255,255,255,.9);color:#424b46;font-size:10px;line-height:1.5}
-.intro-credit a{color:inherit}
-@media(max-width:760px){.intro-membership{padding:35px 0 30px;background-image:linear-gradient(90deg,rgba(246,244,239,.97),rgba(246,244,239,.87)),url("../../assets/accueil-1.webp");background-position:65% center}.intro-membership p{width:100%}.intro-credit{position:static;display:inline-block;max-width:100%;margin-top:22px;padding:3px 6px}}
+.photo-credit{margin-top:8px;color:var(--muted);font-size:10px;line-height:1.5}
+.photo-credit a{color:inherit}
+@media(max-width:760px){.intro-membership{padding:35px 0 30px;background-image:linear-gradient(90deg,rgba(246,244,239,.97),rgba(246,244,239,.87)),url("../../assets/accueil-1.webp");background-position:65% center}.intro-membership p{width:100%}}
 
 .language:hover,.language:focus-visible{background:var(--deep);color:#fff}
