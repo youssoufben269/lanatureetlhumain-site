@@ -65,6 +65,7 @@ assert.ok(html.includes('L’adhésion est soumise à l’examen du dossier et �
 assert.doesNotMatch(html,/Ce dépôt ne vaut|Message et motivation|#075889/);
 assert.match(html,/\.brand strong\{[^}]*font-weight:normal;color:#202020/);
 assert.match(html,/\.slogan\{[^}]*color:#666660/);
+assert.ok(html.includes('Information non communiquée'));assert.doesNotMatch(html,/Non renseigné/);
 const longHtml=h.context.applicationHtml_({...clean,motivation:'a\n'.repeat(1000),address:'<'.repeat(250)}, {reference:'LNH-D-'+ 'a'.repeat(32),receivedAt:new Date().toISOString()});
 assert.ok(longHtml.includes(('a '.repeat(1000)).trim()));assert.match(longHtml,/&lt;&lt;&lt;/);
 assert.match(longHtml,/Partie 2 \/ 2/);assert.doesNotMatch(longHtml.match(/<div class="message">([\s\S]*?)<\/div>/)[1],/<br>/);

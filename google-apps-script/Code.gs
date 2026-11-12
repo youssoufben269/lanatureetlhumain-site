@@ -218,7 +218,7 @@ function escapeHtml_(value) {
 // Technical import data stays in private Drive. Whitespace is normalized only
 // for print, so repeated newlines cannot force hundreds of near-empty pages.
 function applicationHtml_(data, state) {
-  const text = value => escapeHtml_(String(value || 'Non renseigné').replace(/\s+/g, ' ').trim());
+  const text = value => escapeHtml_(String(value || 'Information non communiquée').replace(/\s+/g, ' ').trim());
   const row = (label, value) => '<tr><th>' + label + '</th><td>' + text(value) + '</td></tr>';
   const categories = {actif:'Membre actif', sympathisant:'Membre sympathisant', institutionnel:'Membre institutionnel'};
   const date = Utilities.formatDate(new Date(state.receivedAt), 'Africa/Porto-Novo', 'dd/MM/yyyy à HH:mm') + ' (Bénin, UTC+1)';
