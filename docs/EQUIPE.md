@@ -9,11 +9,12 @@ Fonctions confirmées par le propriétaire :
 - Fayidat ABDALLAH KOUATI : présidente de l’association.
 - Ayouba SALI : chargé de projets.
 - Ali Abdallah Youssouf Ben : chargé de l’environnement et du climat.
-- Community Manager : nom à compléter, poste distinct de celui d’Ayouba.
+- Kassim KADAFI : chargé des affaires sociales.
+- Aboul : Community Manager, poste distinct de celui d’Ayouba ; nom incomplet fourni provisoirement.
 
-Jeannot AGBAHEY, Lorena RANELY, Abdou Gafar Mikael LAWANI et Kassim KADAFI portent provisoirement « Fonction à préciser ». Le propriétaire a demandé de distinguer les profils professionnels des fonctions associatives ; les intitulés de la liste administrative ne sont donc pas repris comme des attributions actuelles sans confirmation.
+Jeannot AGBAHEY, Lorena RANELY et Abdou Gafar Mikael LAWANI portent provisoirement « Fonction à préciser ». Le propriétaire a demandé de distinguer les profils professionnels des fonctions associatives ; les intitulés de la liste administrative ne sont donc pas repris comme des attributions actuelles sans confirmation.
 
-Les profils sont affichés sous un libellé distinct. Les fonctions, profils et emplacements photo ont une traduction FR/EN. Pour compléter une fonction, modifier le texte HTML et les deux traductions `teamNRole` correspondantes. L’ordre des fiches est celui des noms ci-dessus, puis Community Manager en huitième position.
+Les profils sont affichés sous un libellé distinct. Les fonctions, profils et emplacements photo ont une traduction FR/EN. Pour compléter une fonction, modifier le texte HTML et les deux traductions `teamNRole` correspondantes. Les fiches 1 à 8 correspondent à Fayidat, Ayouba, Ali Abdallah Youssouf Ben, Jeannot, Lorena, Abdou Gafar Mikael, Kassim et Aboul.
 
 Le portrait fourni est publié dans `assets/ali-abdallah-youssouf-ben.webp`, 800 × 800 pixels, environ 41 Ko. Le PNG original reste intact hors du dépôt. Les autres fiches réservent un emplacement « Photo à venir » ; ne pas substituer de portrait fictif.
 
