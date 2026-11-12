@@ -1,16 +1,14 @@
 # Demandes d’adhésion, cartes sur ton ordinateur
 
-**Envoi direct préparé :** le service Google Apps Script et son intégration sont disponibles. L’activation exige une connexion et une autorisation dans `lanaturetlhumain@gmail.com`, puis une URL de déploiement `/exec`. Suivre [ENVOI_DIRECT_GOOGLE.md](ENVOI_DIRECT_GOOGLE.md). Tant que `googleEndpoint` est vide, le parcours manuel ci-dessous reste le parcours publié. Après activation, le demandeur clique sur **Envoyer** et reçoit la confirmation Google, sans télécharger de fichier ni ouvrir sa messagerie. L’association reçoit le dossier joint et l’importe localement comme indiqué ci-dessous.
-
-Le parcours choisi ne nécessite aucun nouveau compte de service et aucun hébergement payant. Le site prépare les dossiers ; tu reçois les emails sur **lanaturetlhumain@gmail.com** et tu traites les demandes localement.
+**Le formulaire public envoie directement les dossiers avec Google Apps Script.** Le compte de l’association, `lanaturetlhumain@gmail.com`, reçoit les demandes ; le service conserve aussi une copie dans son Drive privé. Aucun nouveau compte ni hébergement payant n’est nécessaire. La validation et les cartes restent sur ton ordinateur.
 
 ## Pour le demandeur
 
-1. Ouvrir la rubrique **Adhérer** du site et remplir le formulaire avec la photo et le consentement.
-2. Cliquer sur **Envoyer**, puis **Télécharger mon dossier**. Ce fichier contient les informations et la photo ; celle-ci est redimensionnée et réencodée sans métadonnées EXIF.
-3. Cliquer sur **Ouvrir ma messagerie**, joindre le dossier téléchargé au message et l’envoyer. La pièce jointe n’est pas ajoutée automatiquement.
+1. Ouvrir **Adhérer** sur [le site officiel](https://www.lanatureetlhumain.org/adhesion/) et remplir le formulaire avec son email, sa photo et le consentement.
+2. Cliquer sur **Envoyer**. Le dossier et la photo sont transmis ensemble. Aucun fichier à télécharger ni email à composer.
+3. Lire la page de confirmation Google portant l’identité de l’association. La référence affichée est une référence de dépôt, pas un numéro de membre. Un accusé de réception est envoyé à l’email saisi ; vérifier les courriers indésirables si nécessaire.
 
-Si aucune messagerie ne s’ouvre, l’adresse et le texte à copier sont affichés. Le site ne prétend jamais que le message est envoyé ou reçu. Les données ne sont enregistrées ni sur GitHub ni dans le stockage du navigateur.
+Si la page indique que l’envoi n’a pas pu être confirmé, revenir au formulaire et réessayer. Ne pas recommencer si un accusé a déjà été reçu. Si les notifications restent en attente, le dossier enregistré reste conservé et le service réessaie les emails automatiquement. La validation de l’adhésion et le paiement ne sont pas automatiques.
 
 ## Pour toi
 
@@ -43,4 +41,6 @@ Le lanceur conserve les données dans `site-web/var/`, hors Git et hors publicat
 
 ## Site publié
 
-Le workflow Pages prépare uniquement les pages, images et scripts publics. La configuration publiée utilise le mode **email**. L’administration, les lecteurs de cartes, le serveur Python, les tests et les données privées ne sont pas inclus dans l’artefact. Les options d’hébergement distant restent disponibles dans le code pour un besoin futur ; elles ne sont pas nécessaires au parcours actuel.
+Le workflow Pages prépare uniquement les pages, images et scripts publics. La configuration publiée utilise le mode **google**. L’administration, les lecteurs de cartes, le serveur Python, les tests et les données privées ne sont pas inclus dans l’artefact. Les options d’hébergement distant restent disponibles dans le code pour un besoin futur ; elles ne sont pas nécessaires au parcours actuel.
+
+La procédure technique, les quotas et le retour au parcours manuel figurent dans [ENVOI_DIRECT_GOOGLE.md](ENVOI_DIRECT_GOOGLE.md). Le contrôle de réception réel est décrit dans [PUBLICATION_DIRECTE.md](PUBLICATION_DIRECTE.md).

@@ -1,4 +1,6 @@
-# Publication du parcours par email
+# Publication initiale du parcours par email
+
+**Historique : ce parcours manuel a été remplacé par l’envoi direct Google.** Voir [PUBLICATION_DIRECTE.md](PUBLICATION_DIRECTE.md).
 
 Version initiale publiée le **11 novembre 2026**, commit `a42fa32`.
 

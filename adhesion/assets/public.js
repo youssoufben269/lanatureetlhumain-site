@@ -99,6 +99,9 @@
     status.textContent = lang === 'en' ? 'Sending…' : 'Envoi en cours…';
     try {
       const file = photo.files[0];
+      if (!imageURL || preview.hidden) {
+        imageURL = URL.createObjectURL(file); preview.src = imageURL; preview.hidden = false;
+      }
       await preview.decode();
       if (preview.naturalWidth < 240 || preview.naturalHeight < 320 || preview.naturalWidth * preview.naturalHeight > 16_000_000) throw new Error(lang === 'en' ? 'Use a photo of at least 240 × 320 pixels, maximum 16 megapixels.' : 'Utilise une photo d’au moins 240 × 320 pixels, maximum 16 mégapixels.');
       const encoded = await new Promise((resolve, reject) => {
@@ -156,7 +159,7 @@
     select.disabled = false; button.disabled = false; translate();
   }).catch(error => { status.className = 'status error'; status.textContent = error.message; });
   window.addEventListener('pageshow', event => {
-    if (event.persisted) {
+    if (event.persisted || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
       navigating = false; sending = false; button.disabled = !config; startedAt = Date.now(); status.textContent = '';
       if (photo.files[0]) {
         imageURL = URL.createObjectURL(photo.files[0]); preview.src = imageURL; preview.hidden = false;

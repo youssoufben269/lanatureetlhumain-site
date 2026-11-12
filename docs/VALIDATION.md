@@ -1,5 +1,11 @@
 # Vérification finale du 11 novembre 2026
 
+## Envoi direct Google publié et vérifié
+
+Voir [PUBLICATION_DIRECTE.md](PUBLICATION_DIRECTE.md). Le service Google est installé, autorisé par le propriétaire et déployé en version 1. Le formulaire public utilise le mode `google`. Dépôt avec photo testé sans connexion Google ; dossier et accusé reçus dans Gmail ; dossier téléchargé et importé localement avec photo nettoyée, consentement v2 et absence de numéro/carte. Le stockage Drive est limité au compte de l’association. FR/EN et mobile 390 px vérifiés sur le site publié, sans débordement et sans erreur JavaScript observée.
+
+Les comptes rendus qui suivent sont historiques et décrivent la préparation avant activation.
+
 ## Envoi direct Google préparé
 
 Activation Google commencée dans le compte de l’association : projet créé, code et manifeste enregistrés ; lancement de `installer` arrêté sur la demande d’autorisation Google. Le propriétaire doit valider personnellement les autorisations. Aucun `/exec` ni envoi réel vérifié ; la publication du mode direct reste en attente. [État et reprise](ENVOI_DIRECT_GOOGLE.md).

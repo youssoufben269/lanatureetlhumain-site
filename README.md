@@ -1,12 +1,10 @@
-# Administration du site La Nature et l'Humain
+# Administration du site La Nature et l’Humain
 
-**Envoi direct préparé avec le compte Google de l’association :** voir [la procédure d’activation](docs/ENVOI_DIRECT_GOOGLE.md). Le demandeur pourra transmettre ses informations et sa photo en un seul clic, sans téléchargement ni messagerie. L’envoi direct exige le déploiement Apps Script et son URL dans `adhesion/settings.json` ; tant que cette URL est vide, le parcours manuel reste actif.
+**Envoi direct publié :** le demandeur transmet son dossier et sa photo depuis [le formulaire public](https://www.lanatureetlhumain.org/adhesion/). Google Apps Script les enregistre dans le Drive privé de l’association, envoie le dossier à `lanaturetlhumain@gmail.com` et adresse un accusé au demandeur. Aucun fichier à télécharger ou email à composer par le demandeur.
 
-**Parcours actuellement publié : demandes par email vers `lanaturetlhumain@gmail.com`, traitement et cartes sur l’ordinateur.** Aucun compte supplémentaire ni serveur distant n’est nécessaire. Voir [le guide pratique](docs/PRISE_EN_MAIN.md) et ouvrir `GERER_ADHESIONS.cmd` pour l’administration locale.
+L’examen, la fonction attribuée, la validation, la confirmation manuelle du paiement et les cartes restent dans l’administration locale. Ouvrir `GERER_ADHESIONS.cmd` et suivre [PRISE_EN_MAIN.md](docs/PRISE_EN_MAIN.md). Voir [le bilan de publication](docs/PUBLICATION_DIRECTE.md), [la configuration Google](docs/ENVOI_DIRECT_GOOGLE.md) et [le guide du module](docs/ADHESION.md).
 
-Le module d’adhésion, son administration et le générateur de cartes sont intégrés à ce dépôt. Consulte [le guide d’utilisation et de configuration](docs/ADHESION.md). L’interface publique se trouve dans `adhesion/`, l’administration dans `admin/adhesions/`, le service privé dans `membership/`. Un service Python avec stockage persistant est nécessaire en plus de GitHub Pages.
-
-La branche `codex/adhesion-en-ligne` a été actualisée sur `origin/main` `82f0ad0` le 11 novembre 2026 et prépare le module pour publication. Son hébergement Python reste à configurer avant activation sur le site. Voir [les vérifications](docs/VALIDATION.md) et [la procédure de déploiement](docs/DEPLOIEMENT.md).
+Le site reste sur GitHub Pages. Aucun hébergement Python distant n’est nécessaire au parcours retenu. Le serveur Python et les données privées ne sont pas publiés avec les pages.
 
 L’option PostgreSQL + Supabase + Render reste une alternative technique non activée, décrite dans [RENDER.md](docs/RENDER.md). Elle n’est pas nécessaire au parcours par email choisi.
 

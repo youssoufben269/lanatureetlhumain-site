@@ -1,5 +1,7 @@
 # Mise à jour et hébergement
 
+**Configuration publiée : envoi direct Google Apps Script, dossiers et cartes gérés localement.** Voir [ENVOI_DIRECT_GOOGLE.md](ENVOI_DIRECT_GOOGLE.md) et [PUBLICATION_DIRECTE.md](PUBLICATION_DIRECTE.md). Les modes email manuel et serveur distant décrits ci-dessous sont des alternatives.
+
 ## Parcours choisi : email, sans nouveau compte
 
 Le demandeur a retenu une collecte par email vers **lanaturetlhumain@gmail.com**, puis un traitement dans l’administration locale et l’envoi manuel des cartes PDF. Le formulaire est publié en mode email sur GitHub Pages. Aucun service Python distant n’est nécessaire pour cette collecte. Le serveur existant reste utilisé uniquement sur l’ordinateur pour importer les dossiers et créer les cartes. Les sections d’hébergement ci-dessous décrivent des options antérieures, non activées.
