@@ -996,6 +996,17 @@ main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:1
 .updates-grid h3{margin:0;font-size:1.15rem;font-weight:500}
 .updates-grid p{margin:8px 0;color:var(--muted)}
 @media(max-width:650px){.updates-grid{grid-template-columns:1fr}}
+.home-link{
+  display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+  padding:0 12px;border:1px solid var(--deep);border-radius:4px;
+  color:var(--deep);background:white;text-decoration:none;font-size:.86rem;
+  white-space:nowrap;flex:none
+}
+.home-link:is(:hover,:focus-visible){background:var(--deep);color:white}
+.home-link:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
+.nav .home-link{margin-left:auto}
+@media(min-width:1081px) and (max-width:1200px){.nav{gap:10px}.menu{gap:8px}.menu :is(.donate,.membership,.contact){padding-inline:10px}}
+@media(max-width:420px){.nav-enabled .nav{gap:6px}.nav .home-link,.nav-enabled .menu-toggle{padding-inline:8px}.nav .brand{flex:1;min-width:0}.nav .brand img{width:36px;height:36px}}
 </style>
 </head>
 <body>
@@ -1019,6 +1030,7 @@ main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:1
         <span data-i18n="tagline">RÉSEAUX · PARTENARIATS · SOLUTIONS</span>
       </div>
     </a>
+    <a class="home-link" href="#accueil" data-i18n="navHome">Accueil</a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">Menu</button>
     <nav id="site-menu" class="menu" aria-label="Navigation principale">
       <a href="#vision" data-i18n="navVision">Approche</a>
@@ -1435,6 +1447,7 @@ main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:1
     exploreTitle:["Découvrir l’association","Explore the association"],
     exploreStrategy:["Notre stratégie","Our strategy"],
     explorePartners:["Nos partenariats","Our partnerships"],
+    navHome:["Accueil","Home"],
     navVision:["Approche","Approach"],
     navStrategy:["Stratégie","Strategy"],
     navPartners:["Partenariats","Partnerships"],
@@ -1612,7 +1625,7 @@ main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:1
     toggle.setAttribute("aria-expanded", String(toggle.getAttribute("aria-expanded") !== "true"));
   });
   document.addEventListener("click", (event) => {
-    if (event.target.closest("#site-menu a") || !event.target.closest(".nav")) closeMenu();
+    if (event.target.closest("#site-menu a, .home-link, .brand") || !event.target.closest(".nav")) closeMenu();
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true"){

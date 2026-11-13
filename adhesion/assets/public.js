@@ -11,7 +11,7 @@
   let recipient, requestURL, preparedApplication;
   let config, imageURL, lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'fr';
   const english = {
-    topbar: 'International association · Biodiversity · Climate · Sustainable development', home: 'Back to website', eyebrow: 'Membership', title: 'Join us', photoCredit: 'Photo: Sampo Kiviniemi · Grand-Popo, Benin',
+    topbar: 'International association · Biodiversity · Climate · Sustainable development', home: 'Home', eyebrow: 'Membership', title: 'Join us', photoCredit: 'Photo: Sampo Kiviniemi · Grand-Popo, Benin',
     intro: 'Please complete the form below to submit your membership application.',
     formTitle: 'Your membership application', required: 'Fields marked * are required.', first: 'First name *', last: 'Last name *', email: 'Email *', phone: 'Phone *', address: 'Address (optional)', city: 'City (optional)', country: 'Country (optional)', profession: 'Profession (optional)', roleHint: 'The role printed on your card is assigned by the association.', category: 'Requested membership category *', loading: 'Loading…', photo: 'Identity photo *', photoHint: 'Recent portrait with an unobstructed face. JPEG or PNG, up to 3 MB, at least 240 × 320 pixels. The photo will be cropped to portrait format.', motivation: 'Motivation *', consent: 'I consent to the processing of my data to review my application, manage my membership and issue my card. *', privacy: 'Read the privacy notice', submit: 'Submit my application', next: 'What happens next', cardTitle: 'Your membership card', step1: 'Submit your details and photo.', step2: 'The association reviews your application and assigns your role.', step3: 'Payment of the membership fee is confirmed.', step4: 'Your number and card are created after approval.', noInstant: 'Submitting this form does not constitute acceptance of membership.'
   };
@@ -47,7 +47,7 @@
   function translate() {
     document.documentElement.lang = lang;
     document.title = (lang === 'en' ? 'Join us' : 'Adhérer') + ' | La Nature et l’Humain';
-    document.querySelector('[data-t="home"]').href = '../?lang=' + lang;
+    document.querySelector('[data-t="home"]').href = '../?lang=' + lang + '#accueil';
     document.querySelector('.brand').href = '../?lang=' + lang;
     document.querySelector('[data-t="privacy"]').href = 'confidentialite.html?lang=' + lang;
     preview.alt = lang === 'en' ? 'Your photo preview' : 'Aperçu de votre photo';

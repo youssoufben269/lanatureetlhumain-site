@@ -1,7 +1,7 @@
 const englishNotice = new URLSearchParams(location.search).get('lang') === 'en';
 if (englishNotice) {
   const texts = {
-    back: 'Back to the form', eyebrow: 'Membership form privacy notice', title: 'Your personal data',
+    home: 'Home', back: 'Back to the form', eyebrow: 'Membership form privacy notice', title: 'Your personal data',
     intro: 'La Nature et l’Humain uses the information provided to review your application, verify payment, manage your membership, produce your card and keep you informed about your application.',
     fieldsTitle: 'Information requested',
     fields: 'Your first and last names, email, phone number, requested category, motivation and a photo are required for review. Address, city, country and profession are optional. The role printed on your card is assigned by the association. Do not send a national identity document or bank details through this form.',
@@ -17,6 +17,7 @@ if (englishNotice) {
   document.title = 'Personal data | La Nature et l’Humain';
   document.querySelectorAll('[data-t]').forEach(node => { node.textContent = texts[node.dataset.t]; });
 }
+document.querySelector('[data-t="home"]').href = '../?lang=' + (englishNotice ? 'en' : 'fr') + '#accueil';
 document.querySelector('#back').href = './?lang=' + (englishNotice ? 'en' : 'fr');
 document.querySelector('.brand').href = '../?lang=' + (englishNotice ? 'en' : 'fr');
 if (['email','google'].includes(window.LNH_MEMBERSHIP_MODE)) {

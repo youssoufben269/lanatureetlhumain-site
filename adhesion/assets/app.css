@@ -29,3 +29,11 @@
   :is(#submit,.language,.button){transition:none}
   :is(#submit,.language,.button):not(:disabled):hover{transform:none}
 }
+.home-link{
+  display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+  padding:0 12px;border:1px solid var(--deep);border-radius:4px;
+  color:var(--deep);background:white;text-decoration:none;font-size:.86rem;
+  white-space:nowrap;flex:none
+}
+.home-link:is(:hover,:focus-visible){background:var(--deep);color:white}
+.home-link:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
