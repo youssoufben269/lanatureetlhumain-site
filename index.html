@@ -214,8 +214,23 @@ header{
   overflow:hidden;
   background:#274d43;
 }
-.slide{grid-area:1 / 1;position:relative;visibility:hidden;opacity:0;transition:opacity .7s ease;pointer-events:none}
-.slide.active{visibility:visible;opacity:1;pointer-events:auto}
+.slide{
+  grid-area:1 / 1;
+  position:relative;
+  overflow:hidden;
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 1.2s ease-in-out,visibility 0s linear 1.2s;
+}
+.slide.active{visibility:visible;opacity:1;pointer-events:auto;transition-delay:0s;z-index:1}
+.slide-2{--pan-start:1.4%;--pan-end:-2%}
+.slide.active .bg,.slide.leaving .bg{animation:landscape-drift 9.2s linear both}
+@keyframes landscape-drift{
+  from{transform:translateX(var(--pan-start,-1%)) scale(1.035)}
+  to{transform:translateX(var(--pan-end,1.8%)) scale(1.15)}
+}
+.hero.paused .bg{animation-play-state:paused}
 .bg{
   position:absolute;
   inset:0;
@@ -325,6 +340,14 @@ header{
   background:transparent;
   cursor:pointer;
 }
+.motion-toggle{
+  width:32px;height:32px;align-self:center;border:1px solid #ffffff88;border-radius:50%;
+  background:#092d39aa;color:white;cursor:pointer;display:grid;place-items:center
+}
+.motion-toggle[hidden]{display:none}
+.motion-toggle::before{content:"";width:5px;height:11px;border-inline:2px solid currentColor}
+.paused .motion-toggle::before{width:0;height:0;border:5px solid transparent;border-right:0;border-left:8px solid white}
+.hero-nav{align-items:center}
 .dot::after{content:"";display:block;height:3px;background:rgba(255,255,255,.55)}
 .dot.active::after{background:#fff;height:5px}
 .section{padding:88px 0}
@@ -883,6 +906,8 @@ main section[id]{scroll-margin-top:96px}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .slide,.btn,.dot,a{transition:none}
+  .slide.active .bg,.slide.leaving .bg{animation:none;transform:none}
+  .motion-toggle{display:none}
 }
 </style>
 </head>
@@ -958,6 +983,7 @@ main section[id]{scroll-margin-top:96px}
     </div>
   </div>
   <div class="hero-nav">
+    <button class="motion-toggle" type="button" hidden aria-label="Mettre le diaporama en pause"></button>
     <button class="dot active" data-target="0" aria-label="Visuel 1"></button>
     <button class="dot" data-target="1" aria-label="Visuel 2"></button>
     <button class="dot" data-target="2" aria-label="Visuel 3"></button>
@@ -1453,6 +1479,33 @@ main section[id]{scroll-margin-top:96px}
   let current = 0;
   let currentLang = "fr";
   let timer;
+  const hero = document.querySelector(".hero");
+  const motionToggle = hero.querySelector(".motion-toggle");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let paused = false;
+  motionToggle.hidden = false;
+  function labelMotion(){
+    const label = currentLang === "en"
+      ? (paused ? "Resume slideshow" : "Pause slideshow")
+      : (paused ? "Reprendre le diaporama" : "Mettre le diaporama en pause");
+    motionToggle.setAttribute("aria-label", label);
+    motionToggle.title = label;
+  }
+  motionToggle.addEventListener("click", () => {
+    paused = !paused;
+    hero.classList.toggle("paused", paused);
+    labelMotion();
+    restart();
+  });
+  reducedMotion.addEventListener("change", restart);
+  document.addEventListener("visibilitychange", restart);
+  slides.forEach((slide, i) => {
+    slide.inert = i !== 0;
+    slide.addEventListener("transitionend", event => {
+      if (event.target === slide && event.propertyName === "opacity" && !slide.classList.contains("active"))
+        slide.classList.remove("leaving");
+    });
+  });
 
   function applyLanguage(lang){
     const index = lang === "en" ? 1 : 0;
@@ -1462,6 +1515,7 @@ main section[id]{scroll-margin-top:96px}
     });
     document.documentElement.lang = lang;
     currentLang = lang;
+    labelMotion();
     document.querySelector('[data-i18n="navMembership"]').href = 'adhesion/?lang=' + lang;
     document.querySelectorAll(".lang-btn").forEach((btn) => {
       const active = btn.dataset.lang === lang;
@@ -1475,14 +1529,19 @@ main section[id]{scroll-margin-top:96px}
 
   function show(n){
     current = (n + slides.length) % slides.length;
-    slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+    slides.forEach((slide, i) => {
+      const active = i === current;
+      slide.classList.toggle("leaving", !active && slide.classList.contains("active") && !reducedMotion.matches);
+      slide.classList.toggle("active", active);
+      slide.inert = !active;
+    });
     dots.forEach((dot, i) => dot.classList.toggle("active", i === current));
     if (credit) credit.textContent = currentLang === "en" ? slides[current].dataset.creditEn : slides[current].dataset.creditFr;
   }
 
   function restart(){
     clearInterval(timer);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || reducedMotion.matches || document.hidden) return;
     timer = setInterval(() => show(current + 1), 8000);
   }
 
