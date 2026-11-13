@@ -382,14 +382,6 @@ header{
   gap:60px;
   align-items:start;
 }
-.statement{
-  margin:0;
-  padding-left:24px;
-  border-left:4px solid var(--green);
-  font-size:clamp(1.62rem,2.7vw,2.55rem);
-  line-height:1.2;
-  font-weight:300;
-}
 .position-copy p{color:var(--muted);font-size:1rem}
 .position-copy .strong{font-size:1.14rem;color:var(--ink)}
 .statutory-card{
@@ -443,6 +435,7 @@ header{
   box-shadow:inset 0 -3px 0 var(--green);
 }
 .fit.active strong{color:var(--green-2)}
+.partner-detail:not(:has(.fit-panel.active)){display:none}
 .partner-detail{
   margin-top:22px;
   border:1px solid var(--line);
@@ -1103,63 +1096,65 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="section" id="vision">
-  <div class="container position-grid">
-    <blockquote class="statement" data-i18n="statement">Réunir les bons acteurs autour de projets crédibles, ancrés dans les territoires et ouverts aux coopérations internationales.</blockquote>
-    <div class="position-copy">
-      <div class="label" data-i18n="approachLabel">Notre approche</div>
-      <h2 class="section-title" data-i18n="approachTitle">Faire converger les acteurs autour de priorités partagées</h2>
-      <p class="strong" data-i18n="approachStrong">La Nature et l'Humain développe des alliances entre organisations locales, institutions, réseaux techniques et partenaires financiers engagés sur la biodiversité, le climat et le développement durable.</p>
-      <p data-i18n="approachP1">L'association facilite la mise en relation, la préparation de projets et la mobilisation de partenaires capables d'apporter des compétences, des financements ou une visibilité stratégique.</p>
-      <p data-i18n="approachP2">Son rôle est de renforcer la portée des initiatives africaines sans les déconnecter de leur base territoriale.</p>
-      <div class="statutory-card">
-        <strong data-i18n="statusTitle">Statut de l'association</strong>
-      <p data-i18n="statusText">Fondée à Marseille le 8 avril 2026 sous le régime de la loi 1901, La Nature et l'Humain agit pour la protection de l'environnement, la biodiversité, le climat, le développement durable, la solidarité et le développement humain. L'association développe des coopérations en France, dans les pays africains et avec des partenaires internationaux lorsque ces alliances renforcent l'impact des projets.</p>
+<section class="section" id="vision" aria-labelledby="approach-heading">
+  <div class="container">
+    <div class="position-grid">
+      <div>
+        <div class="label" data-i18n="approachLabel">Notre approche</div>
+        <h2 class="section-title" id="approach-heading" data-i18n="approachTitle">Des partenaires pour les initiatives locales</h2>
       </div>
-      <div class="partner-fit" role="tablist" aria-label="Axes de coopération">
-        <button type="button" class="fit" id="fit-local-tab" data-fit-target="fit-local" role="tab" aria-selected="false" aria-controls="fit-local"><strong data-i18n="fit1Title">Réseaux locaux</strong><span data-i18n="fit1Text">Qualifier et relier associations, collectivités, initiatives et relais communautaires.</span></button>
-        <button type="button" class="fit" id="fit-technical-tab" data-fit-target="fit-technical" role="tab" aria-selected="false" aria-controls="fit-technical"><strong data-i18n="fit2Title">Partenaires techniques</strong><span data-i18n="fit2Text">Mobiliser les compétences adaptées à chaque enjeu et à chaque territoire.</span></button>
-        <button type="button" class="fit" id="fit-finance-tab" data-fit-target="fit-finance" role="tab" aria-selected="false" aria-controls="fit-finance"><strong data-i18n="fit3Title">Partenaires financiers</strong><span data-i18n="fit3Text">Préparer des opportunités lisibles pour fondations, bailleurs et investisseurs à impact.</span></button>
-        <button type="button" class="fit" id="fit-visibility-tab" data-fit-target="fit-visibility" role="tab" aria-selected="false" aria-controls="fit-visibility"><strong data-i18n="fit4Title">Visibilité internationale</strong><span data-i18n="fit4Text">Créer des passerelles entre initiatives africaines et réseaux internationaux.</span></button>
+      <div class="position-copy">
+        <p class="strong" data-i18n="approachStrong">La Nature et l’Humain relie les associations, les collectivités et les communautés à des partenaires techniques et financiers. Le point de départ de chaque coopération est une priorité locale en matière de biodiversité, de climat ou de développement durable.</p>
+        <p data-i18n="approachP1">Avec les porteurs de projets, nous précisons les besoins et préparons les dossiers de coopération. Nos réseaux en Afrique, en France et à l’international permettent de rechercher un appui technique ou financier et de faire connaître les initiatives africaines.</p>
       </div>
-      <div class="partner-detail">
-        <article class="fit-panel" id="fit-local" role="tabpanel" aria-labelledby="fit-local-tab" hidden>
-          <h3 data-i18n="fitLocalDetailTitle">Réseaux locaux</h3>
-          <p data-i18n="fitLocalDetailText">Identifier les organisations déjà actives, comprendre leurs priorités et créer des liens de travail avec les collectivités, associations, relais communautaires et porteurs d'initiatives.</p>
-          <ul>
-            <li data-i18n="fitLocalDetail1">Cartographie des acteurs locaux</li>
-            <li data-i18n="fitLocalDetail2">Mise en relation avec les relais communautaires</li>
-            <li data-i18n="fitLocalDetail3">Lecture partagée des besoins du territoire</li>
-          </ul>
-        </article>
-        <article class="fit-panel" id="fit-technical" role="tabpanel" aria-labelledby="fit-technical-tab" hidden>
-          <h3 data-i18n="fitTechnicalDetailTitle">Partenaires techniques</h3>
-          <p data-i18n="fitTechnicalDetailText">Mobiliser les compétences utiles selon la nature du projet : biodiversité, climat, restauration des écosystèmes, gouvernance locale, suivi-évaluation ou montage opérationnel.</p>
-          <ul>
-            <li data-i18n="fitTechnicalDetail1">Universités, ONG et centres de recherche</li>
-            <li data-i18n="fitTechnicalDetail2">Expertise adaptée aux réalités du terrain</li>
-            <li data-i18n="fitTechnicalDetail3">Appui méthodologique et opérationnel</li>
-          </ul>
-        </article>
-        <article class="fit-panel" id="fit-finance" role="tabpanel" aria-labelledby="fit-finance-tab" hidden>
-          <h3 data-i18n="fitFinanceDetailTitle">Partenaires financiers</h3>
-          <p data-i18n="fitFinanceDetailText">Transformer une priorité locale en proposition compréhensible pour les bailleurs, fondations, mécanismes climat, mécènes et investisseurs à impact.</p>
-          <ul>
-            <li data-i18n="fitFinanceDetail1">Dossiers de coopération et fiches projets</li>
-            <li data-i18n="fitFinanceDetail2">Résultats, budget et responsabilités clarifiés</li>
-            <li data-i18n="fitFinanceDetail3">Ciblage des guichets de financement pertinents</li>
-          </ul>
-        </article>
-        <article class="fit-panel" id="fit-visibility" role="tabpanel" aria-labelledby="fit-visibility-tab" hidden>
-          <h3 data-i18n="fitVisibilityDetailTitle">Visibilité internationale</h3>
-          <p data-i18n="fitVisibilityDetailText">Rendre les initiatives africaines plus lisibles pour les réseaux internationaux, sans les déraciner de leur contexte local ni simplifier leurs enjeux.</p>
-          <ul>
-            <li data-i18n="fitVisibilityDetail1">Valorisation des initiatives africaines</li>
-            <li data-i18n="fitVisibilityDetail2">Passerelles avec les réseaux régionaux et internationaux</li>
-            <li data-i18n="fitVisibilityDetail3">Diffusion d'expériences et d'apprentissages</li>
-          </ul>
-        </article>
-      </div>
+    </div>
+    <div class="partner-fit" role="tablist" aria-label="Axes de coopération">
+      <button type="button" class="fit" id="fit-local-tab" data-fit-target="fit-local" role="tab" aria-selected="false" aria-controls="fit-local"><strong data-i18n="fit1Title">Réseaux locaux</strong><span data-i18n="fit1Text">Identifier les priorités avec les associations, les collectivités et les communautés.</span></button>
+      <button type="button" class="fit" id="fit-technical-tab" data-fit-target="fit-technical" role="tab" aria-selected="false" aria-controls="fit-technical"><strong data-i18n="fit2Title">Partenaires techniques</strong><span data-i18n="fit2Text">Relier chaque projet aux organismes qui peuvent lui apporter un appui technique.</span></button>
+      <button type="button" class="fit" id="fit-finance-tab" data-fit-target="fit-finance" role="tab" aria-selected="false" aria-controls="fit-finance"><strong data-i18n="fit3Title">Partenaires financiers</strong><span data-i18n="fit3Text">Préparer les dossiers et identifier les sources de financement adaptées.</span></button>
+      <button type="button" class="fit" id="fit-visibility-tab" data-fit-target="fit-visibility" role="tab" aria-selected="false" aria-controls="fit-visibility"><strong data-i18n="fit4Title">Visibilité internationale</strong><span data-i18n="fit4Text">Faire connaître les initiatives africaines auprès des réseaux régionaux et internationaux.</span></button>
+    </div>
+    <div class="partner-detail">
+      <article class="fit-panel" id="fit-local" role="tabpanel" aria-labelledby="fit-local-tab" hidden>
+        <h3 data-i18n="fitLocalDetailTitle">Réseaux locaux</h3>
+        <p data-i18n="fitLocalDetailText">Les échanges avec les organisations présentes sur le terrain permettent de préciser le besoin, de repérer les actions en cours et de réunir les personnes qui souhaitent travailler ensemble.</p>
+        <ul>
+          <li data-i18n="fitLocalDetail1">Organisations actives sur le territoire</li>
+          <li data-i18n="fitLocalDetail2">Contacts au sein des communautés</li>
+          <li data-i18n="fitLocalDetail3">Priorités définies en commun</li>
+        </ul>
+      </article>
+      <article class="fit-panel" id="fit-technical" role="tabpanel" aria-labelledby="fit-technical-tab" hidden>
+        <h3 data-i18n="fitTechnicalDetailTitle">Partenaires techniques</h3>
+        <p data-i18n="fitTechnicalDetailText">Selon le projet, nous sollicitons des universités, des ONG ou des centres de recherche pour contribuer à la restauration des écosystèmes, à l’adaptation climatique ou au suivi des résultats.</p>
+        <ul>
+          <li data-i18n="fitTechnicalDetail1">Universités, ONG et centres de recherche</li>
+          <li data-i18n="fitTechnicalDetail2">Expertise adaptée aux réalités du terrain</li>
+          <li data-i18n="fitTechnicalDetail3">Appui méthodologique et opérationnel</li>
+        </ul>
+      </article>
+      <article class="fit-panel" id="fit-finance" role="tabpanel" aria-labelledby="fit-finance-tab" hidden>
+        <h3 data-i18n="fitFinanceDetailTitle">Partenaires financiers</h3>
+        <p data-i18n="fitFinanceDetailText">Avec les porteurs de projets, nous précisons les activités, le budget et les résultats attendus avant d’identifier les fondations, bailleurs ou investisseurs à impact dont les priorités correspondent au projet.</p>
+        <ul>
+          <li data-i18n="fitFinanceDetail1">Dossiers de coopération et fiches projets</li>
+          <li data-i18n="fitFinanceDetail2">Résultats, budget et responsabilités clarifiés</li>
+          <li data-i18n="fitFinanceDetail3">Ciblage des guichets de financement pertinents</li>
+        </ul>
+      </article>
+      <article class="fit-panel" id="fit-visibility" role="tabpanel" aria-labelledby="fit-visibility-tab" hidden>
+        <h3 data-i18n="fitVisibilityDetailTitle">Visibilité internationale</h3>
+        <p data-i18n="fitVisibilityDetailText">Nous aidons les porteurs d’initiatives africaines à présenter leur travail, à partager leurs résultats et à échanger avec des organisations confrontées à des enjeux similaires dans d’autres territoires.</p>
+        <ul>
+          <li data-i18n="fitVisibilityDetail1">Valorisation des initiatives africaines</li>
+          <li data-i18n="fitVisibilityDetail2">Passerelles avec les réseaux régionaux et internationaux</li>
+          <li data-i18n="fitVisibilityDetail3">Partage des résultats et des enseignements</li>
+        </ul>
+      </article>
+    </div>
+    <div class="statutory-card">
+      <strong data-i18n="statusTitle">Statut de l'association</strong>
+      <p data-i18n="statusText">La Nature et l’Humain est une association française régie par la loi de 1901, fondée à Marseille le 8 avril 2026. Elle agit pour la protection de l’environnement, la solidarité et le développement humain.</p>
     </div>
   </div>
 </section>
@@ -1426,42 +1421,40 @@ main section[id]{scroll-margin-top:96px}
     heroSlogan3:["Ancrer localement. Coopérer régionalement. Mobiliser internationalement.","Rooted locally. Connected regionally. Mobilized internationally."],
     heroLead3:["La plateforme donne de la visibilité aux initiatives africaines et facilite leur accès aux réseaux capables de les renforcer.","The platform gives visibility to African initiatives and facilitates access to networks able to strengthen them."],
     heroBtn4:["Découvrir l'implantation","Discover the institutional base"],
-    statement:["Réunir les bons acteurs autour de projets crédibles, ancrés dans les territoires et ouverts aux coopérations internationales.","Bringing the right actors together around credible projects rooted in territories and open to international cooperation."],
     approachLabel:["Notre approche","Our approach"],
-    approachTitle:["Faire converger les acteurs autour de priorités partagées","Bringing actors together around shared priorities"],
-    approachStrong:["La Nature et l'Humain développe des alliances entre organisations locales, institutions, réseaux techniques et partenaires financiers engagés sur la biodiversité, le climat et le développement durable.","La Nature et l'Humain develops alliances between local organizations, institutions, technical networks and financial partners committed to biodiversity, climate and sustainable development."],
-    approachP1:["L'association facilite la mise en relation, la préparation de projets et la mobilisation de partenaires capables d'apporter des compétences, des financements ou une visibilité stratégique.","The association facilitates connections, project preparation and the mobilization of partners able to provide skills, funding or strategic visibility."],
-    approachP2:["Son rôle est de renforcer la portée des initiatives africaines sans les déconnecter de leur base territoriale.","Its role is to strengthen the reach of African initiatives without disconnecting them from their territorial base."],
+    approachTitle:["Des partenaires pour les initiatives locales", "Partnerships for local initiatives"],
+    approachStrong:["La Nature et l’Humain relie les associations, les collectivités et les communautés à des partenaires techniques et financiers. Le point de départ de chaque coopération est une priorité locale en matière de biodiversité, de climat ou de développement durable.", "La Nature et l’Humain connects associations, local authorities and communities with technical and financial partners. Each partnership starts with a local priority for biodiversity, climate or sustainable development."],
+    approachP1:["Avec les porteurs de projets, nous précisons les besoins et préparons les dossiers de coopération. Nos réseaux en Afrique, en France et à l’international permettent de rechercher un appui technique ou financier et de faire connaître les initiatives africaines.", "We work with project leaders to identify what they need and prepare partnership proposals. Through our networks in Africa, France and beyond, we seek technical and financial support and bring African initiatives to a wider audience."],
     statusTitle:["Statut de l'association","Association status"],
-    statusText:["Fondée à Marseille le 8 avril 2026 sous le régime de la loi 1901, La Nature et l'Humain agit pour la protection de l'environnement, la biodiversité, le climat, le développement durable, la solidarité et le développement humain. L'association développe des coopérations en France, dans les pays africains et avec des partenaires internationaux lorsque ces alliances renforcent l'impact des projets.","Founded in Marseille on 8 April 2026 under the French 1901 association law, La Nature et l'Humain works for environmental protection, biodiversity, climate, sustainable development, solidarity and human development. The association develops cooperation in France, African countries and with international partners when these alliances strengthen project impact."],
+    statusText:["La Nature et l’Humain est une association française régie par la loi de 1901, fondée à Marseille le 8 avril 2026. Elle agit pour la protection de l’environnement, la solidarité et le développement humain.", "La Nature et l’Humain is a French association governed by the 1901 law on associations. Founded in Marseille on 8 April 2026, it works on environmental protection, solidarity and human development."],
     fit1Title:["Réseaux locaux","Local networks"],
-    fit1Text:["Qualifier et relier associations, collectivités, initiatives et relais communautaires.","Identify and connect associations, local authorities, initiatives and community relays."],
+    fit1Text:["Identifier les priorités avec les associations, les collectivités et les communautés.", "Identify priorities with local associations, authorities and communities."],
     fit2Title:["Partenaires techniques","Technical partners"],
-    fit2Text:["Mobiliser les compétences adaptées à chaque enjeu et à chaque territoire.","Mobilize the right skills for each issue and each territory."],
+    fit2Text:["Relier chaque projet aux organismes qui peuvent lui apporter un appui technique.", "Connect each project with organisations that can provide technical support."],
     fit3Title:["Partenaires financiers","Financial partners"],
-    fit3Text:["Préparer des opportunités lisibles pour fondations, bailleurs et investisseurs à impact.","Prepare clear opportunities for foundations, donors and impact investors."],
+    fit3Text:["Préparer les dossiers et identifier les sources de financement adaptées.", "Prepare proposals and identify suitable sources of funding."],
     fit4Title:["Visibilité internationale","International visibility"],
-    fit4Text:["Créer des passerelles entre initiatives africaines et réseaux internationaux.","Create bridges between African initiatives and international networks."],
+    fit4Text:["Faire connaître les initiatives africaines auprès des réseaux régionaux et internationaux.", "Introduce African initiatives to regional and international networks."],
     fitLocalDetailTitle:["Réseaux locaux","Local networks"],
-    fitLocalDetailText:["Identifier les organisations déjà actives, comprendre leurs priorités et créer des liens de travail avec les collectivités, associations, relais communautaires et porteurs d'initiatives.","Identify organizations already active, understand their priorities and create working links with local authorities, associations, community relays and initiative leaders."],
-    fitLocalDetail1:["Cartographie des acteurs locaux","Mapping of local actors"],
-    fitLocalDetail2:["Mise en relation avec les relais communautaires","Connection with community relays"],
-    fitLocalDetail3:["Lecture partagée des besoins du territoire","Shared reading of territorial needs"],
+    fitLocalDetailText:["Les échanges avec les organisations présentes sur le terrain permettent de préciser le besoin, de repérer les actions en cours et de réunir les personnes qui souhaitent travailler ensemble.", "Discussions with local organisations help define the need, identify work already under way and bring together people who want to collaborate."],
+    fitLocalDetail1:["Organisations actives sur le territoire", "Organisations active in the area"],
+    fitLocalDetail2:["Contacts au sein des communautés", "Community contacts"],
+    fitLocalDetail3:["Priorités définies en commun", "Jointly agreed priorities"],
     fitTechnicalDetailTitle:["Partenaires techniques","Technical partners"],
-    fitTechnicalDetailText:["Mobiliser les compétences utiles selon la nature du projet : biodiversité, climat, restauration des écosystèmes, gouvernance locale, suivi-évaluation ou montage opérationnel.","Mobilize useful skills according to the nature of the project: biodiversity, climate, ecosystem restoration, local governance, monitoring and evaluation, or operational structuring."],
+    fitTechnicalDetailText:["Selon le projet, nous sollicitons des universités, des ONG ou des centres de recherche pour contribuer à la restauration des écosystèmes, à l’adaptation climatique ou au suivi des résultats.", "Depending on the project, we approach universities, NGOs or research centres for support with ecosystem restoration, climate adaptation or monitoring results."],
     fitTechnicalDetail1:["Universités, ONG et centres de recherche","Universities, NGOs and research centers"],
     fitTechnicalDetail2:["Expertise adaptée aux réalités du terrain","Expertise adapted to field realities"],
     fitTechnicalDetail3:["Appui méthodologique et opérationnel","Methodological and operational support"],
     fitFinanceDetailTitle:["Partenaires financiers","Financial partners"],
-    fitFinanceDetailText:["Transformer une priorité locale en proposition compréhensible pour les bailleurs, fondations, mécanismes climat, mécènes et investisseurs à impact.","Turn a local priority into a clear proposal for donors, foundations, climate mechanisms, philanthropies and impact investors."],
+    fitFinanceDetailText:["Avec les porteurs de projets, nous précisons les activités, le budget et les résultats attendus avant d’identifier les fondations, bailleurs ou investisseurs à impact dont les priorités correspondent au projet.", "We work with project leaders to set out activities, budgets and expected results, then identify foundations, donors or impact investors whose priorities match the project."],
     fitFinanceDetail1:["Dossiers de coopération et fiches projets","Cooperation files and project sheets"],
     fitFinanceDetail2:["Résultats, budget et responsabilités clarifiés","Clarified results, budget and responsibilities"],
     fitFinanceDetail3:["Ciblage des guichets de financement pertinents","Targeting of relevant funding windows"],
     fitVisibilityDetailTitle:["Visibilité internationale","International visibility"],
-    fitVisibilityDetailText:["Rendre les initiatives africaines plus lisibles pour les réseaux internationaux, sans les déraciner de leur contexte local ni simplifier leurs enjeux.","Make African initiatives more readable for international networks, without disconnecting them from their local context or oversimplifying their issues."],
+    fitVisibilityDetailText:["Nous aidons les porteurs d’initiatives africaines à présenter leur travail, à partager leurs résultats et à échanger avec des organisations confrontées à des enjeux similaires dans d’autres territoires.", "We help African project leaders present their work, share results and connect with organisations addressing similar challenges elsewhere."],
     fitVisibilityDetail1:["Valorisation des initiatives africaines","Promotion of African initiatives"],
     fitVisibilityDetail2:["Passerelles avec les réseaux régionaux et internationaux","Bridges with regional and international networks"],
-    fitVisibilityDetail3:["Diffusion d'expériences et d'apprentissages","Dissemination of experiences and lessons learned"],
+    fitVisibilityDetail3:["Partage des résultats et des enseignements", "Sharing results and lessons learned"],
     strategyLabel:["Stratégie d'action","Action strategy"],
     strategyTitle:["Plateforme Nature-Humain","Nature-Humain Platform"],
     strategyBadge:["Plateforme de coopération pour la biodiversité, le climat et les territoires","Cooperation platform for biodiversity, climate and territories"],
