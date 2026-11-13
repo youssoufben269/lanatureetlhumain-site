@@ -852,6 +852,43 @@ footer{
   color:#888;
   font-size:.74rem;
 }
+/* Masthead and editorial sections */
+.topbar .anchor{margin-left:auto}
+.topbar .lang-switch{margin-block:4px}
+.nav{min-height:80px}
+.menu{gap:clamp(10px,1.2vw,18px)}
+.menu .donate{color:var(--deep-2);background:white;border-color:var(--deep)}
+.menu .donate:hover,.menu .donate:focus-visible{background:var(--deep);color:white}
+.brand-copy strong{font-weight:500}
+.hero h1{letter-spacing:-.035em;line-height:1.01;font-weight:500}
+.hero .slogan{max-width:36em}
+.hero-kicker{font-weight:600;letter-spacing:.1em}
+.explore{padding:clamp(32px,5vw,68px) 0;border-bottom:1px solid var(--line)}
+.explore h2{font-size:clamp(1.65rem,3vw,2.65rem);font-weight:500;line-height:1.12;letter-spacing:-.025em;margin:0 0 24px}
+.explore-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2.2vw,28px)}
+.explore-link{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px 10px;padding-bottom:12px;border-bottom:2px solid var(--deep);color:var(--deep-2)}
+.explore-link img{grid-column:1/-1;width:100%;height:auto;aspect-ratio:2.8;object-fit:cover}
+.explore-link:last-child img{object-position:center 53%}
+.explore-link span{font-size:clamp(1.05rem,1.7vw,1.45rem);font-weight:500}
+.explore-link::after{content:"";width:9px;height:9px;border:solid currentColor;border-width:1.5px 1.5px 0 0;transform:rotate(45deg);margin-right:5px}
+.explore-link:is(:hover,:focus-visible){color:var(--green-2);border-color:currentColor}
+.explore-link:focus-visible{outline:2px solid var(--deep);outline-offset:4px}
+.label{color:var(--deep-2);font-weight:600;letter-spacing:.095em}
+.section-title,.region h2{font-weight:500;letter-spacing:-.032em;text-wrap:balance}
+.program-name{border:0;border-radius:0;background:transparent;padding:0;color:var(--deep-2);font-size:1rem}
+.pillar{min-height:0;border:0;border-top:2px solid var(--deep);padding:20px 18px 24px}
+.pillar .num{font-size:1rem;margin-bottom:22px;color:var(--deep-2)}
+.partner-card{background:var(--paper);min-height:0;padding:22px 0;border:0;border-top:2px solid var(--green)}
+.partner-card p,.pillar p{font-size:.95rem}
+@media(max-width:650px){
+  .topbar .container{gap:8px}
+  .topbar .lang-switch{margin-left:auto;flex-shrink:0}
+  .topbar .container > span:first-child{text-align:left}
+  .explore-grid{grid-template-columns:1fr;gap:0}
+  .explore-link{grid-template-columns:72px 1fr auto;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .explore-link img{grid-column:auto;aspect-ratio:1.45}
+  .explore h2{margin-bottom:10px}
+}
 @media(max-width:1080px){
   .team-section{scroll-margin-top:80px}
   .nav{align-items:flex-start;flex-direction:column;padding:14px 0}
@@ -956,6 +993,10 @@ main section[id]{scroll-margin-top:96px}
   <div class="container">
     <span data-i18n="topbar">Biodiversité · Climat · Développement durable</span>
     <span class="anchor" data-i18n="anchor">Association loi 1901 · Siège social à Marseille</span>
+    <div class="lang-switch" role="group" aria-label="Choix de la langue">
+        <button type="button" class="lang-btn active" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
   </div>
 </div>
 
@@ -977,10 +1018,7 @@ main section[id]{scroll-margin-top:96px}
       <a href="#equipe" data-i18n="navTeam">Notre équipe</a>
       <a href="#region" data-i18n="navBase">Implantation</a>
       <a class="donate" href="#don" data-i18n="navDonate">Don</a>
-      <div class="lang-switch" role="group" aria-label="Choix de la langue">
-        <button type="button" class="lang-btn active" data-lang="fr" aria-pressed="true">FR</button>
-        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
-      </div>
+
       <a class="membership" href="adhesion/" data-i18n="navMembership">Adhérer</a>
       <a class="contact" href="#contact" data-i18n="navContact">Contact</a>
     </nav>
@@ -1037,6 +1075,26 @@ main section[id]{scroll-margin-top:96px}
     <button class="dot" data-target="3" aria-label="Visuel 4"></button>
   </div>
 
+</section>
+
+<section class="explore" aria-labelledby="explore-title">
+  <div class="container">
+    <h2 id="explore-title" data-i18n="exploreTitle">Découvrir l’association</h2>
+    <div class="explore-grid">
+      <a class="explore-link" href="#programme">
+        <img src="assets/accueil-1.webp" alt="" width="480" height="240" loading="lazy">
+        <span data-i18n="exploreStrategy">Notre stratégie</span>
+      </a>
+      <a class="explore-link" href="#partenariats">
+        <img src="assets/accueil-2.webp" alt="" width="480" height="240" loading="lazy">
+        <span data-i18n="explorePartners">Nos partenariats</span>
+      </a>
+      <a class="explore-link" href="#equipe">
+        <img src="assets/marche-des-aidants.jpg" alt="" width="480" height="240" loading="lazy">
+        <span data-i18n="navTeam">Notre équipe</span>
+      </a>
+    </div>
+  </div>
 </section>
 
 <section class="section" id="vision">
@@ -1332,6 +1390,9 @@ main section[id]{scroll-margin-top:96px}
     topbar:["Biodiversité · Climat · Développement durable","Biodiversity · Climate · Sustainable development"],
     anchor:["Association loi 1901 · Siège social à Marseille","French 1901-law association · Registered office in Marseille"],
     tagline:["RÉSEAUX · PARTENARIATS · SOLUTIONS","RÉSEAUX · PARTENARIATS · SOLUTIONS"],
+    exploreTitle:["Découvrir l’association","Explore the association"],
+    exploreStrategy:["Notre stratégie","Our strategy"],
+    explorePartners:["Nos partenariats","Our partnerships"],
     navVision:["Approche","Approach"],
     navStrategy:["Stratégie","Strategy"],
     navPartners:["Partenariats","Partnerships"],
