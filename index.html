@@ -241,6 +241,7 @@ header{
 .slide-real .bg{background-image:url("assets/accueil-1.webp");background-position:center 58%}
 .slide-2 .bg{background-image:url("assets/accueil-2.webp");background-position:center 50%}
 .slide-3 .bg{background-image:url("assets/accueil-3.webp");background-position:center 48%}
+.slide-4 .bg{background-image:url("assets/marche-des-aidants.jpg");background-position:72% 54%}
 .shade{
   position:absolute;
   inset:0;
@@ -991,11 +992,19 @@ main section[id]{scroll-margin-top:96px}
       <div class="hero-actions"><a class="btn primary" href="#region" data-i18n="heroBtn4">Découvrir l'implantation</a></div>
     </div>
   </div>
+  <div class="slide slide-4" data-slide="3">
+    <div class="bg"></div><div class="shade"></div>
+    <div class="container hero-content">
+      <div class="hero-kicker" data-i18n="heroKicker4">Solidarité</div>
+      <h1 data-i18n="heroTitle4">La Marche des aidants</h1>
+    </div>
+  </div>
   <div class="hero-nav">
     <button class="motion-toggle" type="button" hidden aria-label="Mettre le diaporama en pause"></button>
     <button class="dot active" data-target="0" aria-label="Visuel 1"></button>
     <button class="dot" data-target="1" aria-label="Visuel 2"></button>
     <button class="dot" data-target="2" aria-label="Visuel 3"></button>
+    <button class="dot" data-target="3" aria-label="Visuel 4"></button>
   </div>
 
 </section>
@@ -1284,7 +1293,7 @@ main section[id]{scroll-margin-top:96px}
       <p data-i18n="footerAddress">Siège social : 60 traverse Moulin de la Villette, 13003 Marseille, France</p>
     </div>
   </div>
-  <div class="container credit" data-i18n="credit">Site officiel de l'association La Nature et l'Humain. Photographies : Sampo Kiviniemi, Kulttuurinavigaattori / Heikki Kastemaa et Padonou Dotou, Wikimedia Commons, licences CC BY-SA.</div>
+  <div class="container credit" data-i18n="credit">Site officiel de l'association La Nature et l'Humain. Photographies de paysages : Sampo Kiviniemi, Kulttuurinavigaattori / Heikki Kastemaa et Padonou Dotou, Wikimedia Commons, licences CC BY-SA.</div>
 </footer>
 
 <script>
@@ -1313,6 +1322,8 @@ main section[id]{scroll-margin-top:96px}
     heroSlogan2:["Faire converger les capacités autour de priorités communes.","Bringing capacities together around shared priorities."],
     heroLead2:["Nous agissons comme interface de coopération : nous relions les initiatives, les acteurs publics, les réseaux techniques et les partenaires financiers à partir des priorités du terrain.","We act as a cooperation interface: we connect initiatives, public actors, technical networks and financial partners based on field priorities."],
     heroBtn3:["Voir le modèle d'action","See the action model"],
+    heroKicker4:["Solidarité","Solidarity"],
+    heroTitle4:["La Marche des aidants","The Caregivers’ Walk"],
     heroKicker3:["Coopération régionale","Regional cooperation"],
     heroTitle3:["Relier les initiatives africaines aux bons partenaires","Connecting African initiatives with the right partners"],
     heroSlogan3:["Ancrer localement. Coopérer régionalement. Mobiliser internationalement.","Rooted locally. Connected regionally. Mobilized internationally."],
@@ -1456,7 +1467,7 @@ main section[id]{scroll-margin-top:96px}
     footerDonate:["Don","Donate"],
     footerContact:["Contact","Contact"],
     footerAddress:["Siège social : 60 traverse Moulin de la Villette, 13003 Marseille, France","Registered office: 60 traverse Moulin de la Villette, 13003 Marseille, France"],
-    credit:["Site officiel de l'association La Nature et l'Humain. Photographies : Sampo Kiviniemi, Kulttuurinavigaattori / Heikki Kastemaa et Padonou Dotou, Wikimedia Commons, licences CC BY-SA.","Official website of La Nature et l'Humain. Photographs: Sampo Kiviniemi, Kulttuurinavigaattori / Heikki Kastemaa and Padonou Dotou, Wikimedia Commons, CC BY-SA licenses."]
+    credit:["Site officiel de l'association La Nature et l'Humain. Photographies de paysages : Sampo Kiviniemi, Kulttuurinavigaattori / Heikki Kastemaa et Padonou Dotou, Wikimedia Commons, licences CC BY-SA.","Official website of La Nature et l'Humain. Landscape photographs: Sampo Kiviniemi, Kulttuurinavigaattori / Heikki Kastemaa and Padonou Dotou, Wikimedia Commons, CC BY-SA licenses."]
   };
 
   const toggle = document.querySelector(".menu-toggle");

@@ -257,7 +257,7 @@ class MembershipTest(unittest.TestCase):
         self.assertEqual([sha256(url.encode()).hexdigest() for url in embedded], ['8e83556c568b785a7f5564dc5a37b2f00071c1a3862585e07fcd78c7da111055'])
         self.assertIn('assets/fayidat-abdallah-kouati.jpg', files)
         self.assertEqual((ROOT / 'CNAME').read_text().strip(), 'www.lanatureetlhumain.org')
-        for path in ('/assets/logo-officiel.jpg', '/assets/accueil-1.webp', '/assets/accueil-2.webp', '/assets/accueil-3.webp', '/assets/ali-abdallah-youssouf-ben.webp', '/assets/fayidat-abdallah-kouati.jpg'):
+        for path in ('/assets/logo-officiel.jpg', '/assets/accueil-1.webp', '/assets/accueil-2.webp', '/assets/accueil-3.webp', '/assets/marche-des-aidants.jpg', '/assets/ali-abdallah-youssouf-ben.webp', '/assets/fayidat-abdallah-kouati.jpg'):
             self.assertEqual(self.request(path)['code'], 200, path)
         for path in ('/adhesion', '/admin/adhesions'):
             response = self.request(path)
