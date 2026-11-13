@@ -347,7 +347,16 @@ header{
 .motion-toggle[hidden]{display:none}
 .motion-toggle::before{content:"";width:5px;height:11px;border-inline:2px solid currentColor}
 .paused .motion-toggle::before{width:0;height:0;border:5px solid transparent;border-right:0;border-left:8px solid white}
-.hero-nav{align-items:center}
+/* Keep slideshow controls available to keyboard users without an overlay at rest. */
+.hero-nav{
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+}
+.hero-nav:has(:focus-visible){
+  opacity:1;
+  pointer-events:auto;
+}
 .dot::after{content:"";display:block;height:3px;background:rgba(255,255,255,.55)}
 .dot.active::after{background:#fff;height:5px}
 .section{padding:88px 0}
