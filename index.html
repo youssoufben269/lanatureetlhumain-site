@@ -982,6 +982,20 @@ main section[id]{scroll-margin-top:96px}
 @media(prefers-reduced-motion:reduce){
   :is(.btn,.donation-btn,.form-submit,.menu-toggle,.lang-btn,.fit,.menu .donate,.menu .membership,.menu .contact){transition:none}
 }
+/* Each institutional section opens at its existing public anchor. */
+main > [data-detail],.detail-return{display:none}
+main > [data-detail]:target{display:block}
+main:has(> [data-detail]:target) > :is(.hero,.home-updates,.explore){display:none}
+main:has(> [data-detail]:target) > .detail-return{display:block}
+.detail-return{padding-block:18px 0;font-size:.9rem;color:var(--deep)}
+.detail-return a:hover,.detail-return a:focus-visible{text-decoration:underline}
+main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:148px}
+.home-updates{padding:clamp(36px,5vw,64px) 0;background:var(--soft)}
+.updates-grid{display:grid;grid-template-columns:3fr 2fr;gap:clamp(28px,6vw,80px)}
+.updates-grid h2{margin:0 0 18px;padding-bottom:12px;border-bottom:2px solid var(--deep);font-size:clamp(1.55rem,3vw,2.3rem);font-weight:500;line-height:1.2}
+.updates-grid h3{margin:0;font-size:1.15rem;font-weight:500}
+.updates-grid p{margin:8px 0;color:var(--muted)}
+@media(max-width:650px){.updates-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1073,6 +1087,23 @@ main section[id]{scroll-margin-top:96px}
 
 </section>
 
+<section class="home-updates" id="actualites" aria-labelledby="news-title">
+  <div class="container updates-grid">
+    <div>
+      <h2 id="news-title" data-i18n="newsTitle">Actualités</h2>
+      <article>
+        <h3 data-i18n="membershipNews">Les demandes d’adhésion sont ouvertes</h3>
+        <p data-i18n="membershipNewsText">Vous pouvez désormais transmettre votre demande d’adhésion en ligne.</p>
+        <a class="team-link" href="adhesion/" data-membership-news data-i18n="membershipAction">Accéder au formulaire</a>
+      </article>
+    </div>
+    <div>
+      <h2 data-i18n="ongoingTitle">Projets en cours</h2>
+      <p class="project-note" data-i18n="ongoingEmpty">Les premières fiches projets seront présentées ici.</p>
+    </div>
+  </div>
+</section>
+
 <section class="explore" aria-labelledby="explore-title">
   <div class="container">
     <h2 id="explore-title" data-i18n="exploreTitle">Découvrir l’association</h2>
@@ -1096,7 +1127,10 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="section" id="vision" aria-labelledby="approach-heading">
+<div class="detail-return container">
+  <a href="#explore-title" data-i18n="returnHome">Retour à l’accueil</a>
+</div>
+<section class="section" id="vision" data-detail aria-labelledby="approach-heading">
   <div class="container">
     <div class="position-grid">
       <div>
@@ -1159,7 +1193,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="flagship" id="programme">
+<section class="flagship" id="programme" data-detail>
   <div class="container">
     <div class="flagship-head">
       <div>
@@ -1182,7 +1216,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="partnership" id="partenariats">
+<section class="partnership" id="partenariats" data-detail>
   <div class="container">
     <div class="label" data-i18n="partnersLabel">Stratégie de partenariat</div>
     <h2 class="section-title" data-i18n="partnersTitle">Construire des alliances utiles aux territoires</h2>
@@ -1196,7 +1230,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="model" id="modele">
+<section class="model" id="modele" data-detail>
   <div class="container model-grid">
     <div>
       <div class="label" data-i18n="modelLabel">Notre modèle</div>
@@ -1213,7 +1247,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="team-section" id="equipe">
+<section class="team-section" id="equipe" data-detail>
   <div class="container">
     <div class="team-head">
       <div>
@@ -1259,7 +1293,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="region" id="region">
+<section class="region" id="region" data-detail>
   <div class="container region-grid">
     <div>
       <div class="label" data-i18n="baseLabel">Cadre associatif</div>
@@ -1274,7 +1308,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="donation" id="don">
+<section class="donation" id="don" data-detail>
   <div class="container donation-grid">
     <div class="donation-copy">
       <div class="label" data-i18n="donLabel">Soutenir l'association</div>
@@ -1303,7 +1337,7 @@ main section[id]{scroll-margin-top:96px}
   </div>
 </section>
 
-<section class="contact" id="contact">
+<section class="contact" id="contact" data-detail>
   <div class="container contact-grid">
     <div>
       <h2 data-i18n="contactTitle">Entrer en relation avec l'association</h2>
@@ -1388,6 +1422,13 @@ main section[id]{scroll-margin-top:96px}
 <script>
 (() => {
   const translations = {
+    newsTitle:["Actualités","News"],
+    membershipNews:["Les demandes d’adhésion sont ouvertes","Membership applications are open"],
+    membershipNewsText:["Vous pouvez désormais transmettre votre demande d’adhésion en ligne.","You can now submit your membership application online."],
+    membershipAction:["Accéder au formulaire","Open the application form"],
+    ongoingTitle:["Projets en cours","Current projects"],
+    ongoingEmpty:["Les premières fiches projets seront présentées ici.","Project profiles will appear here."],
+    returnHome:["Retour à l’accueil","Back to home"],
     topbar:["Biodiversité · Climat · Développement durable","Biodiversity · Climate · Sustainable development"],
     anchor:["Association loi 1901 · Siège social à Marseille","French 1901-law association · Registered office in Marseille"],
     tagline:["RÉSEAUX · PARTENARIATS · SOLUTIONS","RÉSEAUX · PARTENARIATS · SOLUTIONS"],
@@ -1625,6 +1666,7 @@ main section[id]{scroll-margin-top:96px}
     });
     document.documentElement.lang = lang;
     currentLang = lang;
+    document.querySelector("[data-membership-news]").href = "adhesion/?lang=" + lang;
     labelMotion();
     document.querySelector('[data-i18n="navMembership"]').href = 'adhesion/?lang=' + lang;
     document.querySelectorAll(".lang-btn").forEach((btn) => {
