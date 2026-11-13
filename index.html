@@ -983,9 +983,9 @@ main section[id]{scroll-margin-top:96px}
   :is(.btn,.donation-btn,.form-submit,.menu-toggle,.lang-btn,.fit,.menu .donate,.menu .membership,.menu .contact){transition:none}
 }
 /* Each institutional section opens at its existing public anchor. */
+#accueil{scroll-margin-top:92px}
 main > [data-detail],.detail-return{display:none}
 main > [data-detail]:target{display:block}
-main:has(> [data-detail]:target) > :is(.hero,.home-updates,.explore){display:none}
 main:has(> [data-detail]:target) > .detail-return{display:block}
 .detail-return{padding-block:18px 0;font-size:.9rem;color:var(--deep)}
 .detail-return a:hover,.detail-return a:focus-visible{text-decoration:underline}
@@ -1087,23 +1087,6 @@ main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:1
 
 </section>
 
-<section class="home-updates" id="actualites" aria-labelledby="news-title">
-  <div class="container updates-grid">
-    <div>
-      <h2 id="news-title" data-i18n="newsTitle">Actualités</h2>
-      <article>
-        <h3 data-i18n="membershipNews">Les demandes d’adhésion sont ouvertes</h3>
-        <p data-i18n="membershipNewsText">Vous pouvez désormais transmettre votre demande d’adhésion en ligne.</p>
-        <a class="team-link" href="adhesion/" data-membership-news data-i18n="membershipAction">Accéder au formulaire</a>
-      </article>
-    </div>
-    <div>
-      <h2 data-i18n="ongoingTitle">Projets en cours</h2>
-      <p class="project-note" data-i18n="ongoingEmpty">Les premières fiches projets seront présentées ici.</p>
-    </div>
-  </div>
-</section>
-
 <section class="explore" aria-labelledby="explore-title">
   <div class="container">
     <h2 id="explore-title" data-i18n="exploreTitle">Découvrir l’association</h2>
@@ -1127,8 +1110,25 @@ main > [data-detail]:target{padding-top:clamp(28px,4vw,52px);scroll-margin-top:1
   </div>
 </section>
 
+<section class="home-updates" id="actualites" aria-labelledby="news-title">
+  <div class="container updates-grid">
+    <div>
+      <h2 id="news-title" data-i18n="newsTitle">Actualités</h2>
+      <article>
+        <h3 data-i18n="membershipNews">Les demandes d’adhésion sont ouvertes</h3>
+        <p data-i18n="membershipNewsText">Vous pouvez désormais transmettre votre demande d’adhésion en ligne.</p>
+        <a class="team-link" href="adhesion/" data-membership-news data-i18n="membershipAction">Accéder au formulaire</a>
+      </article>
+    </div>
+    <div>
+      <h2 data-i18n="ongoingTitle">Projets en cours</h2>
+      <p class="project-note" data-i18n="ongoingEmpty">Les premières fiches projets seront présentées ici.</p>
+    </div>
+  </div>
+</section>
+
 <div class="detail-return container">
-  <a href="#explore-title" data-i18n="returnHome">Retour à l’accueil</a>
+  <a href="#accueil" data-i18n="returnHome">Retour à l’accueil</a>
 </div>
 <section class="section" id="vision" data-detail aria-labelledby="approach-heading">
   <div class="container">
