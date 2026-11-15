@@ -30,3 +30,5 @@ La biographie fournie par le propriétaire est condensée au même format que le
 ## Mise à jour du 15 novembre 2026 : Lorena Ranely
 
 La fonction de trésorière est confirmée par le propriétaire. La biographie fournie est condensée et traduite en anglais, en distinguant le métier d’infirmière de la fonction associative. Le portrait fourni est conservé sans retouche dans `assets/lorena-ranely.jpg` (800 × 800 pixels), autorisé par le serveur local et inclus dans le build public.
+
+À la demande du propriétaire, la présentation de Lorena est recentrée sur ses responsabilités de trésorière : suivi des recettes et dépenses, tenue des comptes, préparation des bilans financiers et gestion des ressources en lien avec la présidence. Le parcours infirmier ne figure plus dans cette présentation. Les versions française et anglaise sont harmonisées.
