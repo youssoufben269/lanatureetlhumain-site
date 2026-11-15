@@ -9,10 +9,11 @@ Fonctions confirmées par le propriétaire :
 - Fayidat ABDALLAH KOUATI : présidente de l’association.
 - Ayouba SALI : chargé de projets.
 - Youssouf Ben Ali Abdallah : responsable Environnement, Biodiversité et Climat.
+- Lorena RANELY : trésorière.
 - Kassim KADAFI : chargé des affaires sociales.
 - Ibro Arzika Abdourahamane : Community Manager.
 
-Jeannot AGBAHEY, Lorena RANELY et Abdou Gafar Mikael LAWANI portent provisoirement « Fonction à préciser ». Le propriétaire a demandé de distinguer les profils professionnels des fonctions associatives ; les intitulés de la liste administrative ne sont donc pas repris comme des attributions actuelles sans confirmation.
+Jeannot AGBAHEY et Abdou Gafar Mikael LAWANI portent provisoirement « Fonction à préciser ». Le propriétaire a demandé de distinguer les profils professionnels des fonctions associatives ; les intitulés de la liste administrative ne sont donc pas repris comme des attributions actuelles sans confirmation.
 
 Les profils sont affichés sous un libellé distinct. Les fonctions, profils et emplacements photo ont une traduction FR/EN. Pour compléter une fonction, modifier le texte HTML et les deux traductions `teamNRole` correspondantes. Les fiches 1 à 8 correspondent à Fayidat, Ayouba, Ali Abdallah Youssouf Ben, Jeannot, Lorena, Abdou Gafar Mikael, Kassim et Ibro Arzika Abdourahamane.
 
@@ -25,3 +26,7 @@ La fiche de Youssouf Ben Ali Abdallah reprend la courte biographie validée par 
 ## Mise à jour du 14 novembre 2026 : Kassim Kadafi
 
 La biographie fournie par le propriétaire est condensée au même format que les autres fiches et traduite en anglais. La fonction confirmée « Chargé des affaires sociales » est conservée ; sa qualité d’administrateur figure dans le texte. Le portrait transmis est publié dans `assets/kassim-kadafi.jpg`, sans retouche du fichier original, avec un cadrage CSS centré sur le visage. Cette ressource est également autorisée par le serveur local.
+
+## Mise à jour du 15 novembre 2026 : Lorena Ranely
+
+La fonction de trésorière est confirmée par le propriétaire. La biographie fournie est condensée et traduite en anglais, en distinguant le métier d’infirmière de la fonction associative. Le portrait fourni est conservé sans retouche dans `assets/lorena-ranely.jpg` (800 × 800 pixels), autorisé par le serveur local et inclus dans le build public.
