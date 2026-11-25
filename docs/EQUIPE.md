@@ -7,13 +7,14 @@ Les noms et profils professionnels proviennent de la liste des dirigeants fourni
 Fonctions confirmées par le propriétaire :
 
 - Fayidat ABDALLAH KOUATI : présidente de l’association.
+- Abdou Gafar Mikael LAWANI : vice-président.
 - Ayouba SALI : chargé de projets.
 - Youssouf Ben Ali Abdallah : responsable Environnement, Biodiversité et Climat.
 - Lorena RANELY : trésorière.
 - Kassim KADAFI : chargé des affaires sociales.
 - Ibro Arzika Abdourahamane : Community Manager.
 
-Jeannot AGBAHEY et Abdou Gafar Mikael LAWANI portent provisoirement « Fonction à préciser ». Le propriétaire a demandé de distinguer les profils professionnels des fonctions associatives ; les intitulés de la liste administrative ne sont donc pas repris comme des attributions actuelles sans confirmation.
+Jeannot AGBAHEY porte provisoirement « Fonction à préciser ». Le propriétaire a demandé de distinguer les profils professionnels des fonctions associatives ; les intitulés de la liste administrative ne sont donc pas repris comme des attributions actuelles sans confirmation.
 
 Les profils sont affichés sous un libellé distinct. Les fonctions, profils et emplacements photo ont une traduction FR/EN. Pour compléter une fonction, modifier le texte HTML et les deux traductions `teamNRole` correspondantes. Les fiches 1 à 8 correspondent à Fayidat, Ayouba, Ali Abdallah Youssouf Ben, Jeannot, Lorena, Abdou Gafar Mikael, Kassim et Ibro Arzika Abdourahamane.
 
@@ -34,3 +35,7 @@ La fonction de trésorière est confirmée par le propriétaire. La biographie f
 À la demande du propriétaire, la présentation de Lorena est recentrée sur ses responsabilités de trésorière : suivi des recettes et dépenses, tenue des comptes, préparation des bilans financiers et gestion des ressources en lien avec la présidence. Le parcours infirmier ne figure plus dans cette présentation. Les versions française et anglaise sont harmonisées.
 
 Précision du propriétaire : une courte phrase introductive mentionne le métier d’infirmière diplômée d’État de Lorena. La suite reste consacrée à la trésorerie, sans établir de lien entre ses compétences cliniques et ses responsabilités financières.
+
+## Mise à jour du 25 novembre 2026 : Abdou Gafar Mikael Lawani
+
+Le propriétaire confirme la fonction de vice-président et fournit le portrait ainsi que le profil professionnel actualisé. La biographie courte en français et en anglais remplace le précédent libellé « Entrepreneur agricole ». Le portrait original est copié sans retouche dans `assets/abdou-gafar-mikael-lawani.jpg` (521 × 522 pixels), autorisé par le serveur local et inclus dans le build public.
